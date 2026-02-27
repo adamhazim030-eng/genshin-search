@@ -11,7 +11,7 @@ async function searchChar() {
   result.innerHTML = "<p> Mencari data...</p>";
 
   try {
-    const response = await fetch();
+    const response = await fetch(`https://genshin.jmp.blue/characters/${name}`);
 
     if (!response.ok) {
       throw new Error("Watak tidak dijumpai");
