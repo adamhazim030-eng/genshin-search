@@ -1,0 +1,16 @@
+{
+  "name": "genshin-search",
+  "version": "1.0.0",
+  "description": "Sistem Carian Watak Genshin Impact menggunakan API",
+  "main": "script.js",
+  "scripts": {
+    "dev": "live-server"
+  },
+  "author": "Nama Anda",
+  "license": "ISC",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  },
+  "keywords": [],
+  "type": "commonjs"
+}
