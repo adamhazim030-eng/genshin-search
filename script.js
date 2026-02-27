@@ -8,10 +8,10 @@ async function searchChar() {
   }
 
   result.style.display = "block";
-  result.innerHTML = "<p>🔍 Mencari data...</p>";
+  result.innerHTML = "<p> Mencari data...</p>";
 
   try {
-    const response = await fetch(`https://genshin.jmp.blue/characters/${name}`);
+    const response = await fetch();
 
     if (!response.ok) {
       throw new Error("Watak tidak dijumpai");
@@ -24,11 +24,11 @@ async function searchChar() {
       <h2>${data.name}</h2>
       <p><b>Elemen:</b> ${data.vision}</p>
       <p><b>Senjata:</b> ${data.weapon}</p>
-      <p><b>Rarity:</b> ⭐ ${data.rarity}</p>
+      <p><b>Rarity:</b>  ${data.rarity}</p>
       <p><b>Wilayah:</b> ${data.nation}</p>
     `;
 
   } catch (error) {
-    result.innerHTML = `<p style="color:red;">❌ Watak tidak dijumpai. Pastikan ejaan betul.</p>`;
+    result.innerHTML = `<p style="color:red;">Watak tidak dijumpai. Pastikan ejaan betul.</p>`;
   }
 }
