@@ -66,8 +66,10 @@
     }
 
     .back {
-      display: inline-block;
-      margin-top: 15px;
+      display: block;
+      margin: 20px auto 0 auto;
+      max-width: 200px;
+      text-align: center;
       background: #6c63ff;
       padding: 10px 18px;
       border-radius: 8px;
@@ -120,7 +122,7 @@
 
           grid.innerHTML += `
             <div class="card" onclick="openDetail('${name}')">
-              <img src="https://genshin.jmp.blue/characters/${name}/icon-big">
+              <img src="https://genshin.jmp.blue/characters/${name}/card" onerror="this.onerror=null;this.src='https://genshin.jmp.blue/characters/${name}/icon-big'">
               <p>${data.name}</p>
               <small>${data.nation}</small>
             </div>
