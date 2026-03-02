@@ -1,112 +1,150 @@
-* {
-  box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+*{
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
 }
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #1e1e2f, #3a3a5f);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(-45deg,#0f0f1c,#2b2b52,#1b1b38,#0f0f1c);
+  background-size:400% 400%;
+  animation:bgmove 15s ease infinite;
+  color:white;
 }
 
-.container {
-  background: rgba(0,0,0,0.4);
-  padding: 30px;
-  border-radius: 15px;
-  width: 90%;
-  max-width: 450px;
-  text-align: center;
-  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+@keyframes bgmove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
 }
 
-h1 {
-  margin-bottom: 20px;
+.navbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 30px;
+  background:rgba(0,0,0,.4);
+  backdrop-filter:blur(8px);
+  box-shadow:0 4px 10px rgba(0,0,0,.6);
 }
 
-.search-box {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+.navbar h2{
+  margin:0;
 }
 
-input {
-  flex: 1;
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  outline: none;
-  font-size: 16px;
+.nav-btn a{
+  text-decoration:none;
+  color:white;
+  background:#6c63ff;
+  padding:8px 15px;
+  border-radius:8px;
+  margin-left:10px;
+  transition:.3s;
 }
 
-button {
-  padding: 10px 15px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  background: #6c63ff;
-  color: white;
-  transition: 0.3s;
+.nav-btn a:hover{
+  background:#5146ff;
+  transform:scale(1.05);
 }
 
-button:hover {
-  background: #5146ff;
+.logout{
+  background:#ff4b5c !important;
 }
 
-.card {
-  background: rgba(255,255,255,0.1);
-  border-radius: 12px;
-  padding: 15px;
-  display: none;
+.logout:hover{
+  background:#e43b4b !important;
 }
 
-.card img {
-  width: 150px;
-  margin-bottom: 10px;
+.container{
+  max-width:500px;
+  margin:60px auto 20px;
+  background:rgba(0,0,0,.45);
+  padding:30px;
+  border-radius:15px;
+  text-align:center;
+  box-shadow:0 0 20px rgba(0,0,0,.7);
 }
 
-.card h2 {
-  margin: 5px 0;
+.subtitle{
+  opacity:.8;
+  margin-bottom:20px;
 }
 
-.card p {
-  margin: 4px 0;
+.search-box{
+  display:flex;
+  gap:10px;
 }
 
-.logout-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  display: inline-block;
-  padding: 10px 20px;
-  background: #6c63ff;
-  color: white;
-  text-decoration: none;
-  border-radius: 8px;
-  transition: 0.3s;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
+input{
+  flex:1;
+  padding:12px;
+  border-radius:10px;
+  border:none;
+  font-size:15px;
 }
 
-.logout-btn:hover {
-  background: #5146ff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(108, 99, 255, 0.3);
+button{
+  padding:12px 18px;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+  background:linear-gradient(135deg,#6c63ff,#00c6ff);
+  color:white;
+  font-size:15px;
+  transition:.3s;
 }
 
-footer {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
-  text-align: center;
-  max-width: 90%;
-  letter-spacing: 0.5px;
+button:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 12px rgba(0,198,255,.7);
 }
+
+.card{
+  margin-top:20px;
+  background:rgba(255,255,255,.1);
+  padding:15px;
+  border-radius:15px;
+  display:none;
+  animation:fade .5s ease forwards;
+}
+
+@keyframes fade{
+  from{opacity:0;transform:translateY(15px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.card img{
+  width:160px;
+}
+
+.detail-btn{
+  margin-top:10px;
+  width:100%;
+}
+
+footer{
+  text-align:center;
+  font-size:12px;
+  opacity:.7;
+  margin-bottom:10px;
+}
+
+/* button link used across pages */
+.btn{
+  display:block;
+  text-align:center;
+  margin:15px auto;
+  width:fit-content;
+  padding:12px 26px;
+  border-radius:30px;
+  background:#6c63ff;
+  color:white;
+  text-decoration:none;
+  font-size:18px;
+  transition:.3s;
+}
+
+.btn:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 15px rgba(108,99,255,.8);
+}    
