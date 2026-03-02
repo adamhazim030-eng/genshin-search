@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Senarai Watak Genshin</title>
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1e1e2f, #3a3a5f);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .filters {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .filters button {
+      margin: 5px;
+      padding: 8px 15px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      background: #6c63ff;
+      color: white;
+    }
+
+    .filters button:hover {
+      background: #5146ff;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 15px;
+    }
+
+    .card {
+      background: rgba(0,0,0,0.45);
+      border-radius: 12px;
+      padding: 10px;
+      text-align: center;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 15px rgba(0,0,0,0.7);
+    }
+
+    .card img {
+      width: 100%;
+      max-width: 100px;
+      margin-bottom: 8px;
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 15px;
+      background: #6c63ff;
+      padding: 10px 18px;
+      border-radius: 8px;
+      color: white;
+      text-decoration: none;
+    }
+
+    .back:hover {
+      background: #5146ff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Senarai Semua Watak Genshin Impact</h1>
+
+  <div class="filters">
+    <button onclick="loadChars('all')">Semua</button>
+    <button onclick="loadChars('mondstadt')">Mondstadt</button>
+    <button onclick="loadChars('liyue')">Liyue</button>
+    <button onclick="loadChars('inazuma')">Inazuma</button>
+    <button onclick="loadChars('sumeru')">Sumeru</button>
+    <button onclick="loadChars('fontaine')">Fontaine</button>
+    <button onclick="loadChars('natlan')">Natlan</button>
+    <button onclick="loadChars('snezhnaya')">Snezhnaya</button>
+  </div>
+
+  <div id="grid" class="grid"></div>
+
+  <a href="home.html" class="back">⬅ Kembali</a>
+
+  <script>
+    const grid = document.getElementById("grid");
+
+    async function loadChars(region) {
+      grid.innerHTML = "Memuatkan...";
+
+      const res = await fetch("https://genshin.jmp.blue/characters");
+      const list = await res.json();
+
+      grid.innerHTML = "";
+
+      for (let name of list) {
+        try {
+          const charRes = await fetch("https://genshin.jmp.blue/characters/" + name);
+          const data = await charRes.json();
+
+          if (region !== "all" && data.nation.toLowerCase() !== region) continue;
+
+          grid.innerHTML += `
+            <div class="card" onclick="openDetail('${name}')">
+              <img src="https://genshin.jmp.blue/characters/${name}/icon-big">
+              <p>${data.name}</p>
+              <small>${data.nation}</small>
+            </div>
+          `;
+
+        } catch {}
+      }
+    }
+
+    function openDetail(name) {
+      window.location.href = "detail.html?name=" + name;
+    }
+
+    loadChars("all");
+  </script>
+
+</body>
+</html>
