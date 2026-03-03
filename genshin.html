@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Play Genshin Impact?</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: white;
+  text-align: center;
+}
+
+header {
+  padding: 40px 20px;
+}
+
+header h1 {
+  font-size: 42px;
+  margin-bottom: 10px;
+  text-shadow: 0 0 20px cyan;
+}
+
+header p {
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+/* VIDEO GRID - stacked vertically */
+.video-section {
+  /* use flexbox to ensure cards are laid out in a single column */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  padding: 40px;
+}
+
+.video-card {
+  background: rgba(255,255,255,0.05);
+  padding: 15px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  transition: 0.4s;
+  box-shadow: 0 0 20px rgba(0,255,255,0.2);
+}
+
+.video-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px cyan;
+}
+
+.video-wrapper {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: 15px;
+}
+
+.video-wrapper iframe,
+.video-wrapper video {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 15px;
+  object-fit: cover;
+}
+
+/* ensure video fullscreen works across browsers */
+.video-wrapper video::-webkit-media-controls-fullscreen-button {
+  display: block;
+}
+.video-wrapper video::-moz-fullscreen-button {
+  display: block;
+}
+
+/* RATING */
+.rating {
+  font-size: 24px;
+  color: gold;
+  margin-top: 20px;
+}
+
+.download-btn {
+  display: inline-block;
+  margin-top: 30px;
+  padding: 15px 35px;
+  font-size: 18px;
+  color: white;
+  text-decoration: none;
+  background: linear-gradient(45deg, #00f2fe, #4facfe);
+  border-radius: 50px;
+  transition: 0.3s;
+  box-shadow: 0 0 20px #00f2fe;
+}
+
+.download-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 30px cyan;
+}
+
+footer {
+  margin-top: 50px;
+  padding: 20px;
+  opacity: 0.6;
+  font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🔥 Why You MUST Play Genshin Impact 🔥</h1>
+  <p>Open World • Epic Boss Fight • Elemental Combat • Cinematic Story</p>
+</header>
+
+<section class="video-section">
+
+  <!-- Video 1 -->
+  <div class="video-card">
+    <h3>⚔️ Epic Boss Battle</h3>
+    <div class="video-wrapper">
+      <iframe 
+        src="https://www.youtube-nocookie.com/embed/lpv1ungKNc0?si=pcG6rCP3SdPZyKb4"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+
+  <!-- Video 2 -->
+  <div class="video-card">
+    <h3>⚡ dragonspine battle</h3>
+    <div class="video-wrapper">
+      <iframe 
+        src="https://www.youtube-nocookie.com/embed/JPnsUuKMiaU?si=VThCc7pCx3HqupwV"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+
+  <!-- Video 3 -->
+  <div class="video-card">
+    <h3>💥 natlan Combat Action</h3>
+    <div class="video-wrapper">
+      <iframe 
+        src="https://www.youtube-nocookie.com/embed/MpYueGE6FQ8?rel=0"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+
+  <!-- Local MP4 Video -->
+  <div class="video-card">
+    <h3>🎬 Special Footage</h3>
+    <div class="video-wrapper">
+      <video controls onclick="this.requestFullscreen?.()">
+        <source src="video/document_6140701037297670369.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
+
+</section>
+
+<div class="rating">
+  ⭐⭐⭐⭐⭐ 4.8 / 5 Rating (Google Play)
+</div>
+
+<a class="download-btn" 
+   href="https://play.google.com/store/apps/details?id=com.miHoYo.GenshinImpact"
+   target="_blank">
+   🎮 Download Now on Play Store
+</a>
+
+<footer>
+  © 2026 Fan Made Genshin Impact Page
+</footer>
+
+</body>
+</html>

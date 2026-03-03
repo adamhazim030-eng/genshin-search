@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Genshin Impact Character Finder</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <h2>✨ Genshin Finder</h2>
+    <div class="nav-btn">
+      <a href="characters.html">📜 Semua Watak</a>
+      <a href="index.html" class="logout">Logout</a>
+      <!-- link to recommendation page -->
+      <a href="genshin.html" class="btn">🎮 Cadangan Game Genshin Impact</a>
+    </div>
+  </nav>
+
+  <main class="container home">
+    <h1>Cari Watak Genshin Impact</h1>
+    <p class="subtitle">Masukkan nama watak untuk lihat info penuh</p>
+
+    <div class="search-box">
+      <input type="text" id="search" placeholder="Contoh: raiden-shogun">
+      <button onclick="searchChar()">Cari</button>
+    </div>
+
+    <div id="result" class="card"></div>
+  </main>
+
+  <footer>© 2026 Genshin Search Team — Adam & Fikri</footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

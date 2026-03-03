@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maklumat Watak Genshin</title>
+
+<style>
+*{box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(-45deg,#0f0f1c,#1b1b38,#2b2b52,#0f0f1c);
+  background-size:400% 400%;
+  animation:bg 18s ease infinite;
+  color:white;
+  padding:20px;
+}
+
+@keyframes bg{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+
+header a{
+  text-decoration:none;
+  padding:8px 16px;
+  border-radius:20px;
+  background:#6c63ff;
+  color:white;
+  transition:.3s;
+}
+
+header a:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 10px rgba(108,99,255,.6);
+}
+
+.main{
+  max-width:950px;
+  margin:auto;
+  background:rgba(255,255,255,.08);
+  border-radius:15px;
+  padding:20px;
+  box-shadow:0 0 25px rgba(0,0,0,.5);
+}
+
+.char-top{
+  display:flex;
+  flex-wrap:wrap;
+  gap:20px;
+  align-items:center;
+  justify-content:center;
+}
+
+.char-top img{
+  width:280px;
+  max-width:90%;
+  filter:drop-shadow(0 0 20px rgba(0,0,0,.7));
+  border-radius:12px;
+}
+
+.info{
+  flex:1;
+  min-width:260px;
+}
+
+h1{
+  margin:0 0 5px;
+}
+
+.tag{
+  display:inline-block;
+  background:#6c63ff;
+  padding:4px 10px;
+  border-radius:15px;
+  font-size:13px;
+  margin:3px 3px 0 0;
+}
+
+.section{
+  margin-top:25px;
+}
+
+.section h2{
+  margin-bottom:10px;
+  border-bottom:2px solid #6c63ff;
+  padding-bottom:5px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:15px;
+}
+
+.card{
+  background:rgba(0,0,0,.45);
+  border-radius:12px;
+  padding:10px;
+  text-align:center;
+  transition:.3s;
+}
+
+.card:hover{
+  transform:translateY(-5px) scale(1.05);
+  box-shadow:0 0 15px rgba(108,99,255,.7);
+}
+
+.card img{
+  width:80px;
+  margin-bottom:5px;
+}
+
+small{opacity:.75}
+
+/* recommendation button style */
+.btn{
+  display:block;
+  text-align:center;
+  margin:15px auto;
+  width:fit-content;
+  padding:12px 26px;
+  border-radius:30px;
+  background:#6c63ff;
+  color:white;
+  text-decoration:none;
+  font-size:18px;
+  transition:.3s;
+}
+
+.btn:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 15px rgba(108,99,255,.8);
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <a href="home.html">🏠 Home</a>
+  <a href="characters.html">📜 Semua Watak</a>
+</header>
+<!-- recommendation button -->
+<a href="genshin.html" class="btn">🎮 Cadangan Game Genshin Impact</a>
+
+<div class="main">
+
+  <div class="char-top">
+    <img id="charImg">
+    <div class="info">
+      <h1 id="charName">Loading...</h1>
+      <div id="tags"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Weapon</h2>
+    <div id="weaponGrid" class="grid"></div>
+  </div>
+
+  <div class="section">
+    <h2>Artifacts</h2>
+    <div id="artifactGrid" class="grid"></div>
+  </div>
+
+  <div class="section">
+    <h2>Constellation</h2>
+    <div id="constellationGrid" class="grid"></div>
+  </div>
+
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const name = params.get("name");
+
+const charName = document.getElementById("charName");
+const charImg = document.getElementById("charImg");
+const tags = document.getElementById("tags");
+const weaponGrid = document.getElementById("weaponGrid");
+const artifactGrid = document.getElementById("artifactGrid");
+const constellationGrid = document.getElementById("constellationGrid");
+
+async function loadChar(){
+  try{
+    const res = await fetch(`https://genshin.jmp.blue/characters/${name}`);
+    const data = await res.json();
+
+    charName.textContent = data.name;
+
+    // load the gacha splash (with Genshin logo) and fall back to portrait then icon
+    const splashUrls = [
+      `https://genshin.jmp.blue/characters/${name}/gacha-splash`,
+      `https://genshin.jmp.blue/characters/${name}/portrait`,
+      `https://genshin.jmp.blue/characters/${name}/icon-big`
+    ];
+    let imgIndex = 0;
+    charImg.src = splashUrls[imgIndex];
+    charImg.onerror = () => {
+      imgIndex++;
+      if(imgIndex < splashUrls.length) {
+        charImg.src = splashUrls[imgIndex];
+      } else {
+        charImg.style.display = "none";
+      }
+    };
+
+    tags.innerHTML = `
+      <span class="tag">${data.vision}</span>
+      <span class="tag">${data.weapon}</span>
+      <span class="tag">${data.nation}</span>
+      <span class="tag">${data.rarity} ⭐</span>
+    `;
+
+    loadWeapon();
+    loadArtifacts();
+    loadConstellation();
+
+  }catch{
+    charName.textContent="Data tidak dijumpai";
+  }
+}
+
+async function loadWeapon(){
+  const res = await fetch("https://genshin.jmp.blue/weapons");
+  const list = await res.json();
+
+  weaponGrid.innerHTML="";
+
+  for(const w of list.slice(0,6)){
+    weaponGrid.innerHTML+=`
+      <div class="card">
+        <img src="https://genshin.jmp.blue/weapons/${w}/icon">
+        <p>${w.replace(/-/g," ")}</p>
+      </div>
+    `;
+  }
+}
+
+async function loadArtifacts(){
+  const res = await fetch("https://genshin.jmp.blue/artifacts");
+  const list = await res.json();
+
+  artifactGrid.innerHTML="";
+
+  for(const a of list.slice(0,6)){
+    artifactGrid.innerHTML+=`
+      <div class="card">
+        <img src="https://genshin.jmp.blue/artifacts/${a}/flower-of-life">
+        <p>${a.replace(/-/g," ")}</p>
+      </div>
+    `;
+  }
+}
+
+async function loadConstellation(){
+  const res = await fetch(`https://genshin.jmp.blue/characters/${name}/constellations`);
+  const data = await res.json();
+
+  constellationGrid.innerHTML="";
+
+  for(const c of data){
+    constellationGrid.innerHTML+=`
+      <div class="card">
+        <p><b>${c.name}</b></p>
+        <small>${c.description.substring(0,90)}...</small>
+      </div>
+    `;
+  }
+}
+
+loadChar();
+</script>
+
+</body>
+</html>

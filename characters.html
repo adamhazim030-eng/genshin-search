@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>✨ Genshin Character Archive</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(-45deg,#0f0f1c,#1b1b38,#2b2b52,#0f0f1c);
+  background-size:400% 400%;
+  animation:bgmove 18s ease infinite;
+  color:white;
+  padding:15px;
+}
+
+@keyframes bgmove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+header{
+  text-align:center;
+  margin-bottom:15px;
+}
+
+header h1{
+  margin:0;
+  font-size:28px;
+  background:linear-gradient(135deg,#6c63ff,#00c6ff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.subtitle{
+  opacity:.8;
+  font-size:14px;
+}
+
+.filters{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:8px;
+  margin:15px 0;
+}
+
+.filters button{
+  padding:8px 14px;
+  border-radius:20px;
+  border:none;
+  cursor:pointer;
+  background:rgba(255,255,255,.1);
+  color:white;
+  backdrop-filter:blur(6px);
+  transition:.3s;
+}
+
+.filters button:hover{
+  background:#6c63ff;
+  transform:scale(1.1);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
+  gap:15px;
+}
+
+.card{
+  background:rgba(255,255,255,.08);
+  border-radius:15px;
+  padding:10px;
+  text-align:center;
+  cursor:pointer;
+  transition:.35s;
+  position:relative;
+  overflow:hidden;
+}
+
+.card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.15),transparent);
+  transform:translateX(-100%);
+  transition:.5s;
+}
+
+.card:hover::before{
+  transform:translateX(100%);
+}
+
+.card:hover{
+  transform:translateY(-8px) scale(1.05);
+  box-shadow:0 0 20px rgba(108,99,255,.7);
+}
+
+.card img{
+  width:100%;
+  max-width:110px;
+  margin-bottom:5px;
+  filter:drop-shadow(0 0 10px rgba(0,0,0,.7));
+}
+
+.card p{
+  margin:3px 0;
+  font-weight:600;
+}
+
+.card small{
+  opacity:.7;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+
+.back{
+  text-decoration:none;
+  padding:8px 16px;
+  border-radius:20px;
+  background:#6c63ff;
+  color:white;
+  transition:.3s;
+}
+
+.back:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 12px rgba(108,99,255,.7);
+}
+
+/* recommendation button style */
+.btn{
+  display:block;
+  text-align:center;
+  margin:15px auto;
+  width:fit-content;
+  padding:12px 26px;
+  border-radius:30px;
+  background:#6c63ff;
+  color:white;
+  text-decoration:none;
+  font-size:18px;
+  transition:.3s;
+}
+
+.btn:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 15px rgba(108,99,255,.8);
+}
+@keyframes pulse{
+  0%{opacity:.4}
+  50%{opacity:1}
+  100%{opacity:.4}
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+  <a href="home.html" class="back">⬅ Home</a>
+  <span class="subtitle">Live API Data</span>
+</div>
+<!-- recommendation button -->
+<a href="genshin.html" class="btn">🎮 Cadangan Game Genshin Impact</a>
+
+<header>
+  <h1>Genshin Character Archive</h1>
+  <p class="subtitle">Semua watak rasmi Genshin Impact</p>
+</header>
+
+<div class="filters">
+  <button onclick="loadChars('all')">🌍 Semua</button>
+  <button onclick="loadChars('mondstadt')">🍃 Mondstadt</button>
+  <button onclick="loadChars('liyue')">⛰ Liyue</button>
+  <button onclick="loadChars('inazuma')">⚡ Inazuma</button>
+  <button onclick="loadChars('sumeru')">🌿 Sumeru</button>
+  <button onclick="loadChars('fontaine')">💧 Fontaine</button>
+  <button onclick="loadChars('natlan')">🔥 Natlan</button>
+  <button onclick="loadChars('snezhnaya')">❄ Snezhnaya</button>
+</div>
+
+<div id="grid" class="grid"></div>
+
+<script>
+const grid = document.getElementById("grid");
+
+async function loadChars(region){
+  grid.innerHTML = '<div class="loader">🔄 Memuatkan data watak...</div>';
+
+  const res = await fetch("https://genshin.jmp.blue/characters");
+  const list = await res.json();
+
+  grid.innerHTML = "";
+
+  for(const name of list){
+    try{
+      const c = await fetch("https://genshin.jmp.blue/characters/"+name);
+      const data = await c.json();
+
+      if(region!=="all" && data.nation.toLowerCase()!==region) continue;
+
+      const div=document.createElement("div");
+      div.className="card";
+      div.innerHTML=`
+        <img src="https://genshin.jmp.blue/characters/${name}/icon-big">
+        <p>${data.name}</p>
+        <small>${data.nation}</small>
+      `;
+      div.onclick=()=>openDetail(name);
+      grid.appendChild(div);
+
+    }catch{}
+  }
+}
+
+function openDetail(name){
+  window.location.href="detail.html?name="+name;
+}
+
+loadChars("all");
+</script>
+
+</body>
+</html>
