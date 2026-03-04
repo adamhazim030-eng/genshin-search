@@ -182,6 +182,11 @@ header h1{
   <p class="subtitle">Semua watak rasmi Genshin Impact</p>
 </header>
 
+<div class="search-container" style="text-align:center;margin-bottom:12px;">
+  <input id="charSearch" type="text" placeholder="Cari watak... (contoh: amber)" style="padding:8px 12px;border-radius:8px;border:none;width:60%;max-width:320px;">
+  <button id="searchBtn" style="padding:8px 12px;border-radius:8px;border:none;background:#6c63ff;color:white;cursor:pointer;margin-left:6px;">Cari</button>
+</div>
+
 <div class="filters">
   <button onclick="loadChars('all')">🌍 Semua</button>
   <button onclick="loadChars('mondstadt')">🍃 Mondstadt</button>
@@ -197,42 +202,72 @@ header h1{
 
 <script>
 const grid = document.getElementById("grid");
+const charSearch = document.getElementById("charSearch");
+const searchBtn = document.getElementById("searchBtn");
+
+let allCharsData = []; // cached character detail objects { nameKey, data }
+let currentRegion = 'all';
 
 async function loadChars(region){
+  currentRegion = region;
   grid.innerHTML = '<div class="loader">🔄 Memuatkan data watak...</div>';
 
-  const res = await fetch("https://genshin.jmp.blue/characters");
-  const list = await res.json();
+  try{
+    const res = await fetch("https://genshin.jmp.blue/characters");
+    const list = await res.json();
 
-  grid.innerHTML = "";
+    // fetch details concurrently but tolerate failures
+    const detailPromises = list.map(name =>
+      fetch(`https://genshin.jmp.blue/characters/${name}`).then(r=>r.json()).then(d=>({nameKey:name,data:d})).catch(()=>null)
+    );
 
-  for(const name of list){
-    try{
-      const c = await fetch("https://genshin.jmp.blue/characters/"+name);
-      const data = await c.json();
+    const settled = await Promise.allSettled(detailPromises);
+    allCharsData = settled.map(s => (s.status==='fulfilled' ? s.value : null)).filter(Boolean);
 
-      if(region!=="all" && data.nation.toLowerCase()!==region) continue;
+    renderList();
+  }catch(e){
+    grid.innerHTML = '<div class="loader">❌ Gagal memuat data. Sila cuba lagi.</div>';
+  }
+}
 
-      const div=document.createElement("div");
-      div.className="card";
-      div.innerHTML=`
-        <img src="https://genshin.jmp.blue/characters/${name}/icon-big">
-        <p>${data.name}</p>
-        <small>${data.nation}</small>
-      `;
-      div.onclick=()=>openDetail(name);
-      grid.appendChild(div);
+function renderList(){
+  grid.innerHTML = '';
+  const q = (charSearch.value || '').trim().toLowerCase();
 
-    }catch{}
+  for(const item of allCharsData){
+    const data = item.data;
+    const nameKey = item.nameKey;
+    if(!data) continue;
+    if(currentRegion !== 'all' && data.nation && data.nation.toLowerCase() !== currentRegion) continue;
+    if(q && (!data.name || !data.name.toLowerCase().includes(q))) continue;
+
+    const div=document.createElement('div');
+    div.className='card';
+    div.innerHTML=`
+      <img src="https://genshin.jmp.blue/characters/${nameKey}/icon-big">
+      <p>${data.name}</p>
+      <small>${data.nation || ''}</small>
+    `;
+    div.onclick = ()=>openDetail(nameKey);
+    grid.appendChild(div);
+  }
+
+  if(grid.children.length===0){
+    grid.innerHTML = '<div class="loader">Tiada watak ditemui.</div>';
   }
 }
 
 function openDetail(name){
-  window.location.href="detail.html?name="+name;
+  window.location.href = `detail.html?name=${name}`;
 }
 
-loadChars("all");
+searchBtn.addEventListener('click', ()=>renderList());
+charSearch.addEventListener('keyup', (e)=>{ if(e.key==='Enter') renderList(); });
+
+loadChars('all');
 </script>
+
+  <footer>© 2026 Genshin Search Team — Adam & Fikri</footer>
 
 </body>
 </html>
