@@ -15,6 +15,7 @@
       <a href="index.html" class="logout">index</a>
       <!-- link to recommendation page -->
       <a href="genshin.html" class="btn">🎮 Cadangan Game Genshin Impact</a>
+      <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
     </div>
   </nav>
 
@@ -33,5 +34,25 @@
   <footer>© 2026 Genshin Search Team — Adam & Fikri</footer>
 
   <script src="script.js"></script>
+  <script>
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+      body.classList.add('light');
+      themeToggle.textContent = '☀️ Light';
+    } else {
+      themeToggle.textContent = '🌙 Dark';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      body.classList.toggle('light');
+      const isLight = body.classList.contains('light');
+      themeToggle.textContent = isLight ? '☀️ Light' : '🌙 Dark';
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    });
+  </script>
 </body>
 </html>

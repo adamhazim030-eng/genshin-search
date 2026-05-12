@@ -11,6 +11,26 @@
       font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
+    :root {
+      --text: white;
+      --login-bg: rgba(20,20,35,.85);
+      --input-bg: rgba(255,255,255,0.1);
+      --input-border: rgba(255,255,255,0.2);
+      --btn-bg: linear-gradient(45deg, #667eea, #764ba2);
+      --btn-hover: linear-gradient(45deg, #5a6fd8, #6a4190);
+      --overlay: radial-gradient(circle at top, rgba(255,255,255,.05), transparent 70%);
+    }
+
+    body.light {
+      --text: #333;
+      --login-bg: rgba(255,255,255,.9);
+      --input-bg: rgba(255,255,255,0.8);
+      --input-border: rgba(0,0,0,0.2);
+      --btn-bg: linear-gradient(45deg, #667eea, #764ba2);
+      --btn-hover: linear-gradient(45deg, #5a6fd8, #6a4190);
+      --overlay: radial-gradient(circle at top, rgba(0,0,0,.1), transparent 70%);
+    }
+
     body{
       margin:0;
       min-height:100vh;
@@ -22,7 +42,7 @@
         url("https://images8.alphacoders.com/114/1141918.jpg");
       background-size:cover;
       background-position:center;
-      color:white;
+      color:var(--text);
       overflow:hidden;
       position:relative;
     }
@@ -30,7 +50,7 @@
     .overlay{
       position:absolute;
       inset:0;
-      background: radial-gradient(circle at top, rgba(255,255,255,.05), transparent 70%);
+      background: var(--overlay);
       pointer-events:none;
     }
 
@@ -38,7 +58,7 @@
       position:relative;
       width:95%;
       max-width:420px;
-      background: rgba(20,20,35,.85);
+      background: var(--login-bg);
       border-radius:20px;
       padding:35px 30px 40px;
       backdrop-filter: blur(12px);
@@ -76,8 +96,8 @@
       width:100%;
       padding:14px 15px;
       border-radius:12px;
-      border:1px solid rgba(255,255,255,.15);
-      background:rgba(255,255,255,.08);
+      border:1px solid var(--input-border);
+      background:var(--input-bg);
       outline:none;
       color:white;
       font-size:15px;
@@ -94,7 +114,7 @@
       padding:14px;
       border-radius:14px;
       border:none;
-      background:linear-gradient(135deg,#6c63ff,#00ffe1);
+      background:var(--btn-bg);
       color:black;
       font-weight:700;
       letter-spacing:.5px;
@@ -170,6 +190,21 @@
       box-shadow:0 0 15px rgba(108,99,255,.8);
     }
 
+    .theme-toggle {
+      background: var(--btn-bg);
+      color: black;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: .3s;
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 12px rgba(108,99,255,.7);
+    }
+
     /* ✅ FIXED FOOTER */
     .main-footer{
       position:fixed;
@@ -203,6 +238,10 @@
     <div class="logo">GENSHIN SEARCH</div>
     <div class="tagline">Sistem Carian Watak Genshin Impact</div>
 
+    <div style="text-align: center; margin-bottom: 20px;">
+      <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
+    </div>
+
     <div class="intro-text">
       <p>Selamat datang! Klik butang di bawah untuk terus ke laman utama.</p>
     </div>
@@ -219,6 +258,26 @@
     © 2026 Genshin Search Team — Adam & Fikri
   </footer>
 
+  <script>
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+      body.classList.add('light');
+      themeToggle.textContent = '☀️ Light';
+    } else {
+      themeToggle.textContent = '🌙 Dark';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      body.classList.toggle('light');
+      const isLight = body.classList.contains('light');
+      themeToggle.textContent = isLight ? '☀️ Light' : '🌙 Dark';
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    });
+  </script>
 
 </body>
 </html>

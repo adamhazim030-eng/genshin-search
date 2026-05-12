@@ -3,13 +3,53 @@
   font-family:'Segoe UI',sans-serif;
 }
 
+:root {
+  --bg: linear-gradient(-45deg,#0f0f1c,#2b2b52,#1b1b38,#0f0f1c);
+  --text: white;
+  --navbar-bg: rgba(0,0,0,.4);
+  --container-bg: rgba(0,0,0,.45);
+  --card-bg: rgba(255,255,255,.08);
+  --input-bg: rgba(255,255,255,0.98);
+  --input-color: #111;
+  --btn-bg: linear-gradient(90deg,#4facfe,#00f2fe);
+  --btn-color: #012;
+  --btn-hover-shadow: rgba(0,198,255,.7);
+  --h1-gradient: linear-gradient(90deg,#ffffff,#6c63ff);
+  --text-fill: transparent;
+  --subtitle-color: rgba(255,255,255,0.9);
+  --nav-btn-bg: #6c63ff;
+  --nav-btn-color: white;
+  --logout-bg: #ff4b5c;
+  --logout-hover: #e43b4b;
+}
+
+body.light {
+  --bg: linear-gradient(-45deg,#f5f5f5,#ffffff,#e8e8e8,#f5f5f5);
+  --text: #333;
+  --navbar-bg: rgba(255,255,255,.8);
+  --container-bg: rgba(255,255,255,.9);
+  --card-bg: rgba(0,0,0,.05);
+  --input-bg: rgba(255,255,255,1);
+  --input-color: #333;
+  --btn-bg: linear-gradient(90deg,#6c63ff,#00c6ff);
+  --btn-color: white;
+  --btn-hover-shadow: rgba(108,99,255,.7);
+  --h1-gradient: linear-gradient(90deg,#333,#6c63ff);
+  --text-fill: transparent;
+  --subtitle-color: rgba(0,0,0,0.7);
+  --nav-btn-bg: #6c63ff;
+  --nav-btn-color: white;
+  --logout-bg: #ff4b5c;
+  --logout-hover: #e43b4b;
+}
+
 body{
   margin:0;
   min-height:100vh;
-  background:linear-gradient(-45deg,#0f0f1c,#2b2b52,#1b1b38,#0f0f1c);
+  background:var(--bg);
   background-size:400% 400%;
   animation:bgmove 15s ease infinite;
-  color:white;
+  color:var(--text);
 }
 
 @keyframes bgmove{
@@ -23,7 +63,7 @@ body{
   justify-content:space-between;
   align-items:center;
   padding:15px 30px;
-  background:rgba(0,0,0,.4);
+  background:var(--navbar-bg);
   backdrop-filter:blur(8px);
   box-shadow:0 4px 10px rgba(0,0,0,.6);
   gap:10px; /* spacing between items */
@@ -37,16 +77,16 @@ body{
 
 .nav-btn a{
   text-decoration:none;
-  color:white;
-  background:#6c63ff;
+  color:var(--nav-btn-color);
+  background:var(--nav-btn-bg);
   padding:8px 15px;
   border-radius:8px;
   transition:.3s;
   margin:0 6px;
 }
 
-.logout{background:#ff4b5c !important;}
-.logout:hover{background:#e43b4b !important;}
+.logout{background:var(--logout-bg) !important;}
+.logout:hover{background:var(--logout-hover) !important;}
 
 @media(max-width:600px){
   .navbar{flex-direction:column;align-items:flex-start;gap:8px;}
@@ -58,7 +98,7 @@ body{
   max-width:1100px;   /* bagi lebih luas */
   margin:40px auto;
   width:calc(100% - 40px);
-  background:rgba(0,0,0,.45);
+  background:var(--container-bg);
   padding:30px;
   border-radius:18px;
   text-align:center;
@@ -82,13 +122,13 @@ body{
   line-height:1.05;
   margin-bottom:8px;
   font-weight:700;
-  background:linear-gradient(90deg,#ffffff,#6c63ff);
+  background:var(--h1-gradient);
   -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+  -webkit-text-fill-color:var(--text-fill);
   text-shadow:0 10px 30px rgba(108,99,255,0.08);
 }
 .container.home .subtitle{
-  color:rgba(255,255,255,0.9);
+  color:var(--subtitle-color);
   margin-bottom:18px;
   font-size:16px;
   opacity:0.95;
@@ -114,8 +154,8 @@ body{
 }
 
 .search-box input{
-  background:rgba(255,255,255,0.98);
-  color:#111;
+  background:var(--input-bg);
+  color:var(--input-color);
   box-shadow:0 10px 30px rgba(2,6,23,0.5);
 }
 
@@ -127,26 +167,24 @@ body{
   border-radius:12px;
   border:none;
   cursor:pointer;
-  background:linear-gradient(90deg,#4facfe,#00f2fe);
-  color:white;
+  background:var(--btn-bg);
+  color:var(--btn-color);
   font-size:16px;
   font-weight:600;
   transition:.3s;
 }
 
-.search-box button{color:#012}
-
 .search-box button:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(79,162,255,0.18)}
 
 .search-box button:hover{
   transform:scale(1.05);
-  box-shadow:0 0 15px rgba(0,198,255,.7);
+  box-shadow:0 0 15px var(--btn-hover-shadow);
 }
 
 /* CARD FULL WIDTH STYLE */
 .card{
   margin:25px auto;
-  background:rgba(255,255,255,.08);
+  background:var(--card-bg);
   padding:25px;
   border-radius:20px;
   display:none;
@@ -189,4 +227,20 @@ body{
   .container.home{min-height:auto;padding:20px;}
   h1{font-size:24px;}
   .subtitle{font-size:14px;}
+}
+
+/* Dark/Light Mode Toggle */
+.theme-toggle {
+  background: var(--nav-btn-bg);
+  color: var(--nav-btn-color);
+  border: none;
+  padding: 8px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: .3s;
+  margin: 0 6px;
+}
+
+.theme-toggle:hover {
+  background: var(--btn-hover-shadow);
 }

@@ -8,13 +8,47 @@
 <style>
 *{box-sizing:border-box;font-family:'Segoe UI',sans-serif}
 
+:root {
+  --bg: linear-gradient(-45deg,#0f0f1c,#1b1b38,#2b2b52,#0f0f1c);
+  --text: white;
+  --main-bg: rgba(255,255,255,.08);
+  --header-link-bg: #6c63ff;
+  --header-link-hover: rgba(108,99,255,.6);
+  --card-bg: rgba(0,0,0,.45);
+  --card-hover: rgba(108,99,255,.7);
+  --recommend-card-bg: rgba(255,255,255,.06);
+  --recommend-card-border: rgba(255,255,255,.1);
+  --recommend-card-hover: rgba(108,99,255,.18);
+  --stat-item-bg: rgba(255,255,255,.05);
+  --stat-item-border: rgba(255,255,255,.08);
+  --icon-border: rgba(255,255,255,.12);
+  --section-border: #6c63ff;
+}
+
+body.light {
+  --bg: linear-gradient(-45deg,#f5f5f5,#ffffff,#e8e8e8,#f5f5f5);
+  --text: #333;
+  --main-bg: rgba(0,0,0,.05);
+  --header-link-bg: #6c63ff;
+  --header-link-hover: rgba(108,99,255,.6);
+  --card-bg: rgba(255,255,255,.9);
+  --card-hover: rgba(108,99,255,.7);
+  --recommend-card-bg: rgba(0,0,0,.05);
+  --recommend-card-border: rgba(0,0,0,.1);
+  --recommend-card-hover: rgba(108,99,255,.18);
+  --stat-item-bg: rgba(0,0,0,.05);
+  --stat-item-border: rgba(0,0,0,.08);
+  --icon-border: rgba(0,0,0,.12);
+  --section-border: #6c63ff;
+}
+
 body{
   margin:0;
   min-height:100vh;
-  background:linear-gradient(-45deg,#0f0f1c,#1b1b38,#2b2b52,#0f0f1c);
+  background:var(--bg);
   background-size:400% 400%;
   animation:bg 18s ease infinite;
-  color:white;
+  color:var(--text);
   padding:20px;
 }
 
@@ -35,20 +69,35 @@ header a{
   text-decoration:none;
   padding:8px 16px;
   border-radius:20px;
-  background:#6c63ff;
+  background:var(--header-link-bg);
   color:white;
   transition:.3s;
 }
 
 header a:hover{
   transform:scale(1.05);
-  box-shadow:0 0 10px rgba(108,99,255,.6);
+  box-shadow:0 0 10px var(--header-link-hover);
+}
+
+.theme-toggle {
+  background: var(--header-link-bg);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px var(--header-link-hover);
 }
 
 .main{
   max-width:950px;
   margin:auto;
-  background:rgba(255,255,255,.08);
+  background:var(--main-bg);
   border-radius:15px;
   padding:20px;
   box-shadow:0 0 25px rgba(0,0,0,.5);
@@ -133,8 +182,8 @@ h1{
 }
 
 .stat-item{
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.08);
+  background:var(--stat-item-bg);
+  border:1px solid var(--stat-item-border);
   border-radius:14px;
   padding:14px 16px;
 }
@@ -157,7 +206,7 @@ h1{
 
 .section h2{
   margin-bottom:10px;
-  border-bottom:2px solid #6c63ff;
+  border-bottom:2px solid var(--section-border);
   padding-bottom:5px;
 }
 
@@ -168,7 +217,7 @@ h1{
 }
 
 .card{
-  background:rgba(0,0,0,.45);
+  background:var(--card-bg);
   border-radius:12px;
   padding:10px;
   text-align:center;
@@ -177,7 +226,7 @@ h1{
 
 .card:hover{
   transform:translateY(-5px) scale(1.05);
-  box-shadow:0 0 15px rgba(108,99,255,.7);
+  box-shadow:0 0 15px var(--card-hover);
 }
 
 .card img{
@@ -192,8 +241,8 @@ h1{
 }
 
 .recommend-card{
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.1);
+  background:var(--recommend-card-bg);
+  border:1px solid var(--recommend-card-border);
   border-radius:18px;
   padding:18px;
   transition:.3s;
@@ -201,7 +250,7 @@ h1{
 
 .recommend-card:hover{
   transform:translateY(-5px);
-  box-shadow:0 18px 40px rgba(108,99,255,.18);
+  box-shadow:0 18px 40px var(--recommend-card-hover);
 }
 
 .recommend-card h3{
@@ -228,7 +277,7 @@ h1{
   width:60px;
   height:60px;
   border-radius:14px;
-  border:1px solid rgba(255,255,255,.12);
+  border:1px solid var(--icon-border);
   object-fit:cover;
 }
 
@@ -279,9 +328,12 @@ small{opacity:.75}
 <header>
   <a href="home.html">🏠 Home</a>
   <a href="characters.html">📜 Semua Watak</a>
+  <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
 </header>
 <!-- recommendation button -->
 <a href="genshin.html" class="btn">🎮 Cadangan Game Genshin Impact</a>
+<a href="home.html" class="btn">🏠 Home</a>
+<a href="index.html" class="btn">🏠 Index</a>
 
 <div class="main">
 
@@ -489,23 +541,28 @@ function renderTalents(talents){
 
   // Try different talent image endpoints
   const talentImageTypes = ['normal-attack', 'elemental-skill', 'elemental-burst'];
+  const normalizedName = name.replace(/-/g, '_');
 
   for(let i = 0; i < talents.length && i < talentImageTypes.length; i++){
     const talent = talents[i];
     const description = talent.description.replace(/\n/g, '<br>');
     const upgrades = talent.upgrades?.map(up => `<li><strong>${up.name}:</strong> ${up.value}</li>`).join('') || '';
+    const normalizedTalent = talent.name.toLowerCase().replace(/\s+/g, '-');
 
     // Try multiple possible image URLs
     const possibleUrls = [
       `https://genshin.jmp.blue/characters/${name}/talents/${talentImageTypes[i]}`,
       `https://genshin.jmp.blue/characters/${name}/talent-${talentImageTypes[i]}`,
       `https://genshin.jmp.blue/characters/${name}/skill-${i + 1}`,
-      `https://genshin.jmp.blue/characters/${name}/talents/${talent.name.toLowerCase().replace(/\s+/g, '-')}`,
+      `https://genshin.jmp.blue/characters/${name}/talents/${normalizedTalent}`,
       `https://genshin.jmp.blue/characters/${name}/talents/${i + 1}`,
-      // Try alternative API endpoints
+      `https://upload-os-bbs.hoyolab.com/game_record/genshin/characters/${normalizedName}/talent_${i + 1}.png`,
+      `https://upload-os-bbs.hoyolab.com/game_record/genshin/characters/${normalizedName}/talent_${talentImageTypes[i]}.png`,
       `https://api.genshin.dev/characters/${name}/talent-icons/${i}`,
-      `https://enka.network/ui/${name}_${talentImageTypes[i].replace('-', '_')}.png`,
-      `https://paimon.moe/images/characters/${name}/talent_${talentImageTypes[i]}.png`
+      `https://enka.network/ui/${normalizedName}_${talentImageTypes[i].replace('-', '_')}.png`,
+      `https://paimon.moe/images/characters/${name}/talent_${talentImageTypes[i]}.png`,
+      `https://paimon.moe/images/characters/${name}/${talentImageTypes[i]}.png`,
+      `https://paimon.moe/images/characters/${name}/${normalizedTalent}.png`
     ];
 
     const card = document.createElement('div');
@@ -572,9 +629,11 @@ function renderPassives(passives){
 
   // Passive talent keys
   const passiveKeys = ['utility-passive', '1st-ascension-passive', '4th-ascension-passive'];
+  const normalizedName = name.replace(/-/g, '_');
 
   for(let i = 0; i < passives.length && i < passiveKeys.length; i++){
     const passive = passives[i];
+    const normalizedPassive = passive.name.toLowerCase().replace(/\s+/g, '-');
 
     // Try multiple passive talent image URLs
     const possibleUrls = [
@@ -582,10 +641,12 @@ function renderPassives(passives){
       `https://genshin.jmp.blue/characters/${name}/passive-${passiveKeys[i]}`,
       `https://genshin.jmp.blue/characters/${name}/passive-${i + 1}`,
       `https://api.genshin.dev/characters/${name}/passive-talents/${passiveKeys[i]}`,
-      `https://genshin.jmp.blue/characters/${name}/passive-talents/${passive.name.toLowerCase().replace(/\s+/g, '-')}`,
+      `https://genshin.jmp.blue/characters/${name}/passive-talents/${normalizedPassive}`,
       `https://genshin.jmp.blue/characters/${name}/passive-talents/${i + 1}`,
-      `https://enka.network/ui/${name}_passive_${i + 1}.png`,
-      `https://paimon.moe/images/characters/${name}/passive_${passiveKeys[i]}.png`
+      `https://upload-os-bbs.hoyolab.com/game_record/genshin/characters/${normalizedName}/passive_${i + 1}.png`,
+      `https://enka.network/ui/${normalizedName}_passive_${i + 1}.png`,
+      `https://paimon.moe/images/characters/${name}/passive_${passiveKeys[i]}.png`,
+      `https://paimon.moe/images/characters/${name}/${normalizedPassive}.png`
     ];
 
     const card = document.createElement('div');
@@ -873,6 +934,27 @@ function renderRecommendations(data){
 }
 
 loadChar();
+</script>
+
+<script>
+  const themeToggle = document.getElementById('themeToggle');
+  const body = document.body;
+
+  // Load saved theme
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'light') {
+    body.classList.add('light');
+    themeToggle.textContent = '☀️ Light';
+  } else {
+    themeToggle.textContent = '🌙 Dark';
+  }
+
+  themeToggle.addEventListener('click', () => {
+    body.classList.toggle('light');
+    const isLight = body.classList.contains('light');
+    themeToggle.textContent = isLight ? '☀️ Light' : '🌙 Dark';
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  });
 </script>
 
   <footer>© 2026 Genshin Search Team — Adam & Fikri</footer>

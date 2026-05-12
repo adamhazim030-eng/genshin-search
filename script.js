@@ -49,6 +49,5 @@ async function searchChar() {
 }
 
 function goDetail(name){
-  localStorage.setItem("char", name);
-  window.location.href = "detail.html";
+  window.location.href = `detail.html?name=${name}`;
 }

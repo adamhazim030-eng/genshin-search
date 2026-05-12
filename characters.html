@@ -11,13 +11,69 @@
   font-family:'Segoe UI',sans-serif;
 }
 
+:root {
+  --bg: linear-gradient(-45deg,#0f0f1c,#1b1b38,#2b2b52,#0f0f1c);
+  --text: white;
+  --card-bg: rgba(255,255,255,.08);
+  --btn-bg: #6c63ff;
+  --btn-hover: rgba(108,99,255,.7);
+  --h1-gradient: linear-gradient(135deg,#6c63ff,#00c6ff);
+  --text-fill: transparent;
+  --subtitle-color: rgba(255,255,255,0.8);
+  --topbar-bg: rgba(0,0,0,.4);
+  --grid-bg: rgba(255,255,255,.08);
+  --small-color: rgba(255,255,255,0.7);
+  --back-bg: #6c63ff;
+  --back-hover: rgba(108,99,255,.7);
+  --rec-btn-bg: #6c63ff;
+  --rec-btn-hover: rgba(108,99,255,.8);
+  --filter-bg: #1d1e3a;
+}
+
+body.light {
+  --bg: linear-gradient(-45deg,#f5f5f5,#ffffff,#e8e8e8,#f5f5f5);
+  --text: #333;
+  --card-bg: rgba(0,0,0,.05);
+  --btn-bg: #6c63ff;
+  --btn-hover: rgba(108,99,255,.7);
+  --h1-gradient: linear-gradient(135deg,#333,#6c63ff);
+  --text-fill: transparent;
+  --subtitle-color: rgba(0,0,0,0.7);
+  --topbar-bg: rgba(255,255,255,.8);
+  --grid-bg: rgba(0,0,0,.05);
+  --small-color: rgba(0,0,0,0.7);
+  --back-bg: #6c63ff;
+  --back-hover: rgba(108,99,255,.7);
+  --rec-btn-bg: #6c63ff;
+  --rec-btn-hover: rgba(108,99,255,.8);
+  --filter-bg: #e0e0e0;
+}
+
+body.light {
+  --bg: linear-gradient(-45deg,#f5f5f5,#ffffff,#e8e8e8,#f5f5f5);
+  --text: #333;
+  --card-bg: rgba(0,0,0,.05);
+  --btn-bg: #6c63ff;
+  --btn-hover: rgba(108,99,255,.7);
+  --h1-gradient: linear-gradient(135deg,#333,#6c63ff);
+  --text-fill: transparent;
+  --subtitle-color: rgba(0,0,0,0.7);
+  --topbar-bg: rgba(255,255,255,.8);
+  --grid-bg: rgba(0,0,0,.05);
+  --small-color: rgba(0,0,0,0.7);
+  --back-bg: #6c63ff;
+  --back-hover: rgba(108,99,255,.7);
+  --rec-btn-bg: #6c63ff;
+  --rec-btn-hover: rgba(108,99,255,.8);
+}
+
 body{
   margin:0;
   min-height:100vh;
-  background:linear-gradient(-45deg,#0f0f1c,#1b1b38,#2b2b52,#0f0f1c);
+  background:var(--bg);
   background-size:400% 400%;
   animation:bgmove 18s ease infinite;
-  color:white;
+  color:var(--text);
   padding:15px;
 }
 
@@ -35,38 +91,75 @@ header{
 header h1{
   margin:0;
   font-size:28px;
-  background:linear-gradient(135deg,#6c63ff,#00c6ff);
+  background:var(--h1-gradient);
   -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+  -webkit-text-fill-color:var(--text-fill);
 }
 
 .subtitle{
   opacity:.8;
   font-size:14px;
+  color:var(--subtitle-color);
 }
 
 .filters{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:8px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  gap:12px;
   margin:15px 0;
 }
 
 .filters button{
-  padding:8px 14px;
-  border-radius:20px;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  align-items:center;
+  min-height:100px;
+  overflow:hidden;
+  border-radius:18px;
   border:none;
-  cursor:pointer;
-  background:rgba(255,255,255,.1);
+  padding:0;
+  background:var(--filter-bg);
   color:white;
-  backdrop-filter:blur(6px);
-  transition:.3s;
+  cursor:pointer;
+  box-shadow:0 16px 35px rgba(0,0,0,.2);
+  transition:.35s;
+}
+
+.filters button::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,.75));
+}
+
+.filters button img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:brightness(.7) saturate(1.2);
+}
+
+.filters button span{
+  position:relative;
+  z-index:1;
+  padding:14px 12px;
+  width:100%;
+  text-align:center;
+  font-weight:700;
+  letter-spacing:.4px;
 }
 
 .filters button:hover{
-  background:#6c63ff;
-  transform:scale(1.1);
+  transform:translateY(-4px);
+  box-shadow:0 20px 40px rgba(108,99,255,.45);
+}
+
+.filters button.active{
+  box-shadow:0 0 0 2px rgba(108,99,255,.9),0 18px 35px rgba(108,99,255,.25);
 }
 
 .grid{
@@ -76,7 +169,7 @@ header h1{
 }
 
 .card{
-  background:rgba(255,255,255,.08);
+  background:var(--card-bg);
   border-radius:15px;
   padding:10px;
   text-align:center;
@@ -118,6 +211,7 @@ header h1{
 
 .card small{
   opacity:.7;
+  color:var(--small-color);
 }
 
 .topbar{
@@ -125,23 +219,25 @@ header h1{
   justify-content:space-between;
   align-items:center;
   margin-bottom:10px;
+  background:var(--topbar-bg);
+  padding:10px;
+  border-radius:10px;
 }
 
 .back{
   text-decoration:none;
   padding:8px 16px;
   border-radius:20px;
-  background:#6c63ff;
+  background:var(--back-bg);
   color:white;
   transition:.3s;
 }
 
 .back:hover{
   transform:scale(1.05);
-  box-shadow:0 0 12px rgba(108,99,255,.7);
+  box-shadow:0 0 12px var(--back-hover);
 }
 
-/* recommendation button style */
 .btn{
   display:block;
   text-align:center;
@@ -149,7 +245,7 @@ header h1{
   width:fit-content;
   padding:12px 26px;
   border-radius:30px;
-  background:#6c63ff;
+  background:var(--rec-btn-bg);
   color:white;
   text-decoration:none;
   font-size:18px;
@@ -158,7 +254,23 @@ header h1{
 
 .btn:hover{
   transform:scale(1.05);
-  box-shadow:0 0 15px rgba(108,99,255,.8);
+  box-shadow:0 0 15px var(--rec-btn-hover);
+}
+
+/* Dark/Light Mode Toggle */
+.theme-toggle {
+  background: var(--btn-bg);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 12px var(--btn-hover);
 }
 @keyframes pulse{
   0%{opacity:.4}
@@ -173,6 +285,7 @@ header h1{
 <div class="topbar">
   <a href="home.html" class="back">⬅ Home</a>
   <span class="subtitle">Live API Data</span>
+  <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
 </div>
 <!-- recommendation button -->
 <a href="genshin.html" class="btn">🎮 Cadangan Game Genshin Impact</a>
@@ -187,16 +300,7 @@ header h1{
   <button id="searchBtn" style="padding:8px 12px;border-radius:8px;border:none;background:#6c63ff;color:white;cursor:pointer;margin-left:6px;">Cari</button>
 </div>
 
-<div class="filters">
-  <button onclick="loadChars('all')">🌍 Semua</button>
-  <button onclick="loadChars('mondstadt')">🍃 Mondstadt</button>
-  <button onclick="loadChars('liyue')">⛰ Liyue</button>
-  <button onclick="loadChars('inazuma')">⚡ Inazuma</button>
-  <button onclick="loadChars('sumeru')">🌿 Sumeru</button>
-  <button onclick="loadChars('fontaine')">💧 Fontaine</button>
-  <button onclick="loadChars('natlan')">🔥 Natlan</button>
-  <button onclick="loadChars('snezhnaya')">❄ Snezhnaya</button>
-</div>
+<div class="filters" id="regionButtons"></div>
 
 <div id="grid" class="grid"></div>
 
@@ -207,6 +311,38 @@ const searchBtn = document.getElementById("searchBtn");
 
 let allCharsData = []; // cached character detail objects { nameKey, data }
 let currentRegion = 'all';
+
+const regions = [
+  { key: 'all', label: 'Semua', image: 'images/regions/all.jpg' },
+  { key: 'mondstadt', label: 'Mondstadt', image: 'images/regions/monstand.jpg' },
+  { key: 'liyue', label: 'Liyue', image: 'images/regions/liyue.jpg' },
+  { key: 'inazuma', label: 'Inazuma', image: 'images/regions/inazuma.jpg' },
+  { key: 'sumeru', label: 'Sumeru', image: 'images/regions/sumeru.jpg' },
+  { key: 'fontaine', label: 'Fontaine', image: 'images/regions/fontaine.jpg' },
+  { key: 'natlan', label: 'Natlan', image: 'images/regions/natlan.jpg' },
+  { key: 'snezhnaya', label: 'Snezhnaya', image: 'images/regions/all.jpg' } // placeholder since no image
+];
+
+function renderRegionButtons(){
+  const container = document.getElementById('regionButtons');
+  container.innerHTML = '';
+  regions.forEach(region => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = region.key === currentRegion ? 'active' : '';
+    button.dataset.region = region.key;
+    button.innerHTML = `
+      <img src="${region.image}" alt="${region.label}">
+      <span>${region.label}</span>
+    `;
+    button.addEventListener('click', () => {
+      loadChars(region.key);
+      document.querySelectorAll('.filters button').forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+    });
+    container.appendChild(button);
+  });
+}
 
 // API endpoints to try (in order of preference)
 const apiEndpoints = [
@@ -322,7 +458,29 @@ function openDetail(name){
 searchBtn.addEventListener('click', ()=>renderList());
 charSearch.addEventListener('keyup', (e)=>{ if(e.key==='Enter') renderList(); });
 
+renderRegionButtons();
 loadChars('all');
+</script>
+
+<script>
+  const themeToggle = document.getElementById('themeToggle');
+  const body = document.body;
+
+  // Load saved theme
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'light') {
+    body.classList.add('light');
+    themeToggle.textContent = '☀️ Light';
+  } else {
+    themeToggle.textContent = '🌙 Dark';
+  }
+
+  themeToggle.addEventListener('click', () => {
+    body.classList.toggle('light');
+    const isLight = body.classList.contains('light');
+    themeToggle.textContent = isLight ? '☀️ Light' : '🌙 Dark';
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  });
 </script>
 
   <footer>© 2026 Genshin Search Team — Adam & Fikri</footer>
