@@ -24,10 +24,7 @@
       background-position:center;
       color:white;
       overflow:hidden;
-<<<<<<< HEAD
-=======
       position:relative;
->>>>>>> 4c5df4df5b8b2f0c8d41054c6296eae6f61c579e
     }
 
     .overlay{
@@ -47,10 +44,7 @@
       backdrop-filter: blur(12px);
       box-shadow:0 20px 50px rgba(0,0,0,.7);
       animation: pop .8s ease;
-<<<<<<< HEAD
-=======
       z-index:2;
->>>>>>> 4c5df4df5b8b2f0c8d41054c6296eae6f61c579e
     }
 
     @keyframes pop{
@@ -128,18 +122,11 @@
       75%{transform:translateX(4px);}
     }
 
-<<<<<<< HEAD
-    .footer{
-      margin-top:20px;
-      font-size:13px;
-      opacity:.7;
-=======
     .footer-text{
       margin-top:20px;
       font-size:13px;
       opacity:.7;
       text-align:center;
->>>>>>> 4c5df4df5b8b2f0c8d41054c6296eae6f61c579e
     }
 
     .glow{
@@ -164,15 +151,6 @@
       filter:blur(30px);
     }
 
-<<<<<<< HEAD
-    @media(max-width:500px){
-      .login-box{padding:28px 22px;}
-      .logo{font-size:28px;}
-    }
-
-    /* recommendation link style */
-=======
->>>>>>> 4c5df4df5b8b2f0c8d41054c6296eae6f61c579e
     .btn{
       display:block;
       text-align:center;
@@ -192,8 +170,6 @@
       box-shadow:0 0 15px rgba(108,99,255,.8);
     }
 
-<<<<<<< HEAD
-=======
     /* ✅ FIXED FOOTER */
     .main-footer{
       position:fixed;
@@ -213,7 +189,6 @@
       .logo{font-size:28px;}
     }
 
->>>>>>> 4c5df4df5b8b2f0c8d41054c6296eae6f61c579e
   </style>
 </head>
 
@@ -228,41 +203,15 @@
     <div class="logo">GENSHIN SEARCH</div>
     <div class="tagline">Sistem Carian Watak Genshin Impact</div>
 
-    <div class="input-group">
-      <input type="text" id="username" placeholder="Username">
-<<<<<<< HEAD
+    <div class="intro-text">
+      <p>Selamat datang! Klik butang di bawah untuk terus ke laman utama.</p>
     </div>
 
-    <div class="input-group">
-      <input type="password" id="password" placeholder="Password">
-    </div>
-
-    <button onclick="login()">LOGIN</button>
-
-    <div id="error" class="error">❌ Username atau password salah</div>
-
-    <div class="footer">
-      © 2026 | Powered by Web Dev Genshin System
-    </div>
-
-    <!-- recommendation link -->
-=======
-    </div>
-
-    <div class="input-group">
-      <input type="password" id="password" placeholder="Password">
-    </div>
-
-    <button onclick="login()">LOGIN</button>
-
-    <div id="error" class="error">❌ Username atau password salah</div>
+    <a href="home.html" class="btn">MAJU KE HOME</a>
 
     <div class="footer-text">
       © 2026 | Powered by Web Dev Genshin System
     </div>
-
->>>>>>> 4c5df4df5b8b2f0c8d41054c6296eae6f61c579e
-    <a href="genshin.html" class="btn">🎮 Cadangan Game Genshin Impact</a>
   </div>
 
   <!-- ✅ FOOTER FIX -->
@@ -270,22 +219,6 @@
     © 2026 Genshin Search Team — Adam & Fikri
   </footer>
 
-  <script>
-    function login(){
-      const user = document.getElementById("username").value.trim();
-      const pass = document.getElementById("password").value.trim();
-      const error = document.getElementById("error");
-
-      const USER = "admin";
-      const PASS = "1234";
-
-      if(user === USER && pass === PASS){
-        window.location.href = "home.html";
-      } else {
-        error.style.display = "block";
-      }
-    }
-  </script>
 
 </body>
 </html>

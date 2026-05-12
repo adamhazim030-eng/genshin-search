@@ -57,34 +57,98 @@ header a:hover{
 .char-top{
   display:flex;
   flex-wrap:wrap;
-  gap:20px;
+  gap:30px;
   align-items:center;
   justify-content:center;
 }
 
-.char-top img{
-  width:280px;
-  max-width:90%;
-  filter:drop-shadow(0 0 20px rgba(0,0,0,.7));
-  border-radius:12px;
+.image-panel{
+  position:relative;
+  width:360px;
+  max-width:100%;
+  min-width:260px;
+}
+
+.image-panel img{
+  width:100%;
+  border-radius:28px;
+  box-shadow:0 30px 70px rgba(0,0,0,.5);
+  border:1px solid rgba(255,255,255,.12);
+  transition:transform .4s ease;
+  display:block; /* Ensure image is visible */
+  min-height:200px; /* Minimum height to prevent layout shift */
+  object-fit:cover; /* Ensure proper image scaling */
+  background: linear-gradient(45deg, rgba(108,99,255,0.1), rgba(0,255,225,0.1)); /* Loading background */
+}
+
+.image-panel:hover img{
+  transform:scale(1.02);
+}
+
+.img-glow{
+  position:absolute;
+  inset:0;
+  border-radius:28px;
+  pointer-events:none;
+  background: radial-gradient(circle at 20% 20%, rgba(108,99,255,.25), transparent 28%),
+              radial-gradient(circle at 80% 80%, rgba(0,255,225,.18), transparent 35%);
+  filter:blur(18px);
 }
 
 .info{
   flex:1;
-  min-width:260px;
+  min-width:280px;
+  position:relative;
+}
+
+.info::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:22px;
+  background: linear-gradient(140deg, rgba(108,99,255,.08), transparent 55%, rgba(0,255,225,.05));
+  z-index:-1;
 }
 
 h1{
   margin:0 0 5px;
 }
 
-.tag{
-  display:inline-block;
-  background:#6c63ff;
-  padding:4px 10px;
-  border-radius:15px;
+.tag-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.summary{
+  line-height:1.7;
+  opacity:.86;
+  max-width:760px;
+}
+
+.stat-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:12px;
+}
+
+.stat-item{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  padding:14px 16px;
+}
+
+.stat-item span{
+  display:block;
   font-size:13px;
-  margin:3px 3px 0 0;
+  opacity:.7;
+}
+
+.stat-item strong{
+  display:block;
+  margin-top:6px;
+  font-size:16px;
 }
 
 .section{
@@ -119,6 +183,71 @@ h1{
 .card img{
   width:80px;
   margin-bottom:5px;
+}
+
+.recommend-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:15px;
+}
+
+.recommend-card{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:18px;
+  padding:18px;
+  transition:.3s;
+}
+
+.recommend-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 18px 40px rgba(108,99,255,.18);
+}
+
+.recommend-card h3{
+  margin:0 0 10px;
+  font-size:16px;
+}
+
+.recommend-card img{
+  width:100%;
+  border-radius:14px;
+  object-fit:cover;
+  min-height:130px;
+}
+
+.icon-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
+  margin-top:10px;
+}
+
+.icon-row img{
+  width:60px;
+  height:60px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.12);
+  object-fit:cover;
+}
+
+.recommend-list{
+  margin:10px 0 0;
+  padding:0;
+  list-style:none;
+  font-size:14px;
+}
+
+.recommend-list li{
+  margin-bottom:8px;
+}
+
+.recommend-info{
+  margin-top:12px;
+  font-size:14px;
+  line-height:1.55;
+  opacity:.9;
 }
 
 small{opacity:.75}
@@ -157,44 +286,127 @@ small{opacity:.75}
 <div class="main">
 
   <div class="char-top">
-    <img id="charImg">
+    <div class="image-panel">
+      <img id="charImg" alt="Gambaran watak">
+      <div class="img-glow"></div>
+    </div>
     <div class="info">
       <h1 id="charName">Loading...</h1>
-      <div id="tags"></div>
+      <span id="charTitle" class="char-title-text"></span>
+      <div id="tags" class="tag-row"></div>
+      <div class="summary" id="charDescription">Loading character description...</div>
+      <div class="stat-grid">
+        <div class="stat-item"><span>Vision</span><strong id="vision">-</strong></div>
+        <div class="stat-item"><span>Weapon</span><strong id="weaponType">-</strong></div>
+        <div class="stat-item"><span>Nation</span><strong id="nation">-</strong></div>
+        <div class="stat-item"><span>Affiliation</span><strong id="affiliation">-</strong></div>
+        <div class="stat-item"><span>Rarity</span><strong id="rarity">-</strong></div>
+        <div class="stat-item"><span>Constellation</span><strong id="constellationName">-</strong></div>
+        <div class="stat-item"><span>Birthday</span><strong id="birthday">-</strong></div>
+        <div class="stat-item"><span>Release</span><strong id="releaseDate">-</strong></div>
+      </div>
     </div>
   </div>
 
   <div class="section">
-    <h2>Weapon</h2>
-    <div id="weaponGrid" class="grid"></div>
+    <h2>Rekomendasi Build & Team</h2>
+    <div id="recommendGrid" class="recommend-grid"></div>
   </div>
 
   <div class="section">
-    <h2>Artifacts</h2>
-    <div id="artifactGrid" class="grid"></div>
+    <h2>Skill Talents</h2>
+    <div id="talentGrid" class="grid"></div>
   </div>
 
   <div class="section">
-    <h2>Constellation</h2>
+    <h2>Passive Talents</h2>
+    <div id="passiveGrid" class="grid"></div>
+  </div>
+
+  <div class="section">
+    <h2>Constellations</h2>
     <div id="constellationGrid" class="grid"></div>
   </div>
 
+  <div class="section">
+    <h2>Bahan Ascension</h2>
+    <div id="materialGrid" class="grid"></div>
+  </div>
 
 <script>
 const params = new URLSearchParams(window.location.search);
 const name = params.get("name");
 
 const charName = document.getElementById("charName");
+const charTitle = document.getElementById("charTitle");
 const charImg = document.getElementById("charImg");
+const charDescription = document.getElementById("charDescription");
 const tags = document.getElementById("tags");
-const weaponGrid = document.getElementById("weaponGrid");
-const artifactGrid = document.getElementById("artifactGrid");
+const visionField = document.getElementById("vision");
+const weaponTypeField = document.getElementById("weaponType");
+const nationField = document.getElementById("nation");
+const affiliationField = document.getElementById("affiliation");
+const rarityField = document.getElementById("rarity");
+const constellationNameField = document.getElementById("constellationName");
+const birthdayField = document.getElementById("birthday");
+const releaseDateField = document.getElementById("releaseDate");
+const talentGrid = document.getElementById("talentGrid");
+const passiveGrid = document.getElementById("passiveGrid");
+const materialGrid = document.getElementById("materialGrid");
 const constellationGrid = document.getElementById("constellationGrid");
+const recommendGrid = document.getElementById("recommendGrid");
+
+const weaponRecommendations = {
+  SWORD: ['mistsplitter-reforged','aquila-favonia','primordial-jade-cutter'],
+  CLAYMORE: ['wolfs-gravestone','song-of-broken-pines','serpent-spine'],
+  POLEARM: ['staff-of-homa','primordial-jade-winged-spear','skyward-spine'],
+  BOW: ['thundering-pulse','amos-bow','polar-star'],
+  CATALYST: ['lost-prayer-to-the-sacred-winds','skyward-atlas','kaguras-verity']
+};
+
+const artifactRecommendations = {
+  CRYO: ['blizzard-strayer','glacierbyrn'],
+  PYRO: ['crimson-witch-of-flames','lavawalker'],
+  HYDRO: ['heart-of-depth','noblesse-oblige'],
+  ANEMO: ['viridescent-venerer','gladiators-finale'],
+  ELECTRO: ['thundering-fury','gladiators-finale'],
+  DENDRO: ['deepwood-memories','gilded-dreams'],
+  GEO: ['archaic-petra','noblesse-oblige']
+};
+
+const teamRecommendations = {
+  CRYO: ['kamisato_ayaka','kamisato_ayato','sangonomiya_kokomi','zhongli'],
+  PYRO: ['hutao','xiao','bennett','zhongli'],
+  HYDRO: ['xingqiu','mona','kokomi','jean'],
+  ANEMO: ['kazuha','venti','sucrose','albedo'],
+  ELECTRO: ['raiden_shogun','fischl','beidou','kuki-shinobu'],
+  DENDRO: ['tighnari','collei','yae_miko','nilou'],
+  GEO: ['zhongli','albedo','noelle','noelle']
+};
+
+const buildGuides = {
+  SWORD: 'Fokus kepada CRIT Rate / CRIT DMG / ATK% atau Energy Recharge untuk DPS.',
+  CLAYMORE: 'Prioritaskan ATK% / CRIT Rate / CRIT DMG, dan gunakan ER jika memerlukan burst cepat.',
+  POLEARM: 'Utamakan CRIT DMG / CRIT Rate / Energy Recharge untuk burst dan sustained damage.',
+  BOW: 'Gunakan CRIT RATE / CRIT DMG / ATK% dan tambah ER jika anda gunakan burst utama.',
+  CATALYST: 'Pilih EM atau CRIT DMG / CRIT Rate bergantung pada damage scaling element.',
+};
 
 async function loadChar(){
+  if(!name){
+    charName.textContent = "Watak tidak ditentukan";
+    charDescription.textContent = "Sila pilih watak dari halaman characters.";
+    return;
+  }
+
   try{
     const res = await fetch(`https://genshin.jmp.blue/characters/${name}`);
     const data = await res.json();
+
+    console.log('Character data loaded:', data);
+    console.log('Skill talents:', data.skillTalents);
+    console.log('Passive talents:', data.passiveTalents);
+    console.log('Constellations:', data.constellations);
 
     charName.textContent = data.name;
 
@@ -204,16 +416,33 @@ async function loadChar(){
       `https://genshin.jmp.blue/characters/${name}/portrait`,
       `https://genshin.jmp.blue/characters/${name}/icon-big`
     ];
+
     let imgIndex = 0;
     charImg.src = splashUrls[imgIndex];
+
+    charImg.onload = () => {
+      console.log(`Image loaded successfully: ${splashUrls[imgIndex]}`);
+    };
+
     charImg.onerror = () => {
+      console.log(`Failed to load image: ${splashUrls[imgIndex]}`);
       imgIndex++;
       if(imgIndex < splashUrls.length) {
+        console.log(`Trying fallback image: ${splashUrls[imgIndex]}`);
         charImg.src = splashUrls[imgIndex];
       } else {
+        console.log('All image sources failed, hiding image');
         charImg.style.display = "none";
+        // Show a placeholder text instead
+        const placeholder = document.createElement('div');
+        placeholder.textContent = 'Gambar tidak tersedia';
+        placeholder.style.cssText = 'padding: 20px; text-align: center; color: rgba(255,255,255,0.6); font-style: italic;';
+        charImg.parentNode.appendChild(placeholder);
       }
     };
+
+    charTitle.textContent = data.title || "";
+    charDescription.textContent = data.description || "Tiada deskripsi tersedia.";
 
     tags.innerHTML = `
       <span class="tag">${data.vision}</span>
@@ -222,70 +451,431 @@ async function loadChar(){
       <span class="tag">${data.rarity} ⭐</span>
     `;
 
-    loadWeapon();
-    loadArtifacts();
-    loadConstellation();
+    visionField.textContent = data.vision || "-";
+    weaponTypeField.textContent = data.weapon || "-";
+    nationField.textContent = data.nation || "-";
+    affiliationField.textContent = data.affiliation || "-";
+    rarityField.textContent = `${data.rarity} ⭐`;
+    constellationNameField.textContent = data.constellation || "-";
+    birthdayField.textContent = data.birthday || "-";
+    releaseDateField.textContent = data.release || "-";
 
-  }catch{
+    renderTalents(data.skillTalents || []);
+    renderPassives(data.passiveTalents || []);
+    renderConstellations(data.constellations || []);
+    renderMaterials(data.ascension_materials || {});
+    renderRecommendations(data);
+
+  }catch(err){
+    console.error(err);
     charName.textContent="Data tidak dijumpai";
+    charDescription.textContent="Sila cuba semula atau kembali ke halaman sebelumnya.";
   }
 }
 
-async function loadWeapon(){
-  const res = await fetch("https://genshin.jmp.blue/weapons");
-  const list = await res.json();
+function createCard(content){
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = content;
+  return card;
+}
 
-  weaponGrid.innerHTML="";
+function renderTalents(talents){
+  talentGrid.innerHTML = '';
+  if(!talents.length){
+    talentGrid.innerHTML = '<p>Tiada skill talents tersedia.</p>';
+    return;
+  }
 
-  for(const w of list.slice(0,6)){
-    weaponGrid.innerHTML+=`
-      <div class="card">
-        <img src="https://genshin.jmp.blue/weapons/${w}/icon">
-        <p>${w.replace(/-/g," ")}</p>
-      </div>
+  // Try different talent image endpoints
+  const talentImageTypes = ['normal-attack', 'elemental-skill', 'elemental-burst'];
+
+  for(let i = 0; i < talents.length && i < talentImageTypes.length; i++){
+    const talent = talents[i];
+    const description = talent.description.replace(/\n/g, '<br>');
+    const upgrades = talent.upgrades?.map(up => `<li><strong>${up.name}:</strong> ${up.value}</li>`).join('') || '';
+
+    // Try multiple possible image URLs
+    const possibleUrls = [
+      `https://genshin.jmp.blue/characters/${name}/talents/${talentImageTypes[i]}`,
+      `https://genshin.jmp.blue/characters/${name}/talent-${talentImageTypes[i]}`,
+      `https://genshin.jmp.blue/characters/${name}/skill-${i + 1}`,
+      `https://genshin.jmp.blue/characters/${name}/talents/${talent.name.toLowerCase().replace(/\s+/g, '-')}`,
+      `https://genshin.jmp.blue/characters/${name}/talents/${i + 1}`,
+      // Try alternative API endpoints
+      `https://api.genshin.dev/characters/${name}/talent-icons/${i}`,
+      `https://enka.network/ui/${name}_${talentImageTypes[i].replace('-', '_')}.png`,
+      `https://paimon.moe/images/characters/${name}/talent_${talentImageTypes[i]}.png`
+    ];
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div id="talent-img-${i}" style="width: 60px; height: 60px; border-radius: 8px; margin-bottom: 8px; background: rgba(108,99,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 24px;"></div>
+      <h3>${talent.name}</h3>
+      <small>${talent.unlock}</small>
+      <p>${description}</p>
+      ${upgrades ? `<ul>${upgrades}</ul>` : ''}
     `;
+
+    const imgContainer = card.querySelector(`#talent-img-${i}`);
+
+    const imgElement = document.createElement('img');
+    imgElement.alt = talent.name;
+    imgElement.style.cssText = 'width: 100%; height: 100%; border-radius: 8px; object-fit: cover;';
+
+    // Try URLs one by one
+    let urlIndex = 0;
+    const tryNextUrl = () => {
+      if(urlIndex < possibleUrls.length) {
+        imgElement.src = possibleUrls[urlIndex];
+        console.log(`Trying talent image for ${talent.name}: ${possibleUrls[urlIndex]}`);
+        urlIndex++;
+      } else {
+        // All URLs failed, use emoji placeholder
+        console.log(`All talent image URLs failed for ${talent.name}`);
+        const placeholder = document.createElement('div');
+        placeholder.textContent = ['⚔️', '💫', '💥'][i] || '🗡️';
+        imgContainer.innerHTML = '';
+        imgContainer.textContent = ['⚔️', '💫', '💥'][i] || '🗡️';
+      }
+    };
+
+    imgElement.onload = function() {
+      console.log(`✅ Talent image loaded for ${talent.name}: ${this.src}`);
+      // Stop trying other URLs since we found one that works
+      urlIndex = possibleUrls.length;
+    };
+
+    imgElement.onerror = function() {
+      console.log(`Talent image failed for ${talent.name}: ${this.src}`);
+      tryNextUrl();
+    };
+
+    // Clear container and add image
+    imgContainer.innerHTML = '';
+    imgContainer.appendChild(imgElement);
+
+    // Start with first URL
+    tryNextUrl();
+
+    talentGrid.appendChild(card);
   }
 }
 
-async function loadArtifacts(){
-  const res = await fetch("https://genshin.jmp.blue/artifacts");
-  const list = await res.json();
+function renderPassives(passives){
+  passiveGrid.innerHTML = '';
+  if(!passives.length){
+    passiveGrid.innerHTML = '<p>Tiada passive talents tersedia.</p>';
+    return;
+  }
 
-  artifactGrid.innerHTML="";
+  // Passive talent keys
+  const passiveKeys = ['utility-passive', '1st-ascension-passive', '4th-ascension-passive'];
 
-  for(const a of list.slice(0,6)){
-    artifactGrid.innerHTML+=`
-      <div class="card">
-        <img src="https://genshin.jmp.blue/artifacts/${a}/flower-of-life">
-        <p>${a.replace(/-/g," ")}</p>
-      </div>
+  for(let i = 0; i < passives.length && i < passiveKeys.length; i++){
+    const passive = passives[i];
+
+    // Try multiple passive talent image URLs
+    const possibleUrls = [
+      `https://genshin.jmp.blue/characters/${name}/passive-talents/${passiveKeys[i]}`,
+      `https://genshin.jmp.blue/characters/${name}/passive-${passiveKeys[i]}`,
+      `https://genshin.jmp.blue/characters/${name}/passive-${i + 1}`,
+      `https://api.genshin.dev/characters/${name}/passive-talents/${passiveKeys[i]}`,
+      `https://genshin.jmp.blue/characters/${name}/passive-talents/${passive.name.toLowerCase().replace(/\s+/g, '-')}`,
+      `https://genshin.jmp.blue/characters/${name}/passive-talents/${i + 1}`,
+      `https://enka.network/ui/${name}_passive_${i + 1}.png`,
+      `https://paimon.moe/images/characters/${name}/passive_${passiveKeys[i]}.png`
+    ];
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div id="passive-img-${i}" style="width: 60px; height: 60px; border-radius: 8px; margin-bottom: 8px; background: rgba(255,215,0,0.2); display: flex; align-items: center; justify-content: center; font-size: 24px;"></div>
+      <h3>${passive.name}</h3>
+      <small>${passive.unlock}</small>
+      <p>${passive.description}</p>
     `;
+
+    const imgContainer = card.querySelector(`#passive-img-${i}`);
+
+    const imgElement = document.createElement('img');
+    imgElement.alt = passive.name;
+    imgElement.style.cssText = 'width: 100%; height: 100%; border-radius: 8px; object-fit: cover;';
+
+    // Try URLs one by one
+    let urlIndex = 0;
+    const tryNextUrl = () => {
+      if(urlIndex < possibleUrls.length) {
+        imgElement.src = possibleUrls[urlIndex];
+        console.log(`Trying passive talent image for ${passive.name}: ${possibleUrls[urlIndex]}`);
+        urlIndex++;
+      } else {
+        // All URLs failed, use emoji placeholder
+        console.log(`All passive talent image URLs failed for ${passive.name}`);
+        imgContainer.innerHTML = '';
+        imgContainer.textContent = ['✨', '⬆️', '⭐'][i] || '✨';
+      }
+    };
+
+    imgElement.onload = function() {
+      console.log(`✅ Passive talent image loaded for ${passive.name}: ${this.src}`);
+      // Stop trying other URLs since we found one that works
+      urlIndex = possibleUrls.length;
+    };
+
+    imgElement.onerror = function() {
+      console.log(`Passive talent image failed for ${passive.name}: ${this.src}`);
+      tryNextUrl();
+    };
+
+    // Clear container and add image
+    imgContainer.innerHTML = '';
+    imgContainer.appendChild(imgElement);
+
+    // Start with first URL
+    tryNextUrl();
+
+    passiveGrid.appendChild(card);
   }
 }
 
-async function loadConstellation(){
-  const res = await fetch(`https://genshin.jmp.blue/characters/${name}/constellations`);
-  const data = await res.json();
-
-  constellationGrid.innerHTML="";
-
-  for(const c of data){
-    constellationGrid.innerHTML+=`
-      <div class="card">
-        <p><b>${c.name}</b></p>
-        <small>${c.description.substring(0,90)}...</small>
-      </div>
-    `;
+function renderConstellations(constellations){
+  constellationGrid.innerHTML = '';
+  if(!constellations.length){
+    constellationGrid.innerHTML = '<p>Tiada constellation tersedia.</p>';
+    return;
   }
+
+  for(let i = 0; i < constellations.length; i++){
+    const c = constellations[i];
+    const constellationNumber = i + 1;
+
+    // Try multiple possible constellation image URLs
+    const possibleUrls = [
+      `https://genshin.jmp.blue/characters/${name}/constellations/${constellationNumber}`,
+      `https://genshin.jmp.blue/characters/${name}/constellation-${constellationNumber}`,
+      `https://api.genshin.dev/characters/${name}/constellations/${constellationNumber}`,
+      `https://genshin.jmp.blue/characters/${name}/constellations/c${constellationNumber}`,
+      `https://enka.network/ui/${name}_C${constellationNumber}.png`,
+      `https://genshin.jmp.blue/characters/${name}/c${constellationNumber}`,
+      `https://paimon.moe/images/characters/${name}/constellation_${constellationNumber}.png`,
+      `https://genshin.honeyhunterworld.com/img/char/${name}_c${constellationNumber}.png`
+    ];
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div id="constellation-img-${i}" style="width: 60px; height: 60px; border-radius: 8px; margin-bottom: 8px; background: linear-gradient(45deg, rgba(0,255,225,0.3), rgba(108,99,255,0.3)); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold;"></div>
+      <h3>${c.name}</h3>
+      <small>${c.unlock}</small>
+      <p>${c.description}</p>
+    `;
+
+    const imgContainer = card.querySelector(`#constellation-img-${i}`);
+
+    const imgElement = document.createElement('img');
+    imgElement.alt = c.name;
+    imgElement.style.cssText = 'width: 100%; height: 100%; border-radius: 8px; object-fit: cover;';
+
+    // Try URLs one by one
+    let urlIndex = 0;
+    const tryNextUrl = () => {
+      if(urlIndex < possibleUrls.length) {
+        imgElement.src = possibleUrls[urlIndex];
+        console.log(`Trying constellation image for ${c.name}: ${possibleUrls[urlIndex]}`);
+        urlIndex++;
+      } else {
+        // All URLs failed, use numbered placeholder
+        console.log(`All constellation image URLs failed for ${c.name}`);
+        imgContainer.innerHTML = `C${constellationNumber}`;
+      }
+    };
+
+    imgElement.onload = function() {
+      console.log(`✅ Constellation image loaded for ${c.name}: ${this.src}`);
+      // Stop trying other URLs since we found one that works
+      urlIndex = possibleUrls.length;
+    };
+
+    imgElement.onerror = function() {
+      console.log(`Constellation image failed for ${c.name}: ${this.src}`);
+      tryNextUrl();
+    };
+
+    // Clear container and add image
+    imgContainer.innerHTML = '';
+    imgContainer.appendChild(imgElement);
+
+    // Start with first URL
+    tryNextUrl();
+
+    constellationGrid.appendChild(card);
+  }
+}
+
+function renderMaterials(materials){
+  materialGrid.innerHTML = '';
+  const levels = Object.keys(materials);
+  if(!levels.length){
+    materialGrid.innerHTML = '<p>Tiada bahan ascension tersedia.</p>';
+    return;
+  }
+
+  for(const level of levels){
+    const levelMaterials = materials[level];
+    if(!Array.isArray(levelMaterials) || !levelMaterials.length){
+      continue;
+    }
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.style.cssText = 'padding: 15px; text-align: left;';
+    card.innerHTML = `
+      <h3 style="margin: 0 0 12px 0;">${level.replace('_', ' ').toUpperCase()}</h3>
+      <ul id="material-list-${level}" style="list-style: none; padding: 0; margin: 0;"></ul>
+    `;
+
+    const materialList = card.querySelector(`#material-list-${level}`);
+
+    for(let i = 0; i < levelMaterials.length; i++){
+      const item = levelMaterials[i];
+      const name = item.name || item.id || 'Unknown';
+      const count = item.count || item.value || 1;
+      const itemId = (item.id || name.toLowerCase().replace(/\s+/g, '-')).replace(/'/g, '');
+
+      const li = document.createElement('li');
+      li.style.cssText = 'display: flex; align-items: center; gap: 8px; margin-bottom: 10px;';
+      li.innerHTML = `
+        <div id="material-img-${level}-${i}" style="width: 40px; height: 40px; border-radius: 6px; background: rgba(100,100,100,0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px;">📦</div>
+        <span>${name}: <strong>${count}</strong></span>
+      `;
+
+      const imgContainer = li.querySelector(`#material-img-${level}-${i}`);
+
+      // Generate HoyoLab-compatible URLs from item name
+      const sanitizedName = name.toLowerCase()
+        .replace(/['\s]+/g, '-')
+        .replace(/&/g, 'and')
+        .replace(/[^a-z0-9-]/g, '');
+
+      // Try multiple image URL sources with HoyoLab priority
+      const possibleUrls = [
+        // HoyoLab/WebStatic URLs (Priority)
+        `https://webstatic.hoyoverse.com/upload/contentweb/20231221/${sanitizedName}.png`,
+        `https://webstatic.hoyoverse.com/upload/contentweb/20240101/${sanitizedName}.png`,
+        `https://webstatic.hoyoverse.com/upload/containweb/20200315/${itemId}.png`,
+        `https://act.hoyoverse.com/hk4e/official/web/20220601/${itemId}.png`,
+        // API URLs
+        `https://genshin.jmp.blue/materials/${itemId}/icon`,
+        `https://api.genshin.dev/materials/${itemId}/icon`,
+        `https://genshin-db-api.vercel.app/api/materials/${itemId}/icon`,
+        // Image CDNs
+        `https://enka.network/ui/UI_ItemIcon_${itemId}.png`,
+        `https://paimon.moe/images/materials/${itemId}.png`,
+        `https://genshin.honeyhunterworld.com/img/Item/${itemId}.png`,
+        // Additional HoyoLab variants
+        `https://webstatic.hoyoverse.com/upload/openAPI/20220601/${itemId}.png`,
+        `https://webstatic.hoyoverse.com/upload/openAPI/20230601/${sanitizedName}.png`,
+      ];
+
+      const imgElement = document.createElement('img');
+      imgElement.alt = name;
+      imgElement.style.cssText = 'width: 100%; height: 100%; border-radius: 6px; object-fit: contain; background: rgba(0,0,0,0.3);';
+
+      let urlIndex = 0;
+      const tryNextUrl = () => {
+        if(urlIndex < possibleUrls.length) {
+          imgElement.src = possibleUrls[urlIndex];
+          console.log(`Trying material image for ${name}: ${possibleUrls[urlIndex]}`);
+          urlIndex++;
+        } else {
+          // All URLs failed, use placeholder emoji
+          console.log(`All material image URLs failed for ${name}`);
+          imgContainer.innerHTML = '';
+          imgContainer.textContent = '📦';
+        }
+      };
+
+      imgElement.onload = function() {
+        console.log(`✅ Material image loaded for ${name}: ${this.src}`);
+        urlIndex = possibleUrls.length;
+      };
+
+      imgElement.onerror = function() {
+        console.log(`Material image failed for ${name}: ${this.src}`);
+        tryNextUrl();
+      };
+
+      // Clear container and add image
+      imgContainer.innerHTML = '';
+      imgContainer.appendChild(imgElement);
+
+      // Start with first URL
+      tryNextUrl();
+
+      materialList.appendChild(li);
+    }
+
+    materialGrid.appendChild(card);
+  }
+}
+
+function renderRecommendations(data){
+  recommendGrid.innerHTML = '';
+
+  const weaponType = (data.weapon_type || data.weapon || 'SWORD').toUpperCase();
+  const visionKey = (data.vision_key || data.vision || 'CRYO').toUpperCase();
+
+  const weapons = weaponRecommendations[weaponType] || weaponRecommendations.SWORD;
+  const artifacts = artifactRecommendations[visionKey] || artifactRecommendations.CRYO;
+  const team = teamRecommendations[visionKey] || teamRecommendations.CRYO;
+  const buildText = buildGuides[weaponType] || 'Fokus kekuatan utama watak ini dan gunakan substats yang sesuai.';
+
+  recommendGrid.appendChild(createCard(`
+    <h3>Senjata Disarankan</h3>
+    <img src="https://genshin.jmp.blue/weapons/${weapons[0]}/icon" alt="${weapons[0]}" style="width: 60px; height: 60px; border-radius: 8px; margin-bottom: 8px;" onerror="this.src='https://via.placeholder.com/60x60?text=⚔️'">
+    <ul class="recommend-list">
+      <li>${weapons[0].replace(/-/g,' ')}</li>
+      <li>${weapons[1]?.replace(/-/g,' ') || ''}</li>
+      <li>${weapons[2]?.replace(/-/g,' ') || ''}</li>
+    </ul>
+  `));
+
+  recommendGrid.appendChild(createCard(`
+    <h3>Set Artifact</h3>
+    <img src="https://genshin.jmp.blue/artifacts/${artifacts[0]}/flower-of-life" alt="${artifacts[0]}" style="width: 60px; height: 60px; border-radius: 8px; margin-bottom: 8px;" onerror="this.src='https://via.placeholder.com/60x60?text=👑'">
+    <ul class="recommend-list">
+      <li>${artifacts[0].replace(/-/g,' ')}</li>
+      <li>${artifacts[1]?.replace(/-/g,' ') || ''}</li>
+    </ul>
+  `));
+
+  recommendGrid.appendChild(createCard(`
+    <h3>Rekomendasi Team</h3>
+    <div class="icon-row">
+      ${team.map(member => `<img src="https://genshin.jmp.blue/characters/${member}/icon-big" alt="${member}" style="width: 60px; height: 60px; border-radius: 8px;" onerror="this.src='https://via.placeholder.com/60x60?text=👤'">`).join('')}
+    </div>
+    <div class="recommend-info">${team.map(member => member.replace(/-/g,' ')).join(', ')}</div>
+  `));
+
+  const buddy = team.find(member => member !== data.id) || team[0];
+  recommendGrid.appendChild(createCard(`
+    <h3>Char Constellation / Buddy</h3>
+    <img src="https://genshin.jmp.blue/characters/${buddy}/icon-big" alt="${buddy}" style="width: 60px; height: 60px; border-radius: 8px; margin-bottom: 8px;" onerror="this.src='https://via.placeholder.com/60x60?text=⭐'">
+    <div class="recommend-info">Kombinasi baik dengan ${buddy.replace(/-/g,' ')} untuk sokongan.</div>
+  `));
+
+  recommendGrid.appendChild(createCard(`
+    <h3>Build Utama</h3>
+    <div class="recommend-info">${buildText}</div>
+  `));
 }
 
 loadChar();
 </script>
-<<<<<<< HEAD
-=======
 
   <footer>© 2026 Genshin Search Team — Adam & Fikri</footer>
->>>>>>> 4c5df4df5b8b2f0c8d41054c6296eae6f61c579e
 
 </body>
 </html>

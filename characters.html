@@ -208,24 +208,82 @@ const searchBtn = document.getElementById("searchBtn");
 let allCharsData = []; // cached character detail objects { nameKey, data }
 let currentRegion = 'all';
 
+// API endpoints to try (in order of preference)
+const apiEndpoints = [
+  {
+    name: 'genshin.jmp.blue',
+    listUrl: 'https://genshin.jmp.blue/characters',
+    detailUrl: (name) => `https://genshin.jmp.blue/characters/${name}`
+  },
+  {
+    name: 'api.genshin.dev',
+    listUrl: 'https://api.genshin.dev/characters',
+    detailUrl: (name) => `https://api.genshin.dev/characters/${name.replace(/-/g, '_').toUpperCase()}`
+  },
+  {
+    name: 'genshin-db-api',
+    listUrl: 'https://genshin-db-api.vercel.app/api/characters',
+    detailUrl: (name) => `https://genshin-db-api.vercel.app/api/characters/${name}`
+  }
+];
+
+async function tryFetchCharList(){
+  for(const api of apiEndpoints){
+    try{
+      console.log(`Trying ${api.name}...`);
+      const res = await fetch(api.listUrl, {timeout: 5000});
+      if(!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      
+      if(Array.isArray(data) && data.length > 0){
+        console.log(`✅ Successfully fetched from ${api.name}`);
+        return {api, list: data};
+      }
+    }catch(e){
+      console.log(`❌ ${api.name} failed: ${e.message}`);
+    }
+  }
+  throw new Error('All APIs failed');
+}
+
+async function fetchCharDetail(name, api){
+  try{
+    const url = api.detailUrl(name);
+    const res = await fetch(url, {timeout: 5000});
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  }catch(e){
+    console.log(`Failed to fetch ${name} from ${api.name}: ${e.message}`);
+    return null;
+  }
+}
+
 async function loadChars(region){
   currentRegion = region;
   grid.innerHTML = '<div class="loader">🔄 Memuatkan data watak...</div>';
 
   try{
-    const res = await fetch("https://genshin.jmp.blue/characters");
-    const list = await res.json();
-
+    // Try to fetch character list from available APIs
+    const {api, list} = await tryFetchCharList();
+    
+    console.log(`Fetching details for ${list.length} characters...`);
+    
     // fetch details concurrently but tolerate failures
     const detailPromises = list.map(name =>
-      fetch(`https://genshin.jmp.blue/characters/${name}`).then(r=>r.json()).then(d=>({nameKey:name,data:d})).catch(()=>null)
+      fetchCharDetail(name, api).then(d => d ? {nameKey:name, data:d} : null).catch(() => null)
     );
 
     const settled = await Promise.allSettled(detailPromises);
     allCharsData = settled.map(s => (s.status==='fulfilled' ? s.value : null)).filter(Boolean);
 
+    if(allCharsData.length === 0){
+      throw new Error('No character data retrieved');
+    }
+
+    console.log(`✅ Loaded ${allCharsData.length} characters`);
     renderList();
   }catch(e){
+    console.error('Error loading characters:', e);
     grid.innerHTML = '<div class="loader">❌ Gagal memuat data. Sila cuba lagi.</div>';
   }
 }
