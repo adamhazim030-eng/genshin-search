@@ -1,0 +1,434 @@
+/* style/detail.css */
+
+*{box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+
+:root {
+  --bg: linear-gradient(-45deg,#0f0f1c,#1b1b38,#2b2b52,#0f0f1c);
+  --text: white;
+  --main-bg: rgba(255,255,255,.08);
+  --header-link-bg: #6c63ff;
+  --header-link-hover: rgba(108,99,255,.6);
+  --card-bg: rgba(0,0,0,.45);
+  --card-hover: rgba(108,99,255,.7);
+  --recommend-card-bg: rgba(255,255,255,.06);
+  --recommend-card-border: rgba(255,255,255,.1);
+  --recommend-card-hover: rgba(108,99,255,.18);
+  --stat-item-bg: rgba(255,255,255,.05);
+  --stat-item-border: rgba(255,255,255,.08);
+  --icon-border: rgba(255,255,255,.12);
+  --section-border: #6c63ff;
+}
+
+body.light {
+  --bg: linear-gradient(-45deg,#f5f5f5,#ffffff,#e8e8e8,#f5f5f5);
+  --text: #333;
+  --main-bg: rgba(0,0,0,.05);
+  --header-link-bg: #6c63ff;
+  --header-link-hover: rgba(108,99,255,.6);
+  --card-bg: rgba(255,255,255,.9);
+  --card-hover: rgba(108,99,255,.7);
+  --recommend-card-bg: rgba(0,0,0,.05);
+  --recommend-card-border: rgba(0,0,0,.1);
+  --recommend-card-hover: rgba(108,99,255,.18);
+  --stat-item-bg: rgba(0,0,0,.05);
+  --stat-item-border: rgba(0,0,0,.08);
+  --icon-border: rgba(0,0,0,.12);
+  --section-border: #6c63ff;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:var(--bg);
+  background-size:400% 400%;
+  animation:bg 18s ease infinite;
+  color:var(--text);
+  padding:20px;
+}
+
+@keyframes bg{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+
+header a{
+  text-decoration:none;
+  padding:8px 16px;
+  border-radius:20px;
+  background:var(--header-link-bg);
+  color:white;
+  transition:.3s;
+}
+
+header a:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 10px var(--header-link-hover);
+}
+
+.theme-toggle {
+  background: var(--header-link-bg);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px var(--header-link-hover);
+}
+
+.main{
+  max-width:950px;
+  margin:auto;
+  background:var(--main-bg);
+  border-radius:15px;
+  padding:20px;
+  box-shadow:0 0 25px rgba(0,0,0,.5);
+}
+
+.char-top{
+  display:flex;
+  flex-wrap:wrap;
+  gap:30px;
+  align-items:center;
+  justify-content:center;
+}
+
+.image-panel{
+  position:relative;
+  width:360px;
+  max-width:100%;
+  min-width:260px;
+  height:620px;
+  border-radius:30px;
+  overflow:hidden;
+  background: linear-gradient(180deg, rgba(16,16,38,.95), rgba(27,27,56,.85));
+  box-shadow:0 35px 80px rgba(0,0,0,.55);
+}
+
+.image-panel::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  border:1px solid rgba(255,255,255,.12);
+  pointer-events:none;
+  box-shadow: inset 0 0 80px rgba(0,0,0,.2);
+  border-radius:30px;
+}
+
+.image-panel img{
+  width:100%;
+  height:100%;
+  border-radius:28px;
+  box-shadow:0 30px 70px rgba(0,0,0,.5);
+  border:1px solid rgba(255,255,255,.12);
+  transition:transform .4s ease;
+  display:block;
+  object-fit:cover;
+  background: linear-gradient(45deg, rgba(108,99,255,0.1), rgba(0,255,225,0.1));
+}
+
+.image-panel:hover img{
+  transform:scale(1.02);
+}
+
+.img-glow{
+  position:absolute;
+  inset:0;
+  border-radius:28px;
+  pointer-events:none;
+  background: radial-gradient(circle at 20% 20%, rgba(108,99,255,.25), transparent 28%),
+              radial-gradient(circle at 80% 80%, rgba(0,255,225,.18), transparent 35%);
+  filter:blur(18px);
+}
+
+.info{
+  flex:1;
+  min-width:280px;
+  position:relative;
+}
+
+.info::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:22px;
+  background: linear-gradient(140deg, rgba(108,99,255,.08), transparent 55%, rgba(0,255,225,.05));
+  z-index:-1;
+}
+
+h1{
+  margin:0 0 5px;
+}
+
+.tag-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.summary{
+  line-height:1.7;
+  opacity:.86;
+  max-width:760px;
+}
+
+.stat-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:12px;
+}
+
+.stat-item{
+  background:var(--stat-item-bg);
+  border:1px solid var(--stat-item-border);
+  border-radius:14px;
+  padding:14px 16px;
+}
+
+.stat-item span{
+  display:block;
+  font-size:13px;
+  opacity:.7;
+}
+
+.stat-item strong{
+  display:block;
+  margin-top:6px;
+  font-size:16px;
+}
+
+.section{
+  margin-top:25px;
+}
+
+.section h2{
+  margin-bottom:10px;
+  border-bottom:2px solid var(--section-border);
+  padding-bottom:5px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:15px;
+}
+
+.card{
+  background:var(--card-bg);
+  border-radius:12px;
+  padding:10px;
+  text-align:center;
+  transition:.3s;
+}
+
+.card:hover{
+  transform:translateY(-5px) scale(1.05);
+  box-shadow:0 0 15px var(--card-hover);
+}
+
+.card img{
+  width:100%;
+  max-width:120px;
+  margin:0 auto 10px;
+  display:block;
+  object-fit:contain;
+}
+
+.recommend-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:15px;
+}
+
+.recommend-card{
+  background:var(--recommend-card-bg);
+  border:1px solid var(--recommend-card-border);
+  border-radius:18px;
+  padding:18px;
+  transition:.3s;
+}
+
+.recommend-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 18px 40px var(--recommend-card-hover);
+}
+
+.recommend-card h3{
+  margin:0 0 10px;
+  font-size:16px;
+}
+
+.recommend-card .recommend-label{
+  margin:0 0 4px;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  opacity:.7;
+}
+
+.recommend-card .recommend-type{
+  margin:0 0 10px;
+  font-size:14px;
+  font-weight:600;
+}
+
+.recommend-card img{
+  width:100%;
+  border-radius:14px;
+  object-fit:cover;
+  min-height:130px;
+}
+
+.icon-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
+  margin-top:10px;
+}
+
+.icon-row img{
+  width:60px;
+  height:60px;
+  border-radius:14px;
+  border:1px solid var(--icon-border);
+  object-fit:cover;
+}
+
+.recommend-list{
+  margin:10px 0 0;
+  padding:0;
+  list-style:none;
+  font-size:14px;
+}
+
+.recommend-list li{
+  margin-bottom:8px;
+}
+
+.recommend-info{
+  margin-top:12px;
+  font-size:14px;
+  line-height:1.55;
+  opacity:.9;
+}
+
+small{opacity:.75}
+
+.btn{
+  display:block;
+  text-align:center;
+  margin:15px auto;
+  width:fit-content;
+  padding:12px 26px;
+  border-radius:30px;
+  background:#6c63ff;
+  color:white;
+  text-decoration:none;
+  font-size:18px;
+  transition:.3s;
+}
+
+.btn:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 15px rgba(108,99,255,.8);
+}
+
+/* ==========================================================================
+   KEMAS KINI STRUKTUR NAVBAR & BUTTON RESPONSIVE (Gantikan dalam detail.css)
+   ========================================================================== */
+
+.navbar, header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 15px 20px;
+  border-radius: 12px;
+  flex-wrap: wrap; /* Memastikan elemen turun ke bawah jika skrin telefon kecil */
+  gap: 15px;
+}
+
+.logo {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.nav-links {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Memperbaiki warna teks pautan supaya kontras dan terang */
+.nav-links a, header a {
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: var(--header-link-bg);
+  color: white !important; /* Paksa warna tulisan jadi putih */
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: .3s;
+  display: inline-block;
+}
+
+.nav-links a:hover, header a:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px var(--header-link-hover);
+  background: #574ebd;
+}
+
+/* Memastikan Butang Tema Sentiasa Sebaris dan Boleh Ditekan */
+.theme-toggle {
+  background: var(--header-link-bg);
+  color: white !important;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: .3s;
+  white-space: nowrap; /* Mengelakkan emoji dan teks terputus dua */
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px var(--header-link-hover);
+  background: #574ebd;
+}
+
+/* Media Query Khas untuk Telefon Pintar (Skrin Kecil) */
+@media (max-width: 600px) {
+  .navbar, header {
+    flex-direction: column; /* Tukar susunan menegak jika skrin terlalu sempit */
+    text-align: center;
+    padding: 15px;
+  }
+  
+  .nav-links {
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .theme-toggle {
+    width: 100%;
+    max-width: 200px;
+  }
+}

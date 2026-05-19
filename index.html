@@ -1,283 +1,133 @@
+﻿
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | Sistem Carian Watak Genshin</title>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-  <style>
-    *{
-      box-sizing:border-box;
-      font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    }
+<title>
+Genshin Finder Ultimate
+</title>
 
-    :root {
-      --text: white;
-      --login-bg: rgba(20,20,35,.85);
-      --input-bg: rgba(255,255,255,0.1);
-      --input-border: rgba(255,255,255,0.2);
-      --btn-bg: linear-gradient(45deg, #667eea, #764ba2);
-      --btn-hover: linear-gradient(45deg, #5a6fd8, #6a4190);
-      --overlay: radial-gradient(circle at top, rgba(255,255,255,.05), transparent 70%);
-    }
-
-    body.light {
-      --text: #333;
-      --login-bg: rgba(255,255,255,.9);
-      --input-bg: rgba(255,255,255,0.8);
-      --input-border: rgba(0,0,0,0.2);
-      --btn-bg: linear-gradient(45deg, #667eea, #764ba2);
-      --btn-hover: linear-gradient(45deg, #5a6fd8, #6a4190);
-      --overlay: radial-gradient(circle at top, rgba(0,0,0,.1), transparent 70%);
-    }
-
-    body{
-      margin:0;
-      min-height:100vh;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      background:
-        linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
-        url("https://images8.alphacoders.com/114/1141918.jpg");
-      background-size:cover;
-      background-position:center;
-      color:var(--text);
-      overflow:hidden;
-      position:relative;
-    }
-
-    .overlay{
-      position:absolute;
-      inset:0;
-      background: var(--overlay);
-      pointer-events:none;
-    }
-
-    .login-box{
-      position:relative;
-      width:95%;
-      max-width:420px;
-      background: var(--login-bg);
-      border-radius:20px;
-      padding:35px 30px 40px;
-      backdrop-filter: blur(12px);
-      box-shadow:0 20px 50px rgba(0,0,0,.7);
-      animation: pop .8s ease;
-      z-index:2;
-    }
-
-    @keyframes pop{
-      from{opacity:0; transform:scale(.9) translateY(20px);}
-      to{opacity:1; transform:scale(1) translateY(0);}
-    }
-
-    .logo{
-      font-size:34px;
-      font-weight:700;
-      letter-spacing:1px;
-      background:linear-gradient(90deg,#6c63ff,#00ffe1);
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-      margin-bottom:10px;
-    }
-
-    .tagline{
-      font-size:14px;
-      opacity:.8;
-      margin-bottom:25px;
-    }
-
-    .input-group{
-      margin-bottom:15px;
-    }
-
-    input{
-      width:100%;
-      padding:14px 15px;
-      border-radius:12px;
-      border:1px solid var(--input-border);
-      background:var(--input-bg);
-      outline:none;
-      color:white;
-      font-size:15px;
-      transition:.3s;
-    }
-
-    input:focus{
-      border-color:#6c63ff;
-      box-shadow:0 0 0 2px rgba(108,99,255,.25);
-    }
-
-    button{
-      width:100%;
-      padding:14px;
-      border-radius:14px;
-      border:none;
-      background:var(--btn-bg);
-      color:black;
-      font-weight:700;
-      letter-spacing:.5px;
-      cursor:pointer;
-      margin-top:10px;
-      transition:.3s;
-    }
-
-    button:hover{
-      transform:translateY(-2px);
-      box-shadow:0 8px 25px rgba(108,99,255,.45);
-    }
-
-    .error{
-      margin-top:12px;
-      color:#ff5c5c;
-      font-size:14px;
-      display:none;
-      animation: shake .4s;
-    }
-
-    @keyframes shake{
-      0%,100%{transform:translateX(0);}
-      25%{transform:translateX(-4px);}
-      75%{transform:translateX(4px);}
-    }
-
-    .footer-text{
-      margin-top:20px;
-      font-size:13px;
-      opacity:.7;
-      text-align:center;
-    }
-
-    .glow{
-      position:absolute;
-      width:250px;
-      height:250px;
-      background:radial-gradient(circle,#6c63ff55,transparent 70%);
-      top:-80px;
-      right:-80px;
-      border-radius:50%;
-      filter:blur(30px);
-    }
-
-    .glow2{
-      position:absolute;
-      width:250px;
-      height:250px;
-      background:radial-gradient(circle,#00ffe155,transparent 70%);
-      bottom:-100px;
-      left:-100px;
-      border-radius:50%;
-      filter:blur(30px);
-    }
-
-    .btn{
-      display:block;
-      text-align:center;
-      margin:15px auto;
-      width:fit-content;
-      padding:12px 26px;
-      border-radius:30px;
-      background:#6c63ff;
-      color:white;
-      text-decoration:none;
-      font-size:18px;
-      transition:.3s;
-    }
-
-    .btn:hover{
-      transform:scale(1.05);
-      box-shadow:0 0 15px rgba(108,99,255,.8);
-    }
-
-    .theme-toggle {
-      background: var(--btn-bg);
-      color: black;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 20px;
-      cursor: pointer;
-      transition: .3s;
-    }
-
-    .theme-toggle:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 12px rgba(108,99,255,.7);
-    }
-
-    /* ✅ FIXED FOOTER */
-    .main-footer{
-      position:fixed;
-      bottom:0;
-      left:0;
-      width:100%;
-      text-align:center;
-      padding:10px;
-      font-size:13px;
-      background:rgba(0,0,0,.6);
-      backdrop-filter:blur(5px);
-      z-index:1;
-    }
-
-    @media(max-width:500px){
-      .login-box{padding:28px 22px;}
-      .logo{font-size:28px;}
-    }
-
-  </style>
+<link rel="stylesheet" href="style/index.css">
 </head>
 
 <body>
 
-  <div class="overlay"></div>
+<!-- NAVBAR -->
 
-  <div class="login-box">
-    <div class="glow"></div>
-    <div class="glow2"></div>
+<nav class="navbar">
 
-    <div class="logo">GENSHIN SEARCH</div>
-    <div class="tagline">Sistem Carian Watak Genshin Impact</div>
-
-    <div style="text-align: center; margin-bottom: 20px;">
-      <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
-    </div>
-
-    <div class="intro-text">
-      <p>Selamat datang! Klik butang di bawah untuk terus ke laman utama.</p>
-    </div>
-
-    <a href="home.html" class="btn">MAJU KE HOME</a>
-
-    <div class="footer-text">
-      © 2026 | Powered by Web Dev Genshin System
-    </div>
+  <div class="logo">
+    ✨ Genshin Finder
   </div>
 
-  <!-- ✅ FOOTER FIX -->
-  <footer class="main-footer">
-    © 2026 Genshin Search Team — Adam & Fikri
-  </footer>
+  <div class="nav-links">
 
-  <script>
-    const themeToggle = document.getElementById('themeToggle');
-    const body = document.body;
+    <a href="home.html">Home</a>
+    <a href="characters.html">Watak</a>
+    <a href="genshin.html">Game</a>
 
-    // Load saved theme
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
-      body.classList.add('light');
-      themeToggle.textContent = '☀️ Light';
-    } else {
-      themeToggle.textContent = '🌙 Dark';
-    }
+    <button
+    class="theme-toggle"
+    id="themeToggle">
 
-    themeToggle.addEventListener('click', () => {
-      body.classList.toggle('light');
-      const isLight = body.classList.contains('light');
-      themeToggle.textContent = isLight ? '☀️ Light' : '🌙 Dark';
-      localStorage.setItem('theme', isLight ? 'light' : 'dark');
-    });
-  </script>
+      🌙 Dark
+
+    </button>
+
+  </div>
+
+</nav>
+
+<!-- MAIN -->
+
+<main class="landing-container">
+
+<section class="hero-landing">
+
+<div class="hero-content">
+
+<span class="badge">
+✨ Ultimate Character Search
+</span>
+
+<h1>
+Cari Watak Genshin Impact
+Dengan Gaya Premium
+</h1>
+
+<p>
+Cari maklumat lengkap character
+seperti elemen, rarity,
+weapon dan splash art HD
+dengan reka bentuk moden
+dan pengalaman yang immersive.
+</p>
+
+<!-- SEARCH -->
+
+<div class="landing-search">
+
+<input
+type="text"
+id="landingSearch"
+placeholder="Contoh: raiden-shogun">
+
+<button id="landingBtn">
+🔍 Cari
+</button>
+
+</div>
+
+<!-- HERO CARDS -->
+
+<div class="hero-cards">
+
+<div class="hero-card">
+<h3>⚡ Raiden Shogun</h3>
+
+<p>
+DPS Electro dengan
+burst damage sangat kuat.
+</p>
+</div>
+
+<div class="hero-card">
+<h3>❄️ Ayaka</h3>
+
+<p>
+Cryo sword user premium
+untuk freeze team.
+</p>
+</div>
+
+<div class="hero-card">
+<h3>🍃 Kazuha</h3>
+
+<p>
+Support Anemo dengan
+crowd control terbaik.
+</p>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+<!-- FOOTER -->
+
+<footer>
+© 2026 Genshin Finder
+— Adam & Fikri 
+</footer>
+
+<script src="script/index.js"></script>
 
 </body>
 </html>

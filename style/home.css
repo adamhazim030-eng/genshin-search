@@ -1,0 +1,221 @@
+/* style/home.css */
+
+.gacha-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.gacha-header h1 {
+  font-size: 2.6rem;
+  color: #6c63ff;
+  margin-bottom: 12px;
+  text-shadow: 0 0 15px rgba(108, 99, 255, 0.3);
+}
+
+.gacha-header p {
+  opacity: 0.8;
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+}
+
+/* Kotak Utama Gacha */
+.gacha-box {
+  background: var(--main-bg);
+  border: 1px solid var(--recommend-card-border);
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+/* Paparan Kad Keputusan */
+.gacha-display {
+  width: 100%;
+  max-width: 300px;
+  min-height: 350px;
+  background: var(--card-bg);
+  border: 2px dashed rgba(108, 99, 255, 0.3);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 25px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Gaya Kad Apabila Watak Berjaya Dikeluarkan */
+.gacha-display.terbuka {
+  border: 2px solid #ffc107;
+  box-shadow: 0 0 30px rgba(255, 193, 7, 0.3);
+  cursor: pointer;
+}
+
+.gacha-display.terbuka:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 40px var(--card-hover);
+}
+
+.misteri-icon {
+  font-size: 5rem;
+  margin-bottom: 15px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.misteri-text {
+  opacity: 0.7;
+  font-style: italic;
+  font-size: 1rem;
+}
+
+/* Gambar Watak Gacha */
+.gacha-char-img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.05);
+  border: 3px solid #ffc107;
+  margin-bottom: 15px;
+}
+
+/* Animasi Pusingan (Spinning) Khas Gacha */
+.gacha-display.animasi-pusing {
+  animation: shake 0.15s infinite, glowChange 0.5s infinite alternate;
+  border-style: solid;
+  border-color: #6c63ff;
+}
+
+/* Butang Gacha Gempak */
+.gacha-btn {
+  background: linear-gradient(45deg, #6c63ff, #00ffe1);
+  color: white;
+  border: none;
+  padding: 16px 36px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(108, 99, 255, 0.4);
+  transition: all 0.3s ease;
+}
+
+.gacha-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 30px rgba(0, 255, 225, 0.6);
+}
+
+.gacha-btn:disabled {
+  background: #555;
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Animasi Tambahan */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shake {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  100% { transform: translate(-1px, -2px) rotate(-1deg); }
+}
+
+@keyframes glowChange {
+  0% { box-shadow: 0 0 15px rgba(108, 99, 255, 0.5); }
+  100% { box-shadow: 0 0 25px rgba(0, 255, 225, 0.8); }
+}
+
+/* ==========================================================================
+   KEMAS KINI STRUKTUR NAVBAR & BUTTON RESPONSIVE (Gantikan dalam detail.css)
+   ========================================================================== */
+
+.navbar, header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 15px 20px;
+  border-radius: 12px;
+  flex-wrap: wrap; /* Memastikan elemen turun ke bawah jika skrin telefon kecil */
+  gap: 15px;
+}
+
+.logo {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.nav-links {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Memperbaiki warna teks pautan supaya kontras dan terang */
+.nav-links a, header a {
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: var(--header-link-bg);
+  color: white !important; /* Paksa warna tulisan jadi putih */
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: .3s;
+  display: inline-block;
+}
+
+.nav-links a:hover, header a:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px var(--header-link-hover);
+  background: #574ebd;
+}
+
+/* Memastikan Butang Tema Sentiasa Sebaris dan Boleh Ditekan */
+.theme-toggle {
+  background: var(--header-link-bg);
+  color: white !important;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: .3s;
+  white-space: nowrap; /* Mengelakkan emoji dan teks terputus dua */
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px var(--header-link-hover);
+  background: #574ebd;
+}
+
+/* Media Query Khas untuk Telefon Pintar (Skrin Kecil) */
+@media (max-width: 600px) {
+  .navbar, header {
+    flex-direction: column; /* Tukar susunan menegak jika skrin terlalu sempit */
+    text-align: center;
+    padding: 15px;
+  }
+  
+  .nav-links {
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .theme-toggle {
+    width: 100%;
+    max-width: 200px;
+  }
+}

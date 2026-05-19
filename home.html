@@ -1,58 +1,44 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Genshin Impact Character Finder</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Genshin Finder — Gacha Roulette</title>
+
+<link rel="stylesheet" href="style/detail.css">
+<link rel="stylesheet" href="style/home.css">
 </head>
+
 <body>
 
-  <nav class="navbar">
-    <h2>✨ Genshin Finder</h2>
-    <div class="nav-btn">
-      <a href="characters.html">📜 Semua Watak</a>
-      <a href="index.html" class="logout">index</a>
-      <!-- link to recommendation page -->
-      <a href="genshin.html" class="btn">🎮 Cadangan Game Genshin Impact</a>
-      <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
+<nav class="navbar">
+  <div class="logo">✨ Genshin Finder</div>
+  <div class="nav-links">
+    <a href="home.html" class="active">Beranda</a>
+    <a href="characters.html">Semua Watak</a>
+    <a href="genshin.html">Cadangan Game</a>
+  </div>
+  <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
+</nav>
+
+<div class="gacha-container">
+  <div class="gacha-header">
+    <h1>Meteorit Misteri: Gacha Roulette</h1>
+    <p>Uji tuah anda hari ini! Klik butang di bawah untuk menyeru watak Genshin Impact secara rawak.</p>
+  </div>
+
+  <div class="gacha-box">
+    <div id="gachaDisplay" class="gacha-display">
+      <div class="misteri-icon">❓</div>
+      <p class="misteri-text">Siapakah yang akan menyahut seruan anda?</p>
     </div>
-  </nav>
+    
+    <button id="gachaBtn" class="gacha-btn">✨ Sertai Seruan (Wish) ✨</button>
+  </div>
+</div>
 
-  <main class="container home">
-    <h1>Cari Watak Genshin Impact</h1>
-    <p class="subtitle">Masukkan nama watak untuk lihat info penuh</p>
+<footer>© 2026 Genshin Finder — Adam & Fikri</footer>
 
-    <div class="search-box">
-      <input type="text" id="search" placeholder="Contoh: raiden-shogun">
-      <button onclick="searchChar()">Cari</button>
-    </div>
-
-    <div id="result" class="card"></div>
-  </main>
-
-  <footer>© 2026 Genshin Search Team — Adam & Fikri</footer>
-
-  <script src="script.js"></script>
-  <script>
-    const themeToggle = document.getElementById('themeToggle');
-    const body = document.body;
-
-    // Load saved theme
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
-      body.classList.add('light');
-      themeToggle.textContent = '☀️ Light';
-    } else {
-      themeToggle.textContent = '🌙 Dark';
-    }
-
-    themeToggle.addEventListener('click', () => {
-      body.classList.toggle('light');
-      const isLight = body.classList.contains('light');
-      themeToggle.textContent = isLight ? '☀️ Light' : '🌙 Dark';
-      localStorage.setItem('theme', isLight ? 'light' : 'dark');
-    });
-  </script>
+<script src="script/home.js"></script>
 </body>
 </html>

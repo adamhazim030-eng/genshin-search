@@ -1,0 +1,219 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+:root {
+  --bg-layer: rgba(5, 10, 25, 0.8);
+  --panel: rgba(8, 12, 32, 0.75);
+  --text: #ffffff;
+  --muted: rgba(255, 255, 255, 0.75);
+  --btn: #6c63ff;
+  --btn-hover: #00c6ff;
+  --shadow: rgba(0, 0, 0, 0.35);
+  --card: rgba(12, 16, 40, 0.82);
+}
+
+body {
+  min-height: 100vh;
+  color: var(--text);
+  background: linear-gradient(180deg, rgba(8, 12, 30, 0.9), rgba(3, 6, 20, 1)),
+    url('https://images.alphacoders.com/131/1312070.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  padding: 28px;
+}
+
+body.light {
+  background: linear-gradient(180deg, rgba(248, 250, 255, 0.92), rgba(220, 226, 255, 0.96)),
+    url('https://images.alphacoders.com/131/1312070.jpeg');
+  color: #111;
+}
+
+body.light .container,
+body.light .theme-toggle,
+body.light .btn,
+body.light .video-card {
+  color: #111;
+}
+
+body.light .container {
+  background: rgba(255, 255, 255, 0.88);
+}
+
+body.light .theme-toggle,
+body.light .btn {
+  background: linear-gradient(90deg, #6c63ff, #00c6ff);
+  color: #fff;
+}
+
+::selection {
+  background: rgba(108, 99, 255, 0.45);
+  color: #fff;
+}
+
+.container {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 32px;
+  background: var(--panel);
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 28px 80px var(--shadow);
+}
+
+h1 {
+  text-align: center;
+  font-size: clamp(2.6rem, 3vw, 4.2rem);
+  line-height: 1.05;
+  margin-bottom: 16px;
+  background: linear-gradient(90deg, #ffffff, #8f7bff, #00c6ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.85;
+  color: var(--muted);
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.images {
+  position: relative;
+  margin: 28px 0;
+  overflow: hidden;
+  border-radius: 30px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
+}
+
+.images img {
+  width: 100%;
+  max-height: 450px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.images img:hover {
+  transform: scale(1.02);
+}
+
+.carousel-nav {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+.carousel-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+  border: none;
+  cursor: pointer;
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.carousel-dot.active {
+  background: #6c63ff;
+  transform: scale(1.2);
+}
+
+.carousel-dot:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.video-section {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 30px;
+}
+
+.video-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 24px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.15);
+}
+
+.video-card h3 {
+  margin: 0 0 16px;
+  font-size: 1.1rem;
+}
+
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #000;
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.btn,
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: none;
+  border-radius: 999px;
+  padding: 14px 28px;
+  background: linear-gradient(90deg, var(--btn), var(--btn-hover));
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 18px 45px rgba(108, 99, 255, 0.25);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.btn:hover,
+.theme-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(0, 198, 255, 0.35);
+}
+
+.theme-toggle {
+  margin-bottom: 18px;
+}
+
+@media (max-width: 900px) {
+  .video-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 580px) {
+  .container {
+    padding: 24px;
+  }
+
+  .images {
+    margin: 20px 0;
+  }
+
+  .carousel-nav {
+    bottom: 12px;
+  }
+}
