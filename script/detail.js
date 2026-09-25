@@ -1,307 +1,121 @@
 const params = new URLSearchParams(window.location.search);
-const name = params.get("name");
+let currentName = params.get("name") || "furina"; // Default watak jika tiada parameter
 
-const charName = document.getElementById("charName");
-const charTitle = document.getElementById("charTitle");
-const charImg = document.getElementById("charImg");
-const charDescription = document.getElementById("charDescription");
-const tags = document.getElementById("tags");
-const visionField = document.getElementById("vision");
-const weaponTypeField = document.getElementById("weaponType");
-const nationField = document.getElementById("nation");
-const affiliationField = document.getElementById("affiliation");
-const rarityField = document.getElementById("rarity");
-const constellationNameField = document.getElementById("constellationName");
-const birthdayField = document.getElementById("birthday");
-const releaseDateField = document.getElementById("releaseDate");
-const talentGrid = document.getElementById("talentGrid");
-const passiveGrid = document.getElementById("passiveGrid");
-const materialGrid = document.getElementById("materialGrid");
-const constellationGrid = document.getElementById("constellationGrid");
-const recommendGrid = document.getElementById("recommendGrid");
-const themeToggle = document.getElementById('themeToggle');
+const charNameEl = document.getElementById("charName");
+const charLevelEl = document.getElementById("charLevel");
+const rarityStarsEl = document.getElementById("rarityStars");
+const charImgEl = document.getElementById("charImg");
+const characterScrollRow = document.getElementById("characterScrollRow");
+const themeToggle = document.getElementById("themeToggle");
 
-// Fungsi pembantu format teks untuk API & CDN
-const formatSlug = (str) => str ? str.toLowerCase().replace(/_/g, '-') : '';
-const formatToCdnName = (str) => str ? str.replace(/ /g, '_') : '';
+const characterDataUrls = [
+  (slug) => `https://raw.githubusercontent.com/theBowja/genshin-db/main/src/data/English/characters/${slug}.json`,
+  (slug) => `https://genshin.jmp.blue/characters/${slug}`
+];
 
-const weaponRecommendations = {
-  SWORD: ['mistsplitter-reforged','aquila-favonia','primordial-jade-cutter'],
-  CLAYMORE: ['wolfs-gravestone','song-of-broken-pines','serpent-spine'],
-  POLEARM: ['staff-of-homa','primordial-jade-winged-spear','skyward-spine'],
-  BOW: ['thundering-pulse','amos-bow','polar-star'],
-  CATALYST: ['lost-prayer-to-the-sacred-winds','skyward-atlas','kaguras-verity']
-};
+const characterImageMapPromise = fetch('https://raw.githubusercontent.com/theBowja/genshin-db/main/src/data/image/characters.json')
+  .then(response => response.ok ? response.json() : {})
+  .catch(() => ({}));
 
-const teamRecommendations = {
-  CRYO: ['kamisato-ayaka','kamisato-ayato','sangonomiya-kokomi','zhongli'],
-  PYRO: ['hu-tao','xiao','bennett','zhongli'],
-  HYDRO: ['xingqiu','mona','sangonomiya-kokomi','jean'],
-  ANEMO: ['kaedehara-kazuha','venti','sucrose','albedo'],
-  ELECTRO: ['raiden-shogun','fischl','beidou','kuki-shinobu'],
-  DENDRO: ['tighnari','collei','yae-miko','nilou'],
-  GEO: ['zhongli','albedo','noelle','gorou']
-};
+// Fungsi format slug API
+const formatSlug = (str) => str ? str.toLowerCase().replace(/ /g, '-') : '';
+const formatCleanName = (slug) => slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
-function getWeaponIconUrl(slug) {
-  return `https://genshin.jmp.blue/weapons/${formatSlug(slug)}/icon`;
-}
-
-function getCharacterIconUrl(charName) {
-  return `https://genshin.jmp.blue/characters/${formatSlug(charName)}/icon`;
-}
-
-function getMaterialCdnUrl(matName) {
-  return `https://api.ambr.top/assets/UI/${formatToCdnName(matName)}.png`;
-}
-
-async function fetchWeaponData(slug) {
-  try {
-    const res = await fetch(`https://genshin.jmp.blue/weapons/${formatSlug(slug)}`);
-    return res.ok ? await res.json() : null;
-  } catch {
-    return null;
-  }
-}
-
-async function fetchCharacterData(charName) {
-  try {
-    const res = await fetch(`https://genshin.jmp.blue/characters/${formatSlug(charName)}`);
-    return res.ok ? await res.json() : null;
-  } catch {
-    return null;
-  }
-}
-
+// 1. Urus Tema Terang/Gelap
 function setTheme(theme) {
   document.body.classList.toggle("light", theme === "light");
-  themeToggle.textContent = theme === "light" ? '☀️ Light' : '🌙 Dark';
+  if (themeToggle) themeToggle.textContent = theme === "light" ? '☀️ Light' : '🌙 Dark';
   localStorage.setItem('theme', theme);
 }
 
-function loadTheme() {
-  const savedTheme = localStorage.getItem('theme');
-  setTheme(savedTheme === 'light' ? 'light' : 'dark');
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
+    const isLight = document.body.classList.contains("light");
+    setTheme(isLight ? "dark" : "light");
+  });
 }
+setTheme(localStorage.getItem('theme') || "dark");
 
-function createCard(content) {
-  const card = document.createElement('div');
-  card.className = 'card';
-  card.innerHTML = content;
-  return card;
-}
-
-function renderList(items, container) {
-  if (!container) return;
-  container.innerHTML = '';
-  items.forEach(item => container.appendChild(item));
-}
-
-function setLoadingState(message) {
-  if (charName) charName.textContent = 'Loading...';
-  if (charDescription) charDescription.textContent = message;
-}
-
-function createMaterialCard(name) {
-  const card = document.createElement('div');
-  card.className = 'card material-card';
-  
-  card.innerHTML = `
-    <img src="${getMaterialCdnUrl(name)}" alt="${name}" class="mat-img" style="width: 60px; height: 60px; object-fit: contain; margin: 0 auto 8px; display: block;">
-    <p style="font-size: 0.9rem; margin: 0;">${name}</p>
-  `;
-  
-  const img = card.querySelector('.mat-img');
-  img.onerror = () => {
-    img.src = 'https://genshin.jmp.blue/materials/common-currency/mora'; 
-  };
-  return card;
-}
-
-function createTalentCard(title, description, vision, typeLabel) {
-  const visionSlug = formatSlug(vision || 'anemo');
-  return createCard(`
-    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px; text-align: left;">
-      <img src="https://genshin.jmp.blue/elements/${visionSlug}/icon" alt="${vision}" style="width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%; padding: 4px; flex-shrink: 0;">
-      <div>
-        <h3 style="margin: 0; font-size: 1.1rem;">${title}</h3>
-        <small style="color: #ffc107; font-weight: bold;">${typeLabel}</small>
-      </div>
-    </div>
-    <p style="text-align: left; margin: 0; font-size: 0.95rem; line-height: 1.5; opacity: 0.9;">${description}</p>
-  `);
-}
-
-function createConstellationCard(constellation, index, vision) {
-  const visionSlug = formatSlug(vision || 'anemo');
-  const card = document.createElement('div');
-  card.className = 'card';
-  card.innerHTML = `
-    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px; text-align: left;">
-      <img src="https://genshin.jmp.blue/elements/${visionSlug}/icon" alt="${vision}" style="width: 40px; height: 40px; opacity: 0.8; flex-shrink: 0;">
-      <h3 style="margin: 0; font-size: 1.1rem;">C${index}: ${constellation.name}</h3>
-    </div>
-    <p style="text-align: left; margin: 0; font-size: 0.95rem; line-height: 1.5; opacity: 0.9;">${constellation.effect || constellation.info || constellation.description || ''}</p>
-  `;
-  return card;
-}
-
-function createRecommendCard(content) {
-  const card = document.createElement('div');
-  card.className = 'recommend-card';
-  card.innerHTML = content;
-  return card;
-}
-
-function createWeaponRecommendCard(slug, weaponData) {
-  const card = createRecommendCard(`
-    <img src="${getWeaponIconUrl(slug)}" alt="${weaponData?.name || slug}" loading="lazy" class="rec-wpn-img">
-    <h3>${weaponData?.name || slug}</h3>
-    <p class="recommend-label">Weapon</p>
-    <p class="recommend-type">${weaponData?.type || 'Weapon'}</p>
-    <p>${weaponData?.passiveDesc || 'Rekomendasi senjata untuk watak ini.'}</p>
-  `);
-
-  const img = card.querySelector('.rec-wpn-img');
-  img.onerror = () => {
-    img.src = 'https://genshin.jmp.blue/weapons/dull-blade/icon';
-  };
-  return card;
-}
-
-function createTeamRecommendCard(memberKey, memberData) {
-  const card = createRecommendCard(`
-    <img src="${getCharacterIconUrl(memberKey)}" alt="${memberData?.name || memberKey}" loading="lazy" class="rec-char-img">
-    <h3>${memberData?.name || memberKey}</h3>
-    <p class="recommend-label">Vision</p>
-    <p class="recommend-type">${memberData?.vision || 'Unknown'} • ${memberData?.weapon || 'Unknown'}</p>
-    <p>${memberData?.nation ? `Dari ${memberData.nation}` : 'Anggota tim yang baik.'}</p>
-  `);
-
-  const img = card.querySelector('.rec-char-img');
-  img.onerror = () => {
-    img.src = `https://genshin.jmp.blue/elements/${formatSlug(memberData?.vision || 'anemo')}/icon`;
-  };
-  return card;
-}
-
-async function loadChar() {
-  if (!name) {
-    if (charName) charName.textContent = "Watak tidak ditentukan";
-    if (charDescription) charDescription.textContent = "Sila pilih watak dari halaman characters.";
-    return;
-  }
-
-  setLoadingState('Memuat maklumat watak...');
-
+// 2. Muat Senarai Karusel Watak di Atas
+async function initCarousel() {
   try {
-    const res = await fetch(`https://genshin.jmp.blue/characters/${formatSlug(name)}`);
-    if (!res.ok) throw new Error("Gagal mengambil data dari API.");
+    const res = await fetch('https://api.github.com/repos/theBowja/genshin-db/contents/src/data/English/characters');
+    if (!res.ok) return;
+    const files = await res.json();
+    const slugs = files.filter(file => file.type === 'file' && file.name.endsWith('.json'))
+      .map(file => file.name.replace(/\.json$/, ''));
+    const imageMap = await characterImageMapPromise;
     
-    const data = await res.json();
-    
-    if (charName) charName.textContent = data.name;
-    if (charTitle) charTitle.textContent = data.title || "";
-    if (charDescription) charDescription.textContent = data.description || "Tiada deskripsi tersedia.";
+    characterScrollRow.innerHTML = "";
+    slugs.forEach(slug => {
+      const imageData = imageMap[slug] || imageMap[slug.replace(/[^a-z0-9]/gi, '').toLowerCase()] || {};
+      const iconUrl = imageData['hoyolab-avatar'] || imageData.hoyowiki_icon || imageData.mihoyo_icon || `https://genshin.jmp.blue/characters/${slug}/icon`;
+      const div = document.createElement("div");
+      div.className = `char-mini-icon ${slug === formatSlug(currentName) ? 'active' : ''}`;
+      div.innerHTML = `<img src="${iconUrl}" alt="${slug}" onerror="this.style.display='none'">`;
+      
+      div.addEventListener("click", () => {
+        currentName = slug;
+        window.history.pushState({}, '', `?name=${slug}`);
+        loadCharacterDetails(slug);
+        
+        document.querySelectorAll('.char-mini-icon').forEach(el => el.classList.remove('active'));
+        div.classList.add('active');
+      });
 
-    const splashUrls = [
-      `https://genshin.jmp.blue/characters/${formatSlug(name)}/portrait`,
-      `https://genshin.jmp.blue/characters/${formatSlug(name)}/gacha-splash`,
-      `https://genshin.jmp.blue/characters/${formatSlug(name)}/icon-big`
-    ];
+      characterScrollRow.appendChild(div);
+    });
+  } catch (err) {
+    console.error("Gagal memuatkan karusel watak:", err);
+  }
+}
 
-    let imgIndex = 0;
-    if (charImg) {
-      charImg.src = splashUrls[imgIndex];
-      charImg.onerror = () => {
-        imgIndex++;
-        if (imgIndex < splashUrls.length) {
-          charImg.src = splashUrls[imgIndex];
-        } else {
-          charImg.style.display = 'none';
-          const placeholder = document.createElement('div');
-          placeholder.textContent = 'Gambar Utama Tidak Tersedia';
-          placeholder.style.cssText = 'padding: 40px; text-align: center; color: rgba(255,255,255,0.5); font-style: italic; border: 1px dashed #555;';
-          charImg.parentNode.appendChild(placeholder);
-        }
-      };
+// 3. Muat Data Watak Terperinci & Build Game8
+async function loadCharacterDetails(slug) {
+  try {
+    let data = null;
+    const formattedSlug = formatSlug(slug);
+    for (const makeUrl of characterDataUrls) {
+      const res = await fetch(makeUrl(formattedSlug));
+      if (res.ok) {
+        data = await res.json();
+        break;
+      }
     }
+    if (!data) throw new Error("Watak tidak dijumpai");
 
-    if (tags) {
-      tags.innerHTML = `
-        <span class="tag">${data.vision || 'Unknown'}</span>
-        <span class="tag">${data.weapon || 'Unknown'}</span>
-        <span class="tag">${data.nation || 'Unknown'}</span>
-        <span class="tag">${data.rarity || '0'} ⭐</span>
-      `;
-    }
+    // Paparkan Nama & Gambar Gacha Splash / Portrait
+    charNameEl.textContent = data.name || formatCleanName(slug);
+    charImgEl.alt = data.name || formatCleanName(slug);
+    const imageMap = await characterImageMapPromise;
+    const imageData = imageMap[formattedSlug] || imageMap[formattedSlug.replace(/[^a-z0-9]/gi, '')] || {};
+    charImgEl.src = imageData.hoyowiki_icon || imageData['hoyolab-avatar'] || imageData.mihoyo_icon || `https://genshin.jmp.blue/characters/${formattedSlug}/gacha-splash`;
+    charImgEl.onerror = () => {
+      charImgEl.src = `https://genshin.jmp.blue/characters/${formattedSlug}/icon-big`;
+    };
 
-    if (visionField) visionField.textContent = data.vision || '-';
-    if (weaponTypeField) weaponTypeField.textContent = data.weapon || '-';
-    if (nationField) nationField.textContent = data.nation || '-';
-    if (affiliationField) affiliationField.textContent = data.affiliation || '-';
-    if (rarityField) rarityField.textContent = data.rarity ? `${data.rarity} ⭐` : '-';
-    if (constellationNameField) constellationNameField.textContent = data.constellation || '-';
-    if (birthdayField) birthdayField.textContent = data.birthday || '-';
-    if (releaseDateField) releaseDateField.textContent = data.release || '-';
+    // Paparkan paras dan rarity jika tersedia
+    charLevelEl.textContent = data.level || 90;
+    rarityStarsEl.textContent = '⭐'.repeat(data.rarity || 5);
 
-    const talentLabels = ['Normal Attack', 'Elemental Skill', 'Elemental Burst'];
-    const talentCards = data.skillTalents?.map((talent, index) => createTalentCard(
-      talent.name,
-      talent.description || 'Deskripsi tidak tersedia.',
-      data.vision,
-      talentLabels[index] || 'Active Skill'
-    )) || [];
-    renderList(talentCards, talentGrid);
-
-    const passiveCards = data.passiveTalents?.map((passive, index) => createTalentCard(
-      passive.name,
-      passive.description || 'Deskripsi tidak tersedia.',
-      data.vision,
-      `Passive Talent ${index + 1}`
-    )) || [];
-    renderList(passiveCards, passiveGrid);
-
-    const constellationCards = data.constellations?.map((cons, i) => 
-      createConstellationCard(cons, i + 1, data.vision)
-    ) || [];
-    renderList(constellationCards, constellationGrid);
-
-    const materialCards = (data.materials || []).map((mat) => createMaterialCard(mat.name));
-    renderList(materialCards, materialGrid);
-
-    const weaponSlugs = weaponRecommendations[data.weapon?.toUpperCase()] || [];
-    const teamKeys = teamRecommendations[data.vision?.toUpperCase()] || [];
-
-    const weaponCards = await Promise.all(
-      weaponSlugs.map(async (slug) => {
-        const weaponData = await fetchWeaponData(slug);
-        return createWeaponRecommendCard(slug, weaponData);
-      })
-    );
-
-    const teamCards = await Promise.all(
-      teamKeys.map(async (key) => {
-        const memberData = await fetchCharacterData(key);
-        return createTeamRecommendCard(key, memberData);
-      })
-    );
-
-    renderList([...weaponCards, ...teamCards], recommendGrid);
+    // Rawak anggaran stat UI
+    document.getElementById("statHp").textContent = Math.floor(12000 + Math.random() * 5000);
+    document.getElementById("statAtk").textContent = Math.floor(1100 + Math.random() * 600);
+    document.getElementById("statDef").textContent = Math.floor(600 + Math.random() * 300);
+    document.getElementById("statCritRate").textContent = (5.0 + Math.random() * 45).toFixed(1) + "%";
+    document.getElementById("statCritDmg").textContent = (50.0 + Math.random() * 120).toFixed(1) + "%";
+    document.getElementById("statHealing").textContent = (data.healingBonus || 0).toFixed(1) + "%";
+    document.getElementById("statEm").textContent = Math.floor(data.elementalMastery || Math.random() * 250);
+    document.getElementById("statEr").textContent = ((data.energyRecharge || 100) + Math.random() * 20).toFixed(1) + "%";
+    document.getElementById("statElemBonus").textContent = ((data.elementalDmgBonus || 0) + Math.random() * 15).toFixed(1) + "%";
 
   } catch (err) {
-    console.error(err);
-    if (charName) charName.textContent = 'Gagal memuatkan watak';
-    if (charDescription) charDescription.textContent = 'Sila semak semula sambungan internet anda atau pilih watak lain.';
+    console.error("Ralat memuatkan data watak:", err);
+    charNameEl.textContent = "Watak Tidak Dijumpai";
+    charImgEl.src = "";
   }
 }
 
-function toggleTheme() {
-  const isLight = document.body.classList.toggle('light');
-  if (themeToggle) themeToggle.textContent = isLight ? '☀️ Light' : '🌙 Dark';
-  localStorage.setItem('theme', isLight ? 'light' : 'dark');
-}
-
-loadTheme();
-if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
-loadChar();
+// Mulakan proses
+initCarousel();
+loadCharacterDetails(currentName);

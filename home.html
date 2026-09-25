@@ -7,38 +7,104 @@
 
 <link rel="stylesheet" href="style/detail.css">
 <link rel="stylesheet" href="style/home.css">
+<link rel="stylesheet" href="style/navigation.css">
 </head>
 
 <body>
 
 <nav class="navbar">
-  <div class="logo">✨ Genshin Finder</div>
-  <div class="nav-links">
-    <a href="home.html" class="active">Beranda</a>
-    <a href="characters.html">Semua Watak</a>
-    <a href="genshin.html">Cadangan Game</a>
+  <div class="nav-left">
+    <div class="logo">HOYOLAB</div>
+    <div class="nav-links">
+      <a href="home.html" class="active">Home</a>
+      
+      <!-- Dropdown Channel seperti dalam HoYoLAB -->
+      <div class="dropdown" id="channelDropdown">
+        <button class="dropdown-toggle" id="channelToggle">Channel <span class="arrow">▾</span></button>
+        <div class="dropdown-menu" id="dropdownMenu">
+          <a href="#" class="dropdown-item"><span class="game-dot genshin"></span> Genshin Impact</a>
+          <a href="#" class="dropdown-item"><span class="game-dot starrail"></span> Honkai: Star Rail</a>
+          <a href="#" class="dropdown-item"><span class="game-dot zzz"></span> Zenless Zone Zero</a>
+          <a href="#" class="dropdown-item"><span class="game-dot hi3"></span> Honkai Impact 3rd</a>
+          <a href="#" class="dropdown-item"><span class="game-dot tot"></span> Tears of Themis</a>
+          <a href="#" class="dropdown-item"><span class="game-dot nexus"></span> Honkai: Nexus Anima</a>
+        </div>
+      </div>
+    </div>
   </div>
-  <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
+
+  <div class="nav-right">
+    <button class="check-in-btn">📅 Check in</button>
+    <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
+    <div class="user-avatar" id="userAvatarBtn">
+      <img src="https://genshin.jmp.blue/characters/lumine/icon" alt="User Profile">
+    </div>
+  </div>
 </nav>
+
+<!-- Login Modal Overlay -->
+<div class="login-modal-overlay" id="loginOverlay">
+  <div class="login-modal">
+    <button class="login-close" id="loginClose" aria-label="Close login modal">×</button>
+    <div class="login-brand">
+      <h2>Account Log In</h2>
+    </div>
+    <form id="loginForm" class="login-form">
+      <label>
+        <span>Username/Email</span>
+        <input type="text" name="username" placeholder="Username/Email" autocomplete="username">
+      </label>
+      <label>
+        <span>Password</span>
+        <input type="password" name="password" placeholder="Password" autocomplete="current-password">
+      </label>
+      <button type="submit" class="login-submit">Log In</button>
+    </form>
+    <div class="login-links">
+      <a href="#">Having Problems?</a>
+      <a href="#">Register Now</a>
+    </div>
+    <div class="login-divider"><span>More Login Methods</span></div>
+    <div class="login-socials">
+      <button class="social-btn google">G</button>
+      <button class="social-btn apple"></button>
+      <button class="social-btn facebook">f</button>
+      <button class="social-btn x">X</button>
+    </div>
+  </div>
+</div>
 
 <div class="gacha-container">
   <div class="gacha-header">
-    <h1>Meteorit Misteri: Gacha Roulette</h1>
-    <p>Uji tuah anda hari ini! Klik butang di bawah untuk menyeru watak Genshin Impact secara rawak.</p>
+    <p class="wish-kicker">WISH SIMULATOR</p>
+    <h1>Event Wish: Character Chronicle</h1>
+    <p>Simulasi wish watak menggunakan data karakter terkini.</p>
   </div>
 
   <div class="gacha-box">
+    <div class="wish-banner">
+      <span>✨ Character Event Wish</span>
+      <strong>Senarai watak terkini</strong>
+      <small>Data disegerakkan daripada genshin-db</small>
+    </div>
     <div id="gachaDisplay" class="gacha-display">
       <div class="misteri-icon">❓</div>
       <p class="misteri-text">Siapakah yang akan menyahut seruan anda?</p>
     </div>
-    
-    <button id="gachaBtn" class="gacha-btn">✨ Sertai Seruan (Wish) ✨</button>
+    <div class="wish-status">
+      <span>Character Pity <strong id="pityValue">0</strong>/90</span>
+      <span>Jumlah Wish <strong id="wishCount">0</strong></span>
+    </div>
+    <div class="wish-actions">
+      <button id="gachaBtn" class="gacha-btn" type="button">✨ Make a Wish</button>
+    </div>
+    <div class="wish-history" id="wishHistory" aria-live="polite"></div>
   </div>
 </div>
 
 <footer>© 2026 Genshin Finder — Adam & Fikri</footer>
 
+<script src="script/navigation.js"></script>
 <script src="script/home.js"></script>
 </body>
 </html>

@@ -3,61 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Maklumat Watak Genshin</title>
-
+<title>HoYoLAB — Character Details</title>
 <link rel="stylesheet" href="style/detail.css">
-<link rel="stylesheet" href="style/home.css">
+<link rel="stylesheet" href="style/navigation.css">
 </head>
-
 <body>
 
 <nav class="navbar">
-  <div class="logo">✨ Genshin Finder</div>
-
-  <div class="nav-links">
-    <a href="index.html">Beranda</a>
-    <a href="characters.html">Semua Watak</a>
-    <a href="genshin.html">Cadangan Game</a>
+  <div class="nav-left">
+    <div class="logo">HOYOLAB</div>
+    <div class="nav-links">
+      <a href="index.html">Genshin Impact Battle Chronic...</a>
+    </div>
   </div>
-
-  <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
+  <div class="nav-right">
+    <button class="lang-btn">EN ▾</button>
+    <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
+  </div>
 </nav>
 
-<div class="main">
-
-  <div class="char-top">
-    <div class="image-panel">
-      <img id="charImg" alt="Gambaran watak">
-      <div class="img-glow"></div>
+<div class="main-container">
+  
+  <!-- Karusel Senarai Watak di Atas (Ala HoYoLAB) -->
+  <div class="character-carousel-section">
+    <div class="carousel-header">
+      <span>⭐ My Characters</span>
+      <a class="all-chars-text" href="characters.html">All Characters ▾</a>
     </div>
-    <div class="info">
-      <h1 id="charName">Loading...</h1>
-      <span id="charTitle" class="char-title-text"></span>
-      <div id="tags" class="tag-row"></div>
-      <div class="summary" id="charDescription">Loading character description...</div>
-      <div class="stat-grid">
-        <div class="stat-item"><span>Vision</span><strong id="vision">-</strong></div>
-        <div class="stat-item"><span>Weapon</span><strong id="weaponType">-</strong></div>
-        <div class="stat-item"><span>Nation</span><strong id="nation">-</strong></div>
-        <div class="stat-item"><span>Affiliation</span><strong id="affiliation">-</strong></div>
-        <div class="stat-item"><span>Rarity</span><strong id="rarity">-</strong></div>
-        <div class="stat-item"><span>Constellation</span><strong id="constellationName">-</strong></div>
-        <div class="stat-item"><span>Birthday</span><strong id="birthday">-</strong></div>
-        <div class="stat-item"><span>Release</span><strong id="releaseDate">-</strong></div>
+    <div class="character-scroll-row" id="characterScrollRow">
+      <!-- Watak akan dimuatkan secara dinamik menggunakan JS -->
+    </div>
+  </div>
+
+  <!-- Paparan Utama Profil Watak -->
+  <div class="profile-card">
+    <div class="profile-top">
+      <div class="char-image-box">
+        <img id="charImg" src="" alt="Character">
+      </div>
+      
+      <div class="profile-info-panel">
+        <div class="char-title-row">
+          <h1 id="charName">Loading...</h1>
+          <span class="level-badge">LV. <span id="charLevel">90</span></span>
+        </div>
+        <div class="rarity-stars" id="rarityStars">⭐⭐⭐⭐⭐</div>
+
+        <!-- Bahagian Statistik (Character Stats) -->
+        <div class="stats-section-title">Character Stats</div>
+        <div class="stats-grid">
+          <div class="stat-box"><span>❤️ Max HP</span> <strong id="statHp">12000</strong></div>
+          <div class="stat-box"><span>🎯 CRIT Rate</span> <strong id="statCritRate">5.0%</strong></div>
+          <div class="stat-box"><span>⚔️ ATK</span> <strong id="statAtk">1200</strong></div>
+          <div class="stat-box"><span>💥 CRIT DMG</span> <strong id="statCritDmg">50.0%</strong></div>
+          <div class="stat-box"><span>🛡️ DEF</span> <strong id="statDef">800</strong></div>
+          <div class="stat-box"><span>💖 Healing Bonus</span> <strong id="statHealing">0.0%</strong></div>
+          <div class="stat-box"><span>⚡ Elemental Mastery</span> <strong id="statEm">0</strong></div>
+          <div class="stat-box"><span>🔋 Energy Recharge</span> <strong id="statEr">100.0%</strong></div>
+          <div class="stat-box" style="grid-column: span 2;"><span>✨ Element DMG Bonus</span> <strong id="statElemBonus">0.0%</strong></div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="section">
-    <h2>Rekomendasi Build & Team</h2>
-    <div id="recommendGrid" class="recommend-grid"></div>
   </div>
-
 </div>
 
+<footer>© 2026 HoYoLAB Replica — Adam & Fikri</footer>
+<script src="script/navigation.js"></script>
 <script src="script/detail.js"></script>
-
-<footer>© 2026 Genshin Search Team — Adam & Fikri</footer>
-
 </body>
 </html>

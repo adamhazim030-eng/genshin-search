@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kuiz Genshin Impact</title>
+  <link rel="stylesheet" href="style/quiz.css">
+  <link rel="stylesheet" href="style/navigation.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">✨ Genshin Quiz</div>
+    <div class="nav-links">
+      <a href="home.html">Beranda</a>
+      <a href="characters.html">Watak</a>
+      <a href="genshin.html">Cadangan</a>
+      <a href="quiz.html" class="active">Kuiz</a>
+    </div>
+    <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
+  </nav>
+
+  <main class="quiz-page">
+    <section class="quiz-card">
+      <div class="quiz-title">
+        <div>
+          <p class="quiz-badge">Kuiz Genshin Impact</p>
+          <h1>Guess the Character</h1>
+          <p>Taip nama watak berdasarkan gambar. Jawapan yang tepat memberi satu mata, dan masa bermula sebaik anda memulakan kuiz.</p>
+        </div>
+
+        <div class="quiz-status">
+          <div class="status-box">
+            <span>Skor</span>
+            <strong id="scoreValue">0</strong>/20
+          </div>
+          <div class="status-box">
+            <span>Masa</span>
+            <strong id="timerValue">15:00</strong>
+          </div>
+          <div class="status-box">
+            <span>Soalan</span>
+            <strong id="progressValue">1/20</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="question-panel">
+        <div class="image-frame">
+          <img id="questionImage" src="images/promotion-genshin-impact/1.webp" alt="Watak Genshin Impact">
+        </div>
+
+        <div class="question-card">
+          <div class="question-head">
+            <span class="question-label">Enter answer:</span>
+          </div>
+
+          <div class="input-row">
+            <input id="answerInput" type="text" placeholder="Contoh: Diluc" autocomplete="off">
+            <button id="submitBtn" class="primary-btn">Semak</button>
+          </div>
+
+          <div class="feedback" id="statusText">Mulakan dengan menaip jawapan dan tekan Semak.</div>
+
+          <div class="button-group">
+            <button id="prevBtn" class="secondary-btn" disabled>← Prev</button>
+            <button id="nextBtn" class="secondary-btn">Next →</button>
+            <button id="giveUpBtn" class="tertiary-btn">Give Up</button>
+          </div>
+
+          <button id="newQuizBtn" class="outline-btn">Mulakan Semula Kuiz</button>
+
+          <p class="hint-text">Gunakan ejaan rasmi Genshin Impact. Nama penuh atau alias ringkas juga diterima.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-footer">© 2026 Genshin Finder — Kuiz Tema Genshin Impact</footer>
+
+  <script src="script/navigation.js"></script>
+  <script src="script/quiz.js"></script>
+</body>
+</html>

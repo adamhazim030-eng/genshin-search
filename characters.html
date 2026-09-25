@@ -6,6 +6,7 @@
 <title>✨ Genshin Character Archive</title>
 
 <link rel="stylesheet" href="style/characters.css">
+<link rel="stylesheet" href="style/navigation.css">
 </head>
 
 <body>
@@ -13,7 +14,10 @@
 <div class="topbar">
   <a href="home.html" class="back">⬅ Home</a>
   <span class="subtitle">Live API Data</span>
-  <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
+  <div class="topbar-actions">
+    <a href="quiz.html" class="btn btn-small">🎮 Kuiz</a>
+    <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
+  </div>
 </div>
 <!-- recommendation button -->
 <a href="genshin.html" class="btn">🎮 Cadangan Game Genshin Impact</a>
@@ -32,6 +36,7 @@
 
 <div id="grid" class="grid"></div>
 
+<script src="script/navigation.js"></script>
 <script src="script/characters.js"></script>
 
   <footer>© 2026 Genshin Search Team — Adam & Fikri</footer>

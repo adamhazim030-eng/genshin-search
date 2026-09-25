@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Genshin Finder — Peta Interaktif</title>
+
+
+<link rel="stylesheet" href="style/map.css">
+<link rel="stylesheet" href="style/navigation.css">
+
+</head>
+
+<body>
+
+
+  <!-- Navbar dengan Hamburger Menu -->
+  <header class="map-navbar">
+    <div class="nav-left">
+      <div class="logo">🗺️ Genshin Impact Map Finder</div>
+    </div>
+    <div class="nav-right">
+      <a href="index.html" class="back-home">← Kembali</a>
+    </div>
+  </header>
+
+  <main class="map-container-direct">
+    <section class="map-embed" aria-label="Peta interaktif Genshin Impact">
+      <div class="map-embed__header">
+        <div>
+          <h1>🧭 Peta Interaktif Teyvat</h1>
+        </div>
+        <a class="btn-secondary" id="openMapFallback" href="https://act.hoyolab.com/ys/app/interactive-map/index.html?bbs_presentation_style=no_header&lang=en-us#/map/2" target="_blank" rel="noopener noreferrer">Buka dalam tab baharu</a>
+      </div>
+      <div class="map-frame-wrap">
+        <iframe
+          id="genshinMapFrame"
+          title="Peta interaktif Genshin Impact daripada HoYoLAB"
+          src="https://act.hoyolab.com/ys/app/interactive-map/index.html?bbs_presentation_style=no_header&lang=en-us#/map/2"
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
+      <p class="map-embed__note">Jika peta tidak dipaparkan, gunakan butang "Buka dalam tab baharu".</p>
+    </section>
+
+  </main>
+
+  <script src="script/navigation.js"></script>
+  <script src="script/map.js"></script>
+</body>
+</html>
