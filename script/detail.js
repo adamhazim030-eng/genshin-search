@@ -5,6 +5,9 @@ const charNameEl = document.getElementById("charName");
 const charLevelEl = document.getElementById("charLevel");
 const rarityStarsEl = document.getElementById("rarityStars");
 const charImgEl = document.getElementById("charImg");
+const weaponTypeNameEl = document.getElementById('weaponTypeName');
+const weaponTypeIconEl = document.getElementById('weaponTypeIcon');
+const weaponTypeSourceEl = document.getElementById('weaponTypeSource');
 const characterScrollRow = document.getElementById("characterScrollRow");
 const themeToggle = document.getElementById("themeToggle");
 
@@ -20,6 +23,18 @@ const characterImageMapPromise = fetch('https://raw.githubusercontent.com/theBow
 // Fungsi format slug API
 const formatSlug = (str) => str ? str.toLowerCase().replace(/ /g, '-') : '';
 const formatCleanName = (slug) => slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+
+function getWeaponType(data) {
+  const rawWeapon = data.weaponText || data.weapon || data.weaponType || '';
+  const rawValue = typeof rawWeapon === 'string' ? rawWeapon : rawWeapon.name || rawWeapon.type || '';
+  const value = rawValue.toLowerCase();
+  if (value.includes('claymore')) return 'Claymore';
+  if (value.includes('polearm')) return 'Polearm';
+  if (value.includes('catalyst')) return 'Catalyst';
+  if (value.includes('bow')) return 'Bow';
+  if (value.includes('sword')) return 'Sword';
+  return '';
+}
 
 // 1. Urus Tema Terang/Gelap
 function setTheme(theme) {
@@ -84,6 +99,14 @@ async function loadCharacterDetails(slug) {
     }
     if (!data) throw new Error("Watak tidak dijumpai");
 
+    const weaponType = getWeaponType(data);
+    const weaponIcons = { Sword: '⚔️', Claymore: '🗡️', Polearm: '🔱', Catalyst: '✨', Bow: '🏹' };
+    weaponTypeNameEl.textContent = weaponType || 'Data tidak tersedia';
+    weaponTypeIconEl.textContent = weaponIcons[weaponType] || '⚔️';
+    weaponTypeSourceEl.textContent = weaponType
+      ? 'Kategori senjata daripada data API watak'
+      : 'Respons API ini tidak menyertakan jenis senjata.';
+
     // Paparkan Nama & Gambar Gacha Splash / Portrait
     charNameEl.textContent = data.name || formatCleanName(slug);
     charImgEl.alt = data.name || formatCleanName(slug);
@@ -113,6 +136,8 @@ async function loadCharacterDetails(slug) {
     console.error("Ralat memuatkan data watak:", err);
     charNameEl.textContent = "Watak Tidak Dijumpai";
     charImgEl.src = "";
+    weaponTypeNameEl.textContent = 'Data tidak tersedia';
+    weaponTypeSourceEl.textContent = 'Gagal mendapatkan data jenis senjata.';
   }
 }
 

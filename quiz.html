@@ -20,12 +20,32 @@
   </nav>
 
   <main class="quiz-page">
-    <section class="quiz-card">
+    <section class="intro-card" id="introCard">
+      <div class="intro-copy">
+        <p class="quiz-badge">Ujian pengetahuan pengembara</p>
+        <h1>Kenal tak<br><span>watak Teyvat?</span></h1>
+        <p class="intro-description">20 siluet dan ikon. 15 minit. Satu peluang untuk buktikan anda memang kenal setiap wajah di Teyvat.</p>
+        <div class="intro-meta">
+          <span><strong>20</strong> soalan rawak</span>
+          <span><strong>15:00</strong> masa maksimum</span>
+          <span><strong>∞</strong> peluang meneka</span>
+        </div>
+        <button id="startQuizBtn" class="primary-btn start-btn">Mula cabaran <span aria-hidden="true">↗</span></button>
+      </div>
+      <div class="intro-art" aria-hidden="true">
+        <div class="orbit orbit-one"></div>
+        <div class="orbit orbit-two"></div>
+        <img src="images/promotion-genshin-impact/1.webp" alt="">
+        <span class="art-caption">TEYVAT · EST. 2020</span>
+      </div>
+    </section>
+
+    <section class="quiz-card" id="quizCard" hidden>
       <div class="quiz-title">
         <div>
-          <p class="quiz-badge">Kuiz Genshin Impact</p>
-          <h1>Guess the Character</h1>
-          <p>Taip nama watak berdasarkan gambar. Jawapan yang tepat memberi satu mata, dan masa bermula sebaik anda memulakan kuiz.</p>
+          <p class="quiz-badge">Cabaran sedang berlangsung</p>
+          <h1>Siapa watak ini?</h1>
+          <p>Taip nama watak berdasarkan imej. Setiap jawapan betul menambah skor dan streak anda.</p>
         </div>
 
         <div class="quiz-status">
@@ -38,40 +58,57 @@
             <strong id="timerValue">15:00</strong>
           </div>
           <div class="status-box">
-            <span>Soalan</span>
-            <strong id="progressValue">1/20</strong>
+            <span>Streak</span>
+            <strong id="streakValue">0</strong>
           </div>
         </div>
       </div>
 
+      <div class="progress-track" role="progressbar" aria-label="Kemajuan kuiz" aria-valuemin="0" aria-valuemax="20" aria-valuenow="0">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="question-count"><span id="progressValue">1/20</span><span>SOALAN</span></div>
+
       <div class="question-panel">
         <div class="image-frame">
           <img id="questionImage" src="images/promotion-genshin-impact/1.webp" alt="Watak Genshin Impact">
+          <span class="image-index" id="imageIndex">NO. 01</span>
         </div>
 
         <div class="question-card">
           <div class="question-head">
-            <span class="question-label">Enter answer:</span>
+            <label class="question-label" for="answerInput">Nama watak</label>
           </div>
 
           <div class="input-row">
             <input id="answerInput" type="text" placeholder="Contoh: Diluc" autocomplete="off">
-            <button id="submitBtn" class="primary-btn">Semak</button>
+            <button id="submitBtn" class="primary-btn">Hantar jawapan <span aria-hidden="true">↗</span></button>
           </div>
 
           <div class="feedback" id="statusText">Mulakan dengan menaip jawapan dan tekan Semak.</div>
 
           <div class="button-group">
-            <button id="prevBtn" class="secondary-btn" disabled>← Prev</button>
-            <button id="nextBtn" class="secondary-btn">Next →</button>
-            <button id="giveUpBtn" class="tertiary-btn">Give Up</button>
+            <button id="prevBtn" class="secondary-btn" disabled>← Sebelum</button>
+            <button id="nextBtn" class="secondary-btn">Seterusnya →</button>
+            <button id="giveUpBtn" class="tertiary-btn">Lihat jawapan</button>
           </div>
 
-          <button id="newQuizBtn" class="outline-btn">Mulakan Semula Kuiz</button>
-
-          <p class="hint-text">Gunakan ejaan rasmi Genshin Impact. Nama penuh atau alias ringkas juga diterima.</p>
+          <p class="hint-text">Nama penuh dan alias ringkas diterima. Tekan Enter untuk hantar.</p>
         </div>
       </div>
+    </section>
+
+    <section class="result-card" id="resultCard" hidden aria-live="polite">
+      <p class="quiz-badge">Cabaran tamat</p>
+      <p class="result-score" id="resultScore">0<span>/20</span></p>
+      <h1 id="resultTitle">Pengembaraan yang hebat.</h1>
+      <p class="result-copy" id="resultCopy"></p>
+      <div class="result-stats">
+        <div><span>Jawapan betul</span><strong id="resultCorrect">0/20</strong></div>
+        <div><span>Streak terbaik</span><strong id="resultStreak">0</strong></div>
+        <div><span>Rekod peribadi</span><strong id="bestScoreValue">0/20</strong></div>
+      </div>
+      <button id="newQuizBtn" class="primary-btn start-btn">Main lagi <span aria-hidden="true">↻</span></button>
     </section>
   </main>
 

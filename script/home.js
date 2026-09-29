@@ -1,17 +1,27 @@
 const body = document.body;
 const themeToggle = document.getElementById("themeToggle");
 const gachaBtn = document.getElementById("gachaBtn");
+const gachaBtn10 = document.getElementById("gachaBtn10");
 const gachaDisplay = document.getElementById("gachaDisplay");
 const pityValue = document.getElementById("pityValue");
+const pityLabel = document.getElementById("pityLabel");
+const pityLimit = document.getElementById("pityLimit");
 const wishCount = document.getElementById("wishCount");
 const wishHistory = document.getElementById("wishHistory");
+const characterBannerTab = document.getElementById("characterBannerTab");
+const weaponBannerTab = document.getElementById("weaponBannerTab");
+const bannerEyebrow = document.getElementById("bannerEyebrow");
+const bannerTitle = document.getElementById("bannerTitle");
+const bannerSubtitle = document.getElementById("bannerSubtitle");
 
 // --- 1. PENGURUSAN TEMA ---
 function setTheme(theme) {
-  body.classList.toggle("light", theme === "light");
-  localStorage.setItem("theme", theme);
+  const nextTheme = theme === "light" ? "light" : "dark";
+  body.classList.toggle("light", nextTheme === "light");
+  localStorage.setItem("theme", nextTheme);
   if (themeToggle) {
-    themeToggle.textContent = theme === "light" ? "☀️ Light" : "🌙 Dark";
+    themeToggle.textContent = nextTheme === "light" ? "☀️ Light" : "🌙 Dark";
+    themeToggle.setAttribute("aria-pressed", String(nextTheme === "light"));
   }
 }
 
@@ -41,33 +51,41 @@ if (channelToggle && dropdownMenu) {
   });
 }
 
-// --- 3. LOGIK WISH SIMULATOR GACHA ---
+// --- 3. WISH SIMULATOR (animasi sinematik) ---
+const KEY = "gf.wish.v1";
+const COL = { 3: "#6fb0ee", 4: "#b48cf5", 5: "#f4c65c" };
+const norm = (s) => String(s).replace(/[^a-z0-9]/gi, "").toLowerCase();
+
 let allCharacters = [];
 let characterImageMap = {};
-let pity = 0;
-let totalWishes = 0;
+let allWeapons = [];
+
+// Data dari genshin-db tiada rarity, jadi senarai 5★ ditetapkan di sini (tambah nama baru jika perlu)
+const FIVE = new Set(("hutao diluc jean keqing mona qiqi tighnari dehya yelan nilou cyno nahida wanderer alhaitham ganyu xiao zhongli venti klee " +
+  "tartaglia albedo kamisatoayaka yoimiya raidenshogun sangonomiyakokomi aratakiitto yaemiko shenhe kamisatoayato baizhu lyney neuvillette " +
+  "wriothesley furina navia chiori arlecchino clorinde sigewinne emilie mualani kinich xilonen chasca mavuika citlali").split(" "));
+const STD5 = ["diluc", "jean", "keqing", "mona", "qiqi", "tighnari", "dehya"];
+const FEATURED = "hutao"; // watak utama banner
+const SKIP = /traveler|aether|lumine|manekin|mannequin|anemo|geo$|electro|dendro|hydro|pyro|cryo/;
+const NAME_FIX = { hutao: "Hu Tao" };
+const FALLBACK = ["hu-tao","diluc","jean","keqing","mona","qiqi","tighnari","dehya","amber","barbara","beidou","bennett","chongyun","fischl","kaeya","lisa","ningguang","noelle","razor","sucrose","xiangling","xingqiu","xinyan","yanfei","diona"];
+const W3 = [["cool-steel","Cool Steel"],["harbinger-of-dawn","Harbinger of Dawn"],["magic-guide","Magic Guide"],["black-tassel","Black Tassel"],["slingshot","Slingshot"],["sharpshooters-oath","Sharpshooter's Oath"],["raven-bow","Raven Bow"],["emerald-orb","Emerald Orb"],["debate-club","Debate Club"],["skyrider-sword","Skyrider Sword"]]
+  .map(([id, n]) => ({ t: "w", id, n }));
+const WEAPON_FIVE = new Set(("aquilafavonia amosbow aquasimulacra azurelight cashflowsupervision engulfinglightning everlastingmoonglow freedomsworn jadefallssplendor kagurasverity keyofkhajnisut lightoffoliarincision lostprayertothesacredwinds mistsplitterreforged primordialjadecutter primordialjadewingedspear redhornstonethresher songofbrokenpines staffofhoma summitshaper thunderingpulse tomeoftheeternalflow urakumisugiri vortexvanquisher wolfsgravestone" ).split(" "));
 
 const formatSlug = (str) => str ? str.toLowerCase().replace(/ /g, '-') : '';
 function formatCleanName(slug) {
+  if (NAME_FIX[norm(slug)]) return NAME_FIX[norm(slug)];
   return slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 }
-
-function wait(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-// Warna ikut rarity: 5★ = emas, 4★ = ungu, 3★ = biru
-const RARITY_COLORS = {
-  five:  { color: "#ffd76b", glow: "#fff3c4", deep: "#7a5200", label: "5 STAR" },
-  four:  { color: "#c58bff", glow: "#e9d4ff", deep: "#3d1f66", label: "4 STAR" },
-  three: { color: "#7ec9ff", glow: "#dff3ff", deep: "#1e4a73", label: "3 STAR" }
-};
+const pick = (a) => a[Math.floor(Math.random() * a.length)];
 
 async function initGacha() {
   try {
-    const [listResponse, imageResponse] = await Promise.all([
+    const [listResponse, imageResponse, weaponResponse] = await Promise.all([
       fetch('https://api.github.com/repos/theBowja/genshin-db/contents/src/data/English/characters'),
-      fetch('https://raw.githubusercontent.com/theBowja/genshin-db/main/src/data/image/characters.json')
+      fetch('https://raw.githubusercontent.com/theBowja/genshin-db/main/src/data/image/characters.json'),
+      fetch('https://api.github.com/repos/theBowja/genshin-db/contents/src/data/English/weapons')
     ]);
     if (!listResponse.ok) throw new Error(`Character list HTTP ${listResponse.status}`);
     const files = await listResponse.json();
@@ -75,269 +93,218 @@ async function initGacha() {
       .filter(file => file.type === 'file' && file.name.endsWith('.json'))
       .map(file => file.name.replace(/\.json$/, ''));
     if (imageResponse.ok) characterImageMap = await imageResponse.json();
+    if (weaponResponse.ok) {
+      const weaponFiles = await weaponResponse.json();
+      allWeapons = weaponFiles
+        .filter(file => file.type === "file" && file.name.endsWith(".json"))
+        .map(file => file.name.replace(/\.json$/, ""));
+    }
   } catch (err) {
-    console.error("Gagal memuatkan data gacha:", err);
+    console.error("Gagal memuatkan data gacha (guna senarai sandaran):", err);
   }
 }
 
 function getCharacterImage(slug) {
-  const key = slug.replace(/[^a-z0-9]/gi, '').toLowerCase();
+  const key = norm(slug);
   const image = characterImageMap[slug] || characterImageMap[key] || {};
   return image['hoyowiki_icon'] || image['hoyolab-avatar'] || image.mihoyo_icon || image.image || `https://genshin.jmp.blue/characters/${slug}/icon`;
 }
-
-// Suntik CSS animation sekali sahaja (meteor / letupan / diamond field)
-let gachaStylesInjected = false;
-function ensureGachaAnimStyles() {
-  if (gachaStylesInjected) return;
-  gachaStylesInjected = true;
-  const style = document.createElement("style");
-  style.id = "gacha-anim-styles";
-  style.textContent = `
-.gacha-display { --rarity-color:#ffd76b; --rarity-glow:#fff3c4; --rarity-deep:#7a5200; }
-
-/* ---------- FASA 1: MENTEOR MELINTAS LANGIT ---------- */
-.gacha-sky {
-  position: relative;
-  width: 100%;
-  height: 350px;
-  overflow: hidden;
-  border-radius: 12px;
-  background: linear-gradient(180deg, #060814 0%, #101c3d 35%, #2f5f9e 68%, #bfe3ff 100%);
-}
-.sky-stars {
-  position: absolute; inset: 0;
-  background-image:
-    radial-gradient(2px 2px at 20% 20%, #fff, transparent),
-    radial-gradient(1.5px 1.5px at 60% 10%, #fff, transparent),
-    radial-gradient(2px 2px at 80% 30%, #fff, transparent),
-    radial-gradient(1.5px 1.5px at 35% 40%, #fff, transparent),
-    radial-gradient(1.5px 1.5px at 90% 15%, #fff, transparent);
-  opacity: 0.7;
-  animation: twinkle 1.6s ease-in-out infinite alternate;
-}
-@keyframes twinkle { from { opacity: 0.3; } to { opacity: 0.85; } }
-
-.meteor-group {
-  position: absolute;
-  top: -25%; left: -15%;
-  width: 8px; height: 240px;
-  transform: rotate(35deg);
-  opacity: 0;
-  animation: meteorFall 1.5s cubic-bezier(.3,.6,.35,1) forwards;
-}
-.meteor-group.side { width: 4px; height: 140px; opacity: 0; }
-.meteor-group.side-a { animation: meteorFallSide 1.5s ease-in .1s forwards; top: -30%; left: 10%; }
-.meteor-group.side-b { animation: meteorFallSide 1.5s ease-in .25s forwards; top: -35%; left: -30%; }
-
-.meteor-tail {
-  position: absolute; inset: 0;
-  background: linear-gradient(180deg, transparent, var(--rarity-glow) 45%, var(--rarity-color) 100%);
-  filter: blur(1.5px);
-  border-radius: 50%;
-}
-.meteor-core {
-  position: absolute; bottom: -4px; left: 50%;
-  width: 14px; height: 14px;
-  transform: translateX(-50%);
-  background: #fff;
-  border-radius: 50%;
-  box-shadow: 0 0 18px 6px var(--rarity-color), 0 0 40px 18px var(--rarity-glow);
-}
-.meteor-group.side .meteor-core { width: 8px; height: 8px; }
-
-@keyframes meteorFall {
-  0%   { top: -30%; left: -20%; opacity: 0; }
-  12%  { opacity: 1; }
-  100% { top: 58%; left: 58%; opacity: 1; }
-}
-@keyframes meteorFallSide {
-  0%   { opacity: 0; }
-  15%  { opacity: 0.85; }
-  100% { top: 70%; opacity: 0; }
+function getSplash(slug) {
+  const image = characterImageMap[slug] || characterImageMap[norm(slug)] || {};
+  return image.filename_gachaSplash ? `https://enka.network/ui/${image.filename_gachaSplash}.png` : `https://genshin.jmp.blue/characters/${slug}/gacha-splash`;
 }
 
-.sky-clouds { position: absolute; bottom: 0; left: 0; width: 100%; height: 90px; }
-.sky-clouds span {
-  position: absolute; bottom: -30px;
-  width: 160px; height: 70px;
-  background: #eaf6ff;
-  border-radius: 50%;
-  opacity: 0.9;
-  filter: blur(1px);
+let S5 = [], P4 = [], featSlug = null;
+function buildPools(list) {
+  const ok = list.filter(s => !SKIP.test(norm(s)));
+  S5 = ok.filter(s => STD5.includes(norm(s)));
+  P4 = ok.filter(s => !FIVE.has(norm(s)));
+  featSlug = ok.find(s => norm(s) === FEATURED) || null;
 }
-.sky-clouds span:nth-child(1) { left: -20px; width: 220px; height: 90px; }
-.sky-clouds span:nth-child(2) { left: 35%; width: 180px; height: 80px; bottom: -40px; }
-.sky-clouds span:nth-child(3) { right: -30px; width: 240px; height: 100px; }
-
-.meteor-caption {
-  position: absolute; bottom: 12px; left: 0; right: 0;
-  text-align: center; color: #fff; letter-spacing: 2px;
-  font-size: 13px; text-shadow: 0 0 8px rgba(0,0,0,.6);
-  margin: 0;
+function ensurePools() {
+  buildPools(allCharacters.length ? allCharacters : FALLBACK);
+  if (!S5.length || !P4.length) buildPools(FALLBACK);
 }
 
-/* ---------- FASA 2: LETUPAN + DIAMOND FIELD + SILUET ---------- */
-.gacha-burst {
-  position: relative;
-  width: 100%; height: 350px;
-  overflow: hidden;
-  border-radius: 12px;
-  background: radial-gradient(circle at 50% 55%, var(--rarity-deep) 0%, #0c0c14 70%);
-  display: flex; align-items: center; justify-content: center;
-}
-.flash {
-  position: absolute; top: 52%; left: 50%;
-  width: 10px; height: 10px;
-  background: #fff; border-radius: 50%;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 0 60px 30px var(--rarity-color);
-  animation: flashExpand 0.7s ease-out forwards;
-}
-@keyframes flashExpand {
-  0%   { width: 10px; height: 10px; opacity: 1; }
-  55%  { width: 520px; height: 520px; opacity: 0.85; }
-  100% { width: 760px; height: 760px; opacity: 0; }
-}
+/* ---- State ---- */
+let st = { p: 0, p5: 0, p4: 0, g: false, h: [], wp: 0, wp5: 0, wp4: 0, wh: [] };
+try { Object.assign(st, JSON.parse(localStorage.getItem(KEY) || "{}")); } catch (e) {}
+let activeBanner = "character";
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} };
+const chr = (slug, r) => ({ r, t: "c", slug, n: formatCleanName(slug) });
 
-.diamond-field { position: absolute; inset: 0; }
-.diamond-field .diamond {
-  position: absolute;
-  width: 34px; height: 34px;
-  background: linear-gradient(145deg, var(--rarity-glow), var(--rarity-color));
-  border: 1px solid var(--rarity-glow);
-  transform: rotate(45deg) scale(0);
-  opacity: 0;
-  box-shadow: 0 0 14px var(--rarity-color);
-  animation: diamondPop 0.6s ease-out forwards;
-}
-.diamond-field .d0 { top: 15%; left: 20%; width: 26px; height: 26px; animation-delay: .05s; }
-.diamond-field .d1 { top: 10%; left: 65%; width: 44px; height: 44px; animation-delay: .12s; }
-.diamond-field .d2 { top: 60%; left: 12%; width: 30px; height: 30px; animation-delay: .18s; }
-.diamond-field .d3 { top: 68%; left: 78%; width: 36px; height: 36px; animation-delay: .08s; }
-.diamond-field .d4 { top: 30%; left: 8%;  width: 20px; height: 20px; animation-delay: .22s; }
-.diamond-field .d5 { top: 22%; left: 85%; width: 22px; height: 22px; animation-delay: .16s; }
-.diamond-field .d6 { top: 78%; left: 45%; width: 24px; height: 24px; animation-delay: .28s; }
-.diamond-field .d7 { top: 5%;  left: 40%; width: 18px; height: 18px; animation-delay: .32s; }
-.diamond-field .d8 { top: 50%; left: 50%; width: 60px; height: 60px; opacity: 0; animation: diamondPop 0.6s ease-out .02s forwards, diamondSpin 4s linear infinite; }
-@keyframes diamondPop {
-  0%   { transform: rotate(45deg) scale(0); opacity: 0; }
-  60%  { opacity: 1; }
-  100% { transform: rotate(45deg) scale(1); opacity: 0.9; }
-}
-@keyframes diamondSpin {
-  from { transform: rotate(45deg) scale(1); }
-  to   { transform: rotate(405deg) scale(1); }
-}
-
-.char-silhouette {
-  position: relative;
-  max-height: 320px;
-  filter: brightness(0) drop-shadow(0 0 25px var(--rarity-color));
-  opacity: 0.95;
-  transition: filter 0.8s ease, opacity 0.8s ease, transform 0.8s ease;
-  transform: translateY(10px) scale(0.96);
-}
-.char-silhouette.revealed {
-  filter: brightness(1) drop-shadow(0 0 25px var(--rarity-color));
-  transform: translateY(0) scale(1);
-}
-
-.wish-reveal .gacha-burst { transition: background 0.8s ease; }
-
-.result-fade-in { animation: resultFadeIn 0.5s ease forwards; }
-@keyframes resultFadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-`;
-  document.head.appendChild(style);
-}
-
-// Fungsi satu wish dengan animation meteor -> letupan -> reveal (ikut warna rarity)
-async function dapatkanGacha() {
-  if (allCharacters.length === 0) {
-    gachaDisplay.innerHTML = `<p style="color:red;">Data tidak tersedia. Sila semak internet.</p>`;
-    return;
+function roll() {
+  st.p++; st.p5++; st.p4++;
+  const r5 = st.p5 >= 90 ? 1 : st.p5 >= 74 ? 0.006 + 0.06 * (st.p5 - 73) : 0.006;
+  if (Math.random() < r5) {
+    const feat = st.g || Math.random() < 0.5;
+    st.g = !feat; st.p5 = 0;
+    return chr(feat ? (featSlug || pick(S5)) : pick(S5), 5);
   }
-
-  ensureGachaAnimStyles();
-  gachaBtn.disabled = true;
-
-  // Tentukan hasil pull dahulu supaya warna animation boleh dipadankan
-  const randomSlug = allCharacters[Math.floor(Math.random() * allCharacters.length)];
-  pity += 1;
-  totalWishes += 1;
-  const rarity = Math.random() < 0.05 ? 5 : (Math.random() < 0.25 ? 4 : 3);
-  const pulledItem = {
-    slug: randomSlug,
-    name: formatCleanName(randomSlug),
-    image: getCharacterImage(randomSlug),
-    rarity
-  };
-
-  const rarityKey = rarity === 5 ? "five" : rarity === 4 ? "four" : "three";
-  const rarityClass = `rarity-${rarityKey}`;
-  const colors = RARITY_COLORS[rarityKey];
-  gachaDisplay.style.setProperty("--rarity-color", colors.color);
-  gachaDisplay.style.setProperty("--rarity-glow", colors.glow);
-  gachaDisplay.style.setProperty("--rarity-deep", colors.deep);
-
-  // FASA 1 — meteor melintas langit
-  gachaDisplay.className = "gacha-display wish-animating";
-  gachaDisplay.innerHTML = `
-    <div class="gacha-sky">
-      <div class="sky-stars"></div>
-      <div class="meteor-group main"><div class="meteor-tail"></div><div class="meteor-core"></div></div>
-      <div class="meteor-group side side-a"><div class="meteor-tail"></div><div class="meteor-core"></div></div>
-      <div class="meteor-group side side-b"><div class="meteor-tail"></div><div class="meteor-core"></div></div>
-      <div class="sky-clouds"><span></span><span></span><span></span></div>
-      <p class="meteor-caption">MEMBELAH LANGIT TAKDIR...</p>
-    </div>
-  `;
-  await wait(1500);
-
-  // FASA 2 — letupan cahaya + diamond field + siluet watak
-  gachaDisplay.className = "gacha-display wish-burst";
-  gachaDisplay.innerHTML = `
-    <div class="gacha-burst">
-      <div class="flash"></div>
-      <div class="diamond-field">
-        ${Array.from({ length: 9 }).map((_, i) => `<span class="diamond d${i}"></span>`).join("")}
-      </div>
-      <img class="char-silhouette" src="${pulledItem.image}" alt="" onerror="this.style.display='none'">
-    </div>
-  `;
-  await wait(900);
-
-  // FASA 3 — reveal (siluet bertukar warna penuh)
-  const silImg = gachaDisplay.querySelector(".char-silhouette");
-  if (silImg) silImg.classList.add("revealed");
-  await wait(800);
-
-  // FASA 4 — kad hasil akhir (boleh klik untuk lihat detail)
-  pityValue.textContent = pity >= 90 ? 0 : pity;
-  wishCount.textContent = totalWishes;
-  if (pity >= 90) pity = 0;
-  wishHistory.insertAdjacentHTML("afterbegin", `<span>${pulledItem.name} • ${pulledItem.rarity}★</span>`);
-
-  gachaDisplay.className = "gacha-display wish-results";
-  gachaDisplay.innerHTML = `
-    <button class="wish-result-card ${rarityClass} result-fade-in" type="button" onclick="window.location.href='detail.html?name=${encodeURIComponent(pulledItem.slug)}'">
-      <span class="result-label">${colors.label}</span>
-      <img src="${pulledItem.image}" alt="${pulledItem.name}" onerror="this.src='https://genshin.jmp.blue/elements/anemo/icon'">
-      <strong>${pulledItem.name}</strong>
-      <span>${"⭐".repeat(pulledItem.rarity)}</span>
-    </button>
-  `;
-
-  gachaBtn.disabled = false;
+  if (st.p4 >= 10 || Math.random() < 0.051) { st.p4 = 0; return chr(pick(P4), 4); }
+  return { r: 3, ...pick(W3) };
 }
 
-initGacha();
-if (gachaBtn) {
-  gachaBtn.addEventListener("click", dapatkanGacha);
+function weapon(slug) {
+  return { r: WEAPON_FIVE.has(norm(slug)) ? 5 : 4, t: "w", id: slug, n: formatCleanName(slug) };
 }
+
+function rollWeapon() {
+  st.wp++; st.wp5++; st.wp4++;
+  const fiveStars = allWeapons.filter(slug => WEAPON_FIVE.has(norm(slug)));
+  const fourStars = allWeapons.filter(slug => !WEAPON_FIVE.has(norm(slug)));
+  const r5 = st.wp5 >= 80 ? 1 : st.wp5 >= 63 ? 0.007 + 0.07 * (st.wp5 - 62) : 0.007;
+  if (Math.random() < r5) { st.wp5 = 0; return weapon(pick(fiveStars.length ? fiveStars : W3.map(item => item.id))); }
+  if (st.wp4 >= 10 || Math.random() < .06) { st.wp4 = 0; return weapon(pick(fourStars.length ? fourStars : W3.map(item => item.id))); }
+  return { r: 3, ...pick(W3) };
+}
+
+/* ---- Gambar (ada fallback berlapis) ---- */
+window.__gfImgErr = function (img) {
+  if (img.dataset.fb) { img.src = img.dataset.fb; img.removeAttribute("data-fb"); return; }
+  const b = document.createElement("b");
+  b.className = "ph"; b.textContent = (img.alt || "?")[0];
+  img.replaceWith(b);
+};
+function im(x, big, cls) {
+  let src, fb = "";
+  if (x.t === "w") src = `https://genshin.jmp.blue/weapons/${x.id}/icon`;
+  else if (big) { src = getSplash(x.slug); fb = getCharacterImage(x.slug); }
+  else src = getCharacterImage(x.slug);
+  return `<img class="${cls}" src="${src}" ${fb ? `data-fb="${fb}"` : ""} alt="${x.n}" onerror="__gfImgErr(this)">`;
+}
+
+/* ---- Overlay ---- */
+const wf = document.createElement("div");
+wf.className = "wf"; wf.dataset.s = "fall";
+wf.setAttribute("role", "dialog"); wf.setAttribute("aria-label", "Animasi wish");
+wf.innerHTML = '<div class="wf-night"></div><div class="wf-sky"></div><div class="wf-met"></div><canvas class="wf-c"></canvas><div class="wf-rv"></div><div class="wf-res"><div class="wf-row"></div></div><div class="wf-flash"></div><div class="wf-hint">Klik watak untuk lihat detail</div><button class="wf-skip" type="button">Langkau ▸▸</button><button class="wf-x" type="button" aria-label="Tutup" hidden>×</button>';
+document.body.appendChild(wf);
+const cv = wf.querySelector("canvas"), cx = cv.getContext("2d"), rv = wf.querySelector(".wf-rv"), row = wf.querySelector(".wf-row");
+const bSkip = wf.querySelector(".wf-skip"), bX = wf.querySelector(".wf-x");
+
+/* ---- Zarah ---- */
+let P = [], raf = 0;
+const sz = () => { cv.width = innerWidth; cv.height = innerHeight; };
+function burst(col, n) {
+  for (let i = 0; i < n; i++) {
+    const a = Math.random() * 6.283, v = 2 + Math.random() * 9;
+    P.push({ x: cv.width / 2, y: cv.height / 2, vx: Math.cos(a) * v, vy: Math.sin(a) * v, l: 1, c: col, s: 1 + Math.random() * 3 });
+  }
+}
+function loop() {
+  cx.clearRect(0, 0, cv.width, cv.height);
+  P = P.filter(p => p.l > 0);
+  for (const p of P) {
+    p.x += p.vx; p.y += p.vy; p.vx *= .97; p.vy = p.vy * .97 + .06; p.l -= .011;
+    cx.globalAlpha = Math.max(p.l, 0); cx.fillStyle = p.c;
+    cx.beginPath(); cx.arc(p.x, p.y, p.s, 0, 6.283); cx.fill();
+  }
+  raf = wf.classList.contains("on") ? requestAnimationFrame(loop) : 0;
+}
+
+/* ---- Urutan animasi ---- */
+let busy = false, skip = false, poke = null, last = [];
+const set = (s) => { wf.dataset.s = s; };
+const wait = (ms) => new Promise((r) => { const d = () => { clearTimeout(t); poke = null; r(); }; const t = setTimeout(d, ms); poke = d; });
+
+function show(x) {
+  const stars = [...Array(x.r)].map((_, i) => `<i style="--i:${i}">★</i>`).join("");
+  rv.innerHTML = `<div class="rv r${x.r}">${im(x, true, "rv-img")}<div class="rv-info"><div class="rv-st">${stars}</div><h2>${x.n}</h2></div></div>`;
+  burst(COL[x.r], x.r === 5 ? 140 : 60);
+}
+
+async function run(rs) {
+  skip = false; last = rs;
+  const best = Math.max(...rs.map(x => x.r));
+  wf.style.setProperty("--m", COL[best]);
+  sz(); wf.classList.add("on"); bX.hidden = true; bSkip.hidden = false;
+  set("fall"); cancelAnimationFrame(raf); loop();
+  await wait(2700);
+  for (const x of rs.filter(x => x.r >= 4)) {
+    if (skip) break;
+    set("reveal"); show(x);
+    await wait(x.r === 5 ? 3400 : 1700);
+  }
+  set("result");
+  row.innerHTML = rs.map((x, i) => `<div class="wc r${x.r}" ${x.t === "c" ? `data-slug="${x.slug}"` : ""} style="--d:${(i * 0.16).toFixed(2)}s">${im(x, false, "wc-i")}<div class="wc-n">${x.n}</div><div class="wc-s">${"★".repeat(x.r)}</div></div>`).join("");
+  if (best === 5) setTimeout(() => burst(COL[5], 120), 350);
+  bSkip.hidden = true; bX.hidden = false; bX.focus();
+}
+
+function closeWish() {
+  if (bX.hidden) return;
+  wf.classList.remove("on"); busy = false; rv.innerHTML = "";
+  updateUI();
+}
+
+function renderBanner() {
+  const isWeapon = activeBanner === "weapon";
+  last = [];
+  if (gachaDisplay) {
+    gachaDisplay.className = "gacha-display";
+    gachaDisplay.innerHTML = '<div class="misteri-icon">✦</div><p class="misteri-text">Make a wish</p>';
+  }
+  document.body.classList.toggle("weapon-mode", isWeapon);
+  characterBannerTab?.classList.toggle("is-active", !isWeapon);
+  weaponBannerTab?.classList.toggle("is-active", isWeapon);
+  characterBannerTab?.setAttribute("aria-selected", String(!isWeapon));
+  weaponBannerTab?.setAttribute("aria-selected", String(isWeapon));
+  if (bannerEyebrow) bannerEyebrow.textContent = isWeapon ? "⚔ Weapon Event Wish" : "✨ Character Event Wish";
+  if (bannerTitle) bannerTitle.textContent = isWeapon ? "Epitome Invocation" : "Character Chronicle";
+  if (bannerSubtitle) bannerSubtitle.textContent = isWeapon ? "Senjata terkini daripada genshin-db" : "Watak terkini daripada genshin-db";
+  if (pityLabel) pityLabel.textContent = isWeapon ? "Weapon Pity" : "Character Pity";
+  if (pityLimit) pityLimit.textContent = isWeapon ? "80" : "90";
+  updateUI();
+}
+
+/* ---- UI halaman home ---- */
+function updateUI() {
+  const isWeapon = activeBanner === "weapon";
+  if (pityValue) pityValue.textContent = isWeapon ? st.wp5 : st.p5;
+  if (wishCount) wishCount.textContent = isWeapon ? st.wp : st.p;
+  if (wishHistory) wishHistory.innerHTML = (isWeapon ? st.wh : st.h).slice(0, 20).map(x => `<span class="wh r${x.r}">${"★".repeat(x.r)} ${x.n}</span>`).join("");
+  if (gachaDisplay && last.length) {
+    const b = last.reduce((a, x) => x.r > a.r ? x : a);
+    gachaDisplay.className = "gacha-display";
+    gachaDisplay.innerHTML = `<div class="last">${im(b, false, "")}<strong>${b.n}</strong><span>${"★".repeat(b.r)}</span></div>`;
+  }
+}
+
+let ready = null;
+async function wish(n) {
+  if (busy) return;
+  busy = true;
+  await ready;
+  ensurePools();
+  const rs = []; for (let i = 0; i < n; i++) rs.push(activeBanner === "weapon" ? rollWeapon() : roll());
+  const history = rs.map(x => ({ r: x.r, n: x.n })).reverse();
+  if (activeBanner === "weapon") st.wh = history.concat(st.wh).slice(0, 30);
+  else st.h = history.concat(st.h).slice(0, 30);
+  save(); run(rs);
+}
+
+ready = initGacha();
+if (gachaBtn) gachaBtn.addEventListener("click", () => wish(1));
+if (gachaBtn10) gachaBtn10.addEventListener("click", () => wish(10));
+characterBannerTab?.addEventListener("click", () => { if (!busy) { activeBanner = "character"; renderBanner(); } });
+weaponBannerTab?.addEventListener("click", () => { if (!busy) { activeBanner = "weapon"; renderBanner(); } });
+
+wf.addEventListener("click", (e) => {
+  const card = e.target.closest(".wc[data-slug]");
+  if (card && wf.dataset.s === "result") { window.location.href = `detail.html?name=${encodeURIComponent(card.dataset.slug)}`; return; }
+  if (e.target === bX) closeWish();
+  else if (e.target === bSkip) { skip = true; poke && poke(); }
+  else if (poke) poke();
+});
+addEventListener("keydown", (e) => {
+  if (!wf.classList.contains("on")) return;
+  if (e.key === "Escape") closeWish();
+  else if ((e.key === " " || e.key === "Enter") && e.target === document.body) { if (!bX.hidden) closeWish(); else if (poke) poke(); }
+});
+addEventListener("resize", sz);
+updateUI();
+renderBanner();
 
 // --- 4. LOGIK MODAL LOGIN ---
 const loginOverlay = document.getElementById("loginOverlay");

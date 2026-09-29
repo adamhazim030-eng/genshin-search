@@ -1,17 +1,19 @@
 :root {
-  --bg-color: #12121c;
-  --card-bg: #1a1a2e;
-  --border-color: rgba(255, 255, 255, 0.08);
-  --text-main: #f4f4ff;
-  --accent-color: #ffae00;
+  --bg-color: #101c18;
+  --card-bg: #17251f;
+  --border-color: rgba(230, 239, 222, 0.12);
+  --text-main: #f1eedf;
+  --accent-color: #c8f169;
 }
 
+*, *::before, *::after { box-sizing: border-box; }
+
 body.light {
-  --bg-color: #f0f2f5;
-  --card-bg: #ffffff;
-  --border-color: rgba(0, 0, 0, 0.08);
-  --text-main: #333333;
-  --accent-color: #ff8800;
+  --bg-color: #ececdd;
+  --card-bg: #fbfaef;
+  --border-color: rgba(23, 37, 31, 0.14);
+  --text-main: #17251f;
+  --accent-color: #638c27;
 }
 
 body {
@@ -69,7 +71,7 @@ body {
 
 /* Main Container */
 .main-container {
-  max-width: 950px;
+  max-width: 1160px;
   margin: 30px auto;
   padding: 0 15px;
 }
@@ -145,11 +147,12 @@ body {
 }
 
 .char-image-box {
-  width: 280px;
-  height: 380px;
+  width: min(32%, 340px);
+  min-width: 250px;
+  height: clamp(360px, 42vw, 500px);
   border-radius: 16px;
   overflow: hidden;
-  background: linear-gradient(135deg, #252538, #181824);
+  background: linear-gradient(135deg, #24392d, #14221b);
   border: 1px solid var(--border-color);
   flex-shrink: 0;
 }
@@ -263,6 +266,10 @@ body {
   object-fit: contain;
 }
 
+.weapon-icon-area span {
+  font-size: 1.65rem;
+}
+
 .weapon-details h4 {
   margin: 0 0 4px;
   font-size: 1rem;
@@ -270,7 +277,7 @@ body {
 
 .weapon-details p {
   margin: 0;
-  font-size: 0.85krem;
+  font-size: 0.85rem;
   opacity: 0.7;
 }
 

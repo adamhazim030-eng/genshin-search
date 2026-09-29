@@ -5,14 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Genshin Finder — Gacha Roulette</title>
 
-<link rel="stylesheet" href="style/detail.css">
 <link rel="stylesheet" href="style/home.css">
 <link rel="stylesheet" href="style/navigation.css">
 </head>
 
 <body>
 
-<nav class="navbar">
+<nav class="navbar" aria-label="Navigasi halaman">
   <div class="nav-left">
     <div class="logo">HOYOLAB</div>
     <div class="nav-links">
@@ -67,42 +66,69 @@
     <div class="login-divider"><span>More Login Methods</span></div>
     <div class="login-socials">
       <button class="social-btn google">G</button>
-      <button class="social-btn apple"></button>
+      <button class="social-btn apple"></button>
       <button class="social-btn facebook">f</button>
       <button class="social-btn x">X</button>
     </div>
   </div>
 </div>
 
-<div class="gacha-container">
-  <div class="gacha-header">
-    <p class="wish-kicker">WISH SIMULATOR</p>
-    <h1>Event Wish: Character Chronicle</h1>
-    <p>Simulasi wish watak menggunakan data karakter terkini.</p>
-  </div>
+<main class="wish-app" aria-label="Genshin wish simulator">
+  <section class="wish-shell">
+    <header class="wish-topbar">
+      <div class="wish-brand"><span class="wish-brand-mark">✦</span><span>Genshin Wish</span></div>
+      <div class="wish-heading">
+        <span class="wish-kicker">EVENT WISH</span>
+        <h1 id="bannerTitle">Character Chronicle</h1>
+      </div>
+      <div class="wish-currency"><span>✦</span><strong id="wishCount">0</strong><span class="wish-pity-mini">Pity <b id="pityValue">0</b>/<i id="pityLimit">90</i></span></div>
+    </header>
 
-  <div class="gacha-box">
-    <div class="wish-banner">
-      <span>✨ Character Event Wish</span>
-      <strong>Senarai watak terkini</strong>
-      <small>Data disegerakkan daripada genshin-db</small>
+    <div class="banner-tabs" role="tablist" aria-label="Jenis banner wish">
+      <button class="banner-tab is-active" id="characterBannerTab" type="button" role="tab" aria-selected="true">Character Event</button>
+      <button class="banner-tab" id="weaponBannerTab" type="button" role="tab" aria-selected="false">Weapon Event</button>
     </div>
-    <div id="gachaDisplay" class="gacha-display">
-      <div class="misteri-icon">❓</div>
-      <p class="misteri-text">Siapakah yang akan menyahut seruan anda?</p>
+
+    <div class="wish-content">
+      <aside class="wish-slots" aria-label="Wish banners">
+        <button class="wish-slot is-selected" type="button"><span class="slot-count">0</span><span class="slot-icon">✦</span><small>Event Wish</small></button>
+        <button class="wish-slot" type="button"><span class="slot-count">0</span><span class="slot-icon">◈</span><small>Weapon Wish</small></button>
+        <button class="wish-slot" type="button"><span class="slot-count">0</span><span class="slot-icon">◇</span><small>Standard Wish</small></button>
+        <button class="wish-slot" type="button"><span class="slot-count">0</span><span class="slot-icon">★</span><small>Novice Wish</small></button>
+        <button class="wish-slot" type="button"><span class="slot-count">0</span><span class="slot-icon">✧</span><small>History</small></button>
+      </aside>
+
+      <section class="wish-stage" id="wishBanner">
+        <div class="stage-glow"></div>
+        <div class="wish-banner-copy">
+          <span id="bannerEyebrow">✨ Character Event Wish</span>
+          <strong id="bannerSubtitle">Watak terkini daripada genshin-db</strong>
+          <p id="pityLabel">Character Pity</p>
+        </div>
+        <div id="gachaDisplay" class="gacha-display">
+          <div class="misteri-icon">✦</div>
+          <p class="misteri-text">Make a wish</p>
+        </div>
+        <div class="wish-stage-footer"><span>Guaranteed 4★ or higher item every 10 wishes</span><span>Character Event Wish</span></div>
+      </section>
     </div>
-    <div class="wish-status">
-      <span>Character Pity <strong id="pityValue">0</strong>/90</span>
-      <span>Jumlah Wish <strong id="wishCount">0</strong></span>
-    </div>
-    <div class="wish-actions">
-      <button id="gachaBtn" class="gacha-btn" type="button">✨ Make a Wish</button>
+
+    <div class="wish-controls">
+      <div class="wish-tool-tabs" role="tablist" aria-label="Wish information">
+        <button class="wish-tool is-active" type="button">Settings</button>
+        <button class="wish-tool" type="button">Details</button>
+        <button class="wish-tool" type="button">Inventory</button>
+      </div>
+      <div class="wish-actions">
+        <button id="gachaBtn" class="gacha-btn" type="button"><span>Wish</span><b>x1</b></button>
+        <button id="gachaBtn10" class="gacha-btn gacha-btn-primary" type="button"><span>Wish</span><b>x10</b></button>
+      </div>
     </div>
     <div class="wish-history" id="wishHistory" aria-live="polite"></div>
-  </div>
-</div>
+  </section>
+</main>
 
-<footer>© 2026 Genshin Finder — Adam & Fikri</footer>
+<footer class="wish-footer">© 2026 Genshin Finder — Adam & Fikri</footer>
 
 <script src="script/navigation.js"></script>
 <script src="script/home.js"></script>

@@ -288,3 +288,72 @@ body.light .hero-card{
     font-size:34px;
   }
 }
+
+/* Wiki-inspired homepage */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+body { background: #edf0f2; color: #20252b; font-family: "Trebuchet MS", "Segoe UI", sans-serif; }
+.global-navbar { background: #15212aee; }
+.wiki-home { width: min(1240px, calc(100% - 36px)); margin: 0 auto; padding: 42px 0 70px; }
+.wiki-banner { position: relative; min-height: 330px; display: flex; align-items: center; overflow: hidden; padding: 46px clamp(28px, 6vw, 80px); border: 1px solid #ffffff55; border-radius: 4px; color: #fff; background: linear-gradient(90deg, #13232ecc 0%, #13232e88 52%, #13232e22), url("../images/promotion-genshin-impact/1.webp") center/cover; box-shadow: 0 14px 32px #1827352c; }
+.wiki-banner::after { content: ""; position: absolute; inset: auto 0 0; height: 7px; background: #d79452; }
+.wiki-banner__copy { position: relative; z-index: 1; max-width: 680px; }
+.wiki-eyebrow { display: block; margin-bottom: 9px; color: #527a2b; font-size: .72rem; font-weight: 800; letter-spacing: .16em; }
+.wiki-banner .wiki-eyebrow { color: #f6c47c; }
+.wiki-banner h1 { margin: 0; font-family: Georgia, serif; font-size: clamp(2.3rem, 6vw, 4.8rem); font-weight: 400; letter-spacing: -.02em; }
+.wiki-banner p { max-width: 540px; margin: 12px 0 24px; color: #e3edf0; line-height: 1.6; }
+.wiki-banner__stamp { position: absolute; right: 8%; bottom: 44px; display: grid; width: 104px; height: 104px; place-content: center; border: 1px solid #f4ca8d88; border-radius: 50%; color: #f4ca8d99; font-size: .7rem; letter-spacing: .12em; line-height: 1.7; text-align: center; transform: rotate(-12deg); }
+.wiki-banner__stamp b { font-size: 1.35rem; font-weight: 400; }
+.landing-search { display: flex; width: min(620px, 100%); gap: 0; margin: 0; }
+.landing-search input { min-width: 0; height: 48px; border: 0; border-radius: 3px 0 0 3px; padding: 0 16px; color: #1f2933; background: #fff; outline: 0; }
+.landing-search input:focus { box-shadow: inset 0 0 0 2px #638c27; }
+.landing-search button { height: 48px; border: 0; border-radius: 0 3px 3px 0; padding: 0 22px; color: #fff; background: #527a2b; cursor: pointer; font-weight: 800; }
+.wiki-section { padding-top: 46px; }
+.section-heading { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 18px; border-bottom: 1px solid #cbd2d6; padding-bottom: 11px; }
+.section-heading h2 { margin: 0; color: #26343d; font-family: Georgia, serif; font-size: clamp(1.45rem, 3vw, 2rem); font-weight: 400; }
+.section-heading a, .section-note { color: #a45e33; font-size: .78rem; text-decoration: none; }
+.region-grid { display: grid; grid-template-columns: 1.5fr repeat(4, 1fr); grid-auto-rows: 126px; gap: 10px; }
+.region-card { position: relative; display: flex; flex-direction: column; justify-content: end; overflow: hidden; min-width: 0; padding: 16px; color: #fff; text-decoration: none; background: linear-gradient(0deg, #0b1722cc, transparent 70%), var(--region-image) center/cover; transition: transform .2s, box-shadow .2s; }
+.region-card:hover { z-index: 1; box-shadow: 0 8px 20px #27384444; transform: translateY(-3px); }
+.region-card--wide { grid-row: span 2; }
+.region-card span { color: #f7c27f; font-size: .62rem; letter-spacing: .13em; text-transform: uppercase; }
+.region-card strong { margin-top: 4px; font-family: Georgia, serif; font-size: 1.15rem; font-weight: 400; }
+.directory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.directory-card { display: grid; min-height: 126px; align-content: center; gap: 5px; padding: 22px; border: 1px solid #d8dde0; color: #26343d; background: #fff; text-decoration: none; box-shadow: 0 4px 12px #26343d0b; transition: transform .2s, border-color .2s; }
+.directory-card:hover { border-color: #bd713d; transform: translateY(-3px); }
+.directory-card b { color: #bd713d; font-size: 1.6rem; font-weight: 400; }
+.directory-card span { font-family: Georgia, serif; font-size: 1.08rem; }
+.directory-card small { color: #77828a; font-size: .72rem; line-height: 1.4; }
+.directory-card--blue b { color: #527ca3; }
+.directory-card--green b { color: #668a69; }
+.directory-card--gold b { color: #ad8241; }
+.featured-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.featured-card { position: relative; display: flex; min-height: 150px; flex-direction: column; justify-content: end; overflow: hidden; padding: 20px; color: #fff; text-decoration: none; background: linear-gradient(0deg, #16232ee8, #16232e22), url("../images/promotion-genshin-impact/2.jpg") center/cover; }
+.featured-card:nth-child(2) { background-image: linear-gradient(0deg, #16232ee8, #16232e22), url("../images/promotion-genshin-impact/3.jpg"); }
+.featured-card:nth-child(3) { background-image: linear-gradient(0deg, #16232ee8, #16232e22), url("../images/promotion-genshin-impact/1.webp"); }
+.featured-card__element { color: #f2c17a; font-size: .68rem; }
+.featured-card strong { margin-top: 5px; font-family: Georgia, serif; font-size: 1.3rem; font-weight: 400; }
+.featured-card small { margin-top: 5px; color: #d5e0e6; font-size: .72rem; }
+footer { color: #68747b; background: #edf0f2; }
+body.light { background: #edf0f2; }
+@media (max-width: 800px) {
+  .wiki-home { width: min(100% - 22px, 1240px); padding-top: 26px; }
+  .wiki-banner { min-height: 350px; padding: 34px 25px; }
+  .wiki-banner__stamp { right: 8%; bottom: 28px; width: 76px; height: 76px; }
+  .region-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 120px; }
+  .region-card--wide { grid-row: span 1; }
+  .directory-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 520px) {
+  .wiki-banner__stamp { display: none; }
+  .landing-search { flex-direction: row; }
+  .landing-search button { padding-inline: 14px; }
+  .region-grid, .directory-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .region-grid { grid-auto-rows: 108px; }
+  .region-card--wide { grid-row: span 1; grid-column: 1 / -1; }
+  .region-card { padding: 12px; }
+  .region-card strong { font-size: 1rem; }
+  .directory-card { min-height: 118px; padding: 14px; }
+  .directory-card small { font-size: .68rem; }
+  .featured-grid { grid-template-columns: 1fr; }
+  .section-heading { align-items: start; flex-direction: column; gap: 8px; }
+}

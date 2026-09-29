@@ -9,63 +9,72 @@
 </head>
 
 <body>
-
-  <div style="text-align: center; margin-bottom: 20px;">
-    <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
-  </div>
-
-  <div class="container">
-
-    <h1>🎮 Cadangan Game: Genshin Impact</h1>
-
-    <!-- Full width horizontal banner carousel -->
-    <div class="images" id="promotionCarousel">
-      <img id="carouselImg" src="images/promotion-genshin-impact/1.webp" alt="Genshin Impact Promotion Banner">
-      <div class="carousel-nav" id="carouselNav"></div>
-    </div>
-
-    <p>
-      Genshin Impact ialah game open-world RPG dengan grafik anime,
-      jalan cerita menarik, sistem combat element, dan karakter unik.
-      <section class="video-section">
-        <div class="video-card">
-          <h3>⚔️ Epic Boss Battle</h3>
-          <div class="video-wrapper">
-            <iframe src="https://www.youtube-nocookie.com/embed/lpv1ungKNc0?si=pcG6rCP3SdPZyKb4" allowfullscreen></iframe>
-          </div>
+  <main class="page-shell">
+    <section class="hero-section" aria-labelledby="pageTitle">
+      <div class="hero-copy">
+        <p class="eyebrow">PANDUAN PENGEMBARA · TEYVAT</p>
+        <h1 id="pageTitle">Satu dunia.<br><span>Seribu kisah.</span></h1>
+        <p class="hero-description">Teroka dunia terbuka, kuasai pertarungan elemen dan temui watak-watak yang akan ikut perjalanan anda.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="https://genshin.hoyoverse.com/" target="_blank" rel="noopener noreferrer">Laman rasmi <span aria-hidden="true">↗</span></a>
+          <a class="button button-secondary" href="https://play.google.com/store/apps/details?id=com.miHoYo.GenshinImpact" target="_blank" rel="noopener noreferrer">Google Play <span aria-hidden="true">↗</span></a>
         </div>
+      </div>
 
-        <div class="video-card">
-          <h3>⚡ Dragonspine Battle</h3>
-          <div class="video-wrapper">
-            <iframe src="https://www.youtube-nocookie.com/embed/JPnsUuKMiaU?si=VThCc7pCx3HqupwV" allowfullscreen></iframe>
-          </div>
-        </div>
+      <div class="promotion-carousel" id="promotionCarousel" aria-label="Galeri promosi Genshin Impact">
+        <img id="carouselImg" src="images/promotion-genshin-impact/1.webp" alt="Promosi Genshin Impact">
+        <div class="carousel-shade"></div>
+        <div class="carousel-caption"><span>JELAJAHI TEYVAT</span><strong id="carouselCaption">Pengembaraan bermula di sini</strong></div>
+        <button class="carousel-arrow carousel-prev" id="carouselPrev" type="button" aria-label="Imej sebelumnya">←</button>
+        <button class="carousel-arrow carousel-next" id="carouselNext" type="button" aria-label="Imej seterusnya">→</button>
+        <div class="carousel-nav" id="carouselNav" aria-label="Pilih imej promosi"></div>
+      </div>
+    </section>
 
-        <div class="video-card">
-          <h3>💥 Natlan Combat Action</h3>
-          <div class="video-wrapper">
-            <iframe src="https://www.youtube-nocookie.com/embed/MpYueGE6FQ8?rel=0" allowfullscreen></iframe>
-          </div>
-        </div>
+    <section class="world-section" aria-labelledby="worldTitle">
+      <div class="section-heading">
+        <div><p class="eyebrow">DUNIA YANG LUAS</p><h2 id="worldTitle">Singgah di setiap rantau</h2></div>
+        <p>Setiap tempat ada budaya, muzik dan rahsia tersendiri.</p>
+      </div>
+      <div class="region-grid">
+        <article class="region-card"><img src="images/regions/mondstadt.jpg" alt="Pemandangan Mondstadt"><div><span>01 · ANEMO</span><h3>Mondstadt</h3></div></article>
+        <article class="region-card"><img src="images/regions/liyue.jpg" alt="Pemandangan Liyue"><div><span>02 · GEO</span><h3>Liyue</h3></div></article>
+        <article class="region-card"><img src="images/regions/sumeru.jpg" alt="Pemandangan Sumeru"><div><span>03 · DENDRO</span><h3>Sumeru</h3></div></article>
+        <article class="region-card"><img src="images/regions/natlan.jpg" alt="Pemandangan Natlan"><div><span>06 · PYRO</span><h3>Natlan</h3></div></article>
+      </div>
+    </section>
 
-        <div class="video-card">
-          <h3>🎥 Extra Trailer</h3>
-          <div class="video-wrapper">
-            <iframe src="https://www.youtube-nocookie.com/embed/q5WeTMUTiak?si=nfubFFh48MawV9OB" allowfullscreen></iframe>
-          </div>
-        </div>
-      </section>
-    </div>
-    <a class="btn" href="https://play.google.com/store/apps/details?id=com.miHoYo.GenshinImpact" target="_blank">
-      📥 Download di Play Store
-    </a>
+    <section class="videos-section" aria-labelledby="videosTitle">
+      <div class="section-heading">
+        <div><p class="eyebrow">TONTON & RASAI</p><h2 id="videosTitle">Aksi Teyvat, terus dari YouTube</h2></div>
+        <p>Tekan play untuk tonton di sini, atau buka video terus di YouTube.</p>
+      </div>
+      <div class="video-grid">
+        <article class="video-card">
+          <div class="video-heading"><span>01 / PERTARUNGAN</span><h3>Epic Boss Battle</h3></div>
+          <div class="video-wrapper"><iframe src="https://www.youtube-nocookie.com/embed/lpv1ungKNc0" title="Genshin Impact Epic Boss Battle" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+          <a class="watch-link" href="https://www.youtube.com/watch?v=lpv1ungKNc0" target="_blank" rel="noopener noreferrer">Buka di YouTube <span aria-hidden="true">↗</span></a>
+        </article>
+        <article class="video-card">
+          <div class="video-heading"><span>02 / PENGEMBARAAN</span><h3>Dragonspine Battle</h3></div>
+          <div class="video-wrapper"><iframe src="https://www.youtube-nocookie.com/embed/JPnsUuKMiaU" title="Genshin Impact Dragonspine Battle" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+          <a class="watch-link" href="https://www.youtube.com/watch?v=JPnsUuKMiaU" target="_blank" rel="noopener noreferrer">Buka di YouTube <span aria-hidden="true">↗</span></a>
+        </article>
+        <article class="video-card">
+          <div class="video-heading"><span>03 / COMBAT</span><h3>Natlan Combat Action</h3></div>
+          <div class="video-wrapper"><iframe src="https://www.youtube-nocookie.com/embed/MpYueGE6FQ8" title="Genshin Impact Natlan Combat Action" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+          <a class="watch-link" href="https://www.youtube.com/watch?v=MpYueGE6FQ8" target="_blank" rel="noopener noreferrer">Buka di YouTube <span aria-hidden="true">↗</span></a>
+        </article>
+        <article class="video-card">
+          <div class="video-heading"><span>04 / TRAILER</span><h3>Pengembaraan seterusnya</h3></div>
+          <div class="video-wrapper"><iframe src="https://www.youtube-nocookie.com/embed/q5WeTMUTiak" title="Genshin Impact Trailer" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+          <a class="watch-link" href="https://www.youtube.com/watch?v=q5WeTMUTiak" target="_blank" rel="noopener noreferrer">Buka di YouTube <span aria-hidden="true">↗</span></a>
+        </article>
+      </div>
+    </section>
 
-    <a class="btn" href="home.html">
-      ⬅ Kembali ke Home
-    </a>
-
-  </div>
+    <footer class="page-footer"><span>GENSHIN IMPACT · TEYVAT</span><a href="home.html">Kembali ke Home ↑</a></footer>
+  </main>
 
   <script src="script/navigation.js"></script>
   <script src="script/genshin.js"></script>

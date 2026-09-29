@@ -6,6 +6,7 @@ const body = document.body;
 
 let allCharsData = [];
 let currentRegion = 'all';
+let currentWeapon = 'all';
 
 const regions = [
   { key: 'all', label: 'Semua', image: 'images/regions/all.jpg' },
@@ -88,6 +89,18 @@ async function fetchCharDetail(name, api){
 
 function normalizeImageKey(value) {
   return value.toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+function getWeaponType(data) {
+  const rawWeapon = data.weaponText || data.weapon || data.weaponType || '';
+  const rawValue = typeof rawWeapon === 'string' ? rawWeapon : rawWeapon.name || rawWeapon.type || '';
+  const value = rawValue.toLowerCase();
+  if (value.includes('claymore')) return 'Claymore';
+  if (value.includes('polearm')) return 'Polearm';
+  if (value.includes('catalyst')) return 'Catalyst';
+  if (value.includes('bow')) return 'Bow';
+  if (value.includes('sword')) return 'Sword';
+  return '';
 }
 
 const verifiedFandomImages = {
@@ -178,8 +191,10 @@ function renderList(){
     const nameKey = item.nameKey;
     if(!data) continue;
     const region = (data.nation || data.region || '').toLowerCase();
+    const weaponType = getWeaponType(data);
     
     if(currentRegion !== 'all' && region !== currentRegion) continue;
+    if(currentWeapon !== 'all' && weaponType !== currentWeapon) continue;
     if(q && (!data.name || !data.name.toLowerCase().includes(q))) continue;
 
     const div = document.createElement('div');
@@ -222,6 +237,11 @@ function renderList(){
     small.textContent = data.nation || data.region || '';
     div.appendChild(small);
 
+    const weapon = document.createElement('small');
+    weapon.className = 'card-weapon-type';
+    weapon.textContent = weaponType ? `⚔ ${weaponType}` : 'Jenis senjata tiada';
+    div.appendChild(weapon);
+
     div.onclick = () => openDetail(nameKey);
     grid.appendChild(div);
   }
@@ -256,6 +276,37 @@ function renderRegionButtons(){
   });
 }
 
+function renderWeaponButtons() {
+  const container = document.getElementById('weaponFilters');
+  const weaponTypes = [
+    { key: 'all', label: 'Semua', icon: '✦' },
+    { key: 'Sword', label: 'Sword', icon: '⚔' },
+    { key: 'Claymore', label: 'Claymore', icon: '🗡' },
+    { key: 'Polearm', label: 'Polearm', icon: '🔱' },
+    { key: 'Catalyst', label: 'Catalyst', icon: '✧' },
+    { key: 'Bow', label: 'Bow', icon: '🏹' }
+  ];
+
+  container.innerHTML = '';
+  weaponTypes.forEach(weapon => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = weapon.key === currentWeapon ? 'active' : '';
+    button.setAttribute('aria-pressed', String(weapon.key === currentWeapon));
+    button.innerHTML = `<span aria-hidden="true">${weapon.icon}</span>${weapon.label}`;
+    button.addEventListener('click', () => {
+      currentWeapon = weapon.key;
+      container.querySelectorAll('button').forEach(filterButton => {
+        const isActive = filterButton === button;
+        filterButton.classList.toggle('active', isActive);
+        filterButton.setAttribute('aria-pressed', String(isActive));
+      });
+      renderList();
+    });
+    container.appendChild(button);
+  });
+}
+
 function loadTheme(){
   const savedTheme = localStorage.getItem('theme');
   if (savedTheme === 'light') {
@@ -277,6 +328,7 @@ searchBtn.addEventListener('click', ()=>renderList());
 charSearch.addEventListener('keyup', (e)=>{ if(e.key==='Enter') renderList(); });
 
 renderRegionButtons();
+renderWeaponButtons();
 loadTheme();
 loadChars('all');
 themeToggle.addEventListener('click', toggleTheme);

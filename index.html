@@ -43,83 +43,51 @@ Genshin Finder Ultimate
 
 </nav>
 
-<!-- MAIN -->
+<main class="wiki-home">
+  <section class="wiki-banner">
+    <div class="wiki-banner__copy">
+      <span class="wiki-eyebrow">GENSHIN FINDER WIKI</span>
+      <h1>Genshin Impact Wiki</h1>
+      <p>Panduan watak, senjata, region, dan dunia Teyvat dalam satu tempat.</p>
+      <div class="landing-search">
+        <label class="sr-only" for="landingSearch">Cari watak</label>
+        <input type="search" id="landingSearch" placeholder="Cari watak, contoh: raiden-shogun" autocomplete="off">
+        <button id="landingBtn" type="button">🔍 Cari</button>
+      </div>
+    </div>
+    <div class="wiki-banner__stamp" aria-hidden="true">TEYVAT<br><b>探索</b></div>
+  </section>
 
-<main class="landing-container">
+  <section class="wiki-section wiki-section--intro">
+    <div class="section-heading"><div><span class="wiki-eyebrow">EXPLORE THE WORLD</span><h2>Terokai Teyvat</h2></div><a href="characters.html">Lihat semua watak →</a></div>
+    <div class="region-grid">
+      <a class="region-card region-card--wide" href="map.html" style="background-image:linear-gradient(0deg,#0b1722cc,transparent 70%),url('images/regions/all.jpg')"><span>Interactive Map</span><strong>Seluruh Teyvat</strong></a>
+      <a class="region-card" href="map.html" style="background-image:linear-gradient(0deg,#0b1722cc,transparent 70%),url('images/regions/mondstadt.jpg')"><span>Region</span><strong>Mondstadt</strong></a>
+      <a class="region-card" href="map.html" style="background-image:linear-gradient(0deg,#0b1722cc,transparent 70%),url('images/regions/liyue.jpg')"><span>Region</span><strong>Liyue</strong></a>
+      <a class="region-card" href="map.html" style="background-image:linear-gradient(0deg,#0b1722cc,transparent 70%),url('images/regions/inazuma.jpg')"><span>Region</span><strong>Inazuma</strong></a>
+      <a class="region-card" href="map.html" style="background-image:linear-gradient(0deg,#0b1722cc,transparent 70%),url('images/regions/sumeru.jpg')"><span>Region</span><strong>Sumeru</strong></a>
+      <a class="region-card" href="map.html" style="background-image:linear-gradient(0deg,#0b1722cc,transparent 70%),url('images/regions/fontaine.jpg')"><span>Region</span><strong>Fontaine</strong></a>
+    </div>
+  </section>
 
-<section class="hero-landing">
+  <section class="wiki-section wiki-section--directory">
+    <div class="section-heading"><div><span class="wiki-eyebrow">DATABASE</span><h2>Genshin Impact Database</h2></div><span class="section-note">Kemas kini untuk pengembara</span></div>
+    <div class="directory-grid">
+      <a class="directory-card directory-card--orange" href="characters.html"><b>♙</b><span>Characters</span><small>Elemen, weapon, build & detail</small></a>
+      <a class="directory-card directory-card--blue" href="home.html"><b>✦</b><span>Wish Simulator</span><small>Cuba nasib dengan banner event</small></a>
+      <a class="directory-card directory-card--green" href="map.html"><b>⌖</b><span>Interactive Map</span><small>Temui lokasi dan region</small></a>
+      <a class="directory-card directory-card--gold" href="quiz.html"><b>?</b><span>Trivia & Quiz</span><small>Uji pengetahuan tentang Teyvat</small></a>
+    </div>
+  </section>
 
-<div class="hero-content">
-
-<span class="badge">
-✨ Ultimate Character Search
-</span>
-
-<h1>
-Cari Watak Genshin Impact
-Dengan Gaya Premium
-</h1>
-
-<p>
-Cari maklumat lengkap character
-seperti elemen, rarity,
-weapon dan splash art HD
-dengan reka bentuk moden
-dan pengalaman yang immersive.
-</p>
-
-<!-- SEARCH -->
-
-<div class="landing-search">
-
-<input
-type="text"
-id="landingSearch"
-placeholder="Contoh: raiden-shogun">
-
-<button id="landingBtn">
-🔍 Cari
-</button>
-
-</div>
-
-<!-- HERO CARDS -->
-
-<div class="hero-cards">
-
-<div class="hero-card">
-<h3>⚡ Raiden Shogun</h3>
-
-<p>
-DPS Electro dengan
-burst damage sangat kuat.
-</p>
-</div>
-
-<div class="hero-card">
-<h3>❄️ Ayaka</h3>
-
-<p>
-Cryo sword user premium
-untuk freeze team.
-</p>
-</div>
-
-<div class="hero-card">
-<h3>🍃 Kazuha</h3>
-
-<p>
-Support Anemo dengan
-crowd control terbaik.
-</p>
-</div>
-
-</div>
-
-</div>
-
-</section>
-
+  <section class="wiki-section wiki-section--featured">
+    <div class="section-heading"><div><span class="wiki-eyebrow">FEATURED CHARACTERS</span><h2>Watak popular</h2></div></div>
+    <div class="featured-grid">
+      <a href="detail.html?name=raiden-shogun" class="featured-card"><span class="featured-card__element">⚡ Electro</span><strong>Raiden Shogun</strong><small>Electro · Polearm · ★★★★★</small></a>
+      <a href="detail.html?name=kamisato-ayaka" class="featured-card"><span class="featured-card__element">❄ Cryo</span><strong>Kamisato Ayaka</strong><small>Cryo · Sword · ★★★★★</small></a>
+      <a href="detail.html?name=kaedehara-kazuha" class="featured-card"><span class="featured-card__element">🍃 Anemo</span><strong>Kaedehara Kazuha</strong><small>Anemo · Sword · ★★★★★</small></a>
+    </div>
+  </section>
 </main>
 
 <!-- FOOTER -->

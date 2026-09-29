@@ -6,41 +6,43 @@
 }
 
 :root {
-  --bg: linear-gradient(-45deg,#0f0f1c,#1b1b38,#2b2b52,#0f0f1c);
-  --text: white;
-  --card-bg: rgba(255,255,255,.08);
-  --btn-bg: #6c63ff;
-  --btn-hover: rgba(108,99,255,.7);
-  --h1-gradient: linear-gradient(135deg,#6c63ff,#00c6ff);
+  --bg: linear-gradient(-45deg,#0b1713,#14231b,#1b3024,#0b1713);
+  --text: #f1eedf;
+  --card-bg: rgba(235,245,225,.07);
+  --btn-bg: #527a2b;
+  --btn-hover: rgba(200,241,105,.35);
+  --accent-color: #c8f169;
+  --h1-gradient: linear-gradient(135deg,#f1eedf,#c8f169);
   --text-fill: transparent;
-  --subtitle-color: rgba(255,255,255,0.8);
-  --topbar-bg: rgba(0,0,0,.4);
-  --grid-bg: rgba(255,255,255,.08);
-  --small-color: rgba(255,255,255,0.7);
-  --back-bg: #6c63ff;
-  --back-hover: rgba(108,99,255,.7);
-  --rec-btn-bg: #6c63ff;
-  --rec-btn-hover: rgba(108,99,255,.8);
-  --filter-bg: #1d1e3a;
+  --subtitle-color: rgba(241,238,223,.78);
+  --topbar-bg: rgba(8,18,13,.58);
+  --grid-bg: rgba(235,245,225,.07);
+  --small-color: rgba(241,238,223,.7);
+  --back-bg: #527a2b;
+  --back-hover: rgba(200,241,105,.35);
+  --rec-btn-bg: #527a2b;
+  --rec-btn-hover: rgba(200,241,105,.35);
+  --filter-bg: #192a21;
 }
 
 body.light {
-  --bg: linear-gradient(-45deg,#f5f5f5,#ffffff,#e8e8e8,#f5f5f5);
-  --text: #333;
+  --bg: linear-gradient(-45deg,#e6ecdf,#f7f8ef,#dce7d7,#e6ecdf);
+  --text: #17251f;
   --card-bg: rgba(0,0,0,.05);
-  --btn-bg: #6c63ff;
-  --btn-hover: rgba(108,99,255,.7);
-  --h1-gradient: linear-gradient(135deg,#333,#6c63ff);
+  --btn-bg: #527a2b;
+  --btn-hover: rgba(82,122,43,.25);
+  --accent-color: #638c27;
+  --h1-gradient: linear-gradient(135deg,#17251f,#638c27);
   --text-fill: transparent;
-  --subtitle-color: rgba(0,0,0,0.7);
-  --topbar-bg: rgba(255,255,255,.8);
+  --subtitle-color: rgba(23,37,31,.72);
+  --topbar-bg: rgba(255,255,255,.68);
   --grid-bg: rgba(0,0,0,.05);
-  --small-color: rgba(0,0,0,0.7);
-  --back-bg: #6c63ff;
-  --back-hover: rgba(108,99,255,.7);
-  --rec-btn-bg: #6c63ff;
-  --rec-btn-hover: rgba(108,99,255,.8);
-  --filter-bg: #e0e0e0;
+  --small-color: rgba(23,37,31,.7);
+  --back-bg: #527a2b;
+  --back-hover: rgba(82,122,43,.25);
+  --rec-btn-bg: #527a2b;
+  --rec-btn-hover: rgba(82,122,43,.25);
+  --filter-bg: #e2e9db;
 }
 
 body{
@@ -131,12 +133,50 @@ header h1{
 
 .filters button:hover{
   transform:translateY(-4px);
-  box-shadow:0 20px 40px rgba(108,99,255,.45);
+  box-shadow:0 20px 40px rgba(200,241,105,.18);
 }
 
 .filters button.active{
-  box-shadow:0 0 0 2px rgba(108,99,255,.9),0 18px 35px rgba(108,99,255,.25);
+  box-shadow:0 0 0 2px rgba(200,241,105,.78),0 18px 35px rgba(200,241,105,.14);
 }
+
+.weapon-filter-section {
+  margin: 20px 0;
+  padding: 16px;
+  border: 1px solid var(--card-bg);
+  border-radius: 14px;
+  background: var(--topbar-bg);
+}
+
+.weapon-filter-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.weapon-filter-heading h2 { margin: 0; font-size: 1rem; }
+.weapon-filter-heading p { margin: 0; color: var(--subtitle-color); font-size: 0.78rem; }
+.weapon-filters { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.weapon-filters button {
+  display: inline-flex;
+  min-height: 38px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 13px;
+  border: 1px solid var(--border-color, rgba(255,255,255,.15));
+  border-radius: 8px;
+  background: var(--filter-bg);
+  color: var(--text);
+  cursor: pointer;
+  transition: background .2s ease, border-color .2s ease, transform .2s ease;
+}
+
+.weapon-filters button:hover { transform: translateY(-2px); }
+.weapon-filters button.active { border-color: #ffae00; background: rgba(255,174,0,.18); }
+.weapon-filters button span { color: #ffbf39; font-size: 1rem; }
 
 .grid{
   display:grid;
@@ -170,7 +210,7 @@ header h1{
 
 .card:hover{
   transform:translateY(-8px) scale(1.05);
-  box-shadow:0 0 20px rgba(108,99,255,.7);
+  box-shadow:0 0 20px rgba(200,241,105,.2);
 }
 
 .card img{
@@ -188,6 +228,14 @@ header h1{
 .card small{
   opacity:.7;
   color:var(--small-color);
+}
+
+.card .card-weapon-type {
+  display: block;
+  margin-top: 5px;
+  color: #ffbf39;
+  opacity: 1;
+  font-size: .72rem;
 }
 
 .topbar{
@@ -265,7 +313,7 @@ header h1{
   padding:8px 12px;
   border-radius:8px;
   border:none;
-  background:#6c63ff;
+  background:#527a2b;
   color:white;
   cursor:pointer;
   margin-left:6px;
@@ -278,6 +326,10 @@ header h1{
   .topbar .subtitle { display: none; }
   .topbar-actions { width: 100%; display: flex; gap: 8px; }
   .topbar-actions .btn-small, .topbar-actions .theme-toggle { flex: 1; }
+  .weapon-filter-section { padding: 12px; }
+  .weapon-filter-heading { align-items: flex-start; flex-direction: column; gap: 4px; }
+  .weapon-filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .weapon-filters button { justify-content: center; padding: 0 8px; font-size: .82rem; }
   .filters { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   .filters button { min-height: 78px; border-radius: 12px; }
   .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
